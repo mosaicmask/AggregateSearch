@@ -33,17 +33,4 @@
   ::-webkit-scrollbar-thumb:hover {
     background-color: rgba(#101f1c, 1);
   }
-
-  a {
-    text-decoration: none;
-    color: #000000;
-  }
-
-  .icon {
-    width: 1.5em;
-    height: 1.5em;
-    vertical-align: -0.15em;
-    fill: currentColor;
-    overflow: hidden;
-  }
 </style>

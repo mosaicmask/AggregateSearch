@@ -21,8 +21,8 @@
       </svg>
     </div>
     <div class="button-box">
-      <el-button type="primary">登陆</el-button>
-      <el-button type="success">注册</el-button>
+      <el-button class="login-button" type="primary">登陆</el-button>
+      <el-button class="enroll-button" type="success">注册</el-button>
     </div>
   </nav>
 </template>
@@ -32,7 +32,7 @@
 <style lang="scss" scoped>
   .navbar-body {
     width: 100%;
-    height: 60px;
+    height: 75px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -46,6 +46,9 @@
 
       a {
         margin: 0 0 0 5px;
+        &:hover {
+          color: rgb(17, 152, 248);
+        }
       }
     }
 
@@ -56,7 +59,7 @@
       justify-content: space-evenly;
       .nav-item {
         // color: #fff;
-        font-size: 1.2rem;
+        font-size: 1rem;
         font-weight: 500;
         text-decoration: none;
         position: relative;
@@ -90,6 +93,11 @@
       align-items: center;
       justify-content: flex-end;
       padding: 0 50px 0 0;
+      .login-button,
+      .enroll-button {
+        width: 95px;
+        height: 45px;
+      }
     }
   }
 </style>
