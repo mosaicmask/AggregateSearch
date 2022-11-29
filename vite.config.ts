@@ -1,26 +1,24 @@
 import { defineConfig } from 'vite'
-// import AutoImport from 'unplugin-auto-import/vite'
-// import Components from 'unplugin-vue-components/vite'
-// import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import vue from '@vitejs/plugin-vue'
-
-const { resolve } = require('path')
+import { resolve } from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue()
-    // AutoImport({
-    //   resolvers: [ElementPlusResolver()]
-    // }),
-    // Components({
-    //   resolvers: [ElementPlusResolver()]
-    // })
+    vue(),
+    AutoImport({
+      resolvers: [ElementPlusResolver()]
+    }),
+    Components({
+      resolvers: [ElementPlusResolver()]
+    })
   ],
   server: {
     host: '0.0.0.0',
-    port: 9000,
+    port: 5432,
     proxy: {
       '/api': {
         target: 'http://localhost:7001', // 代理的目标地址
