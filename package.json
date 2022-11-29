@@ -10,7 +10,11 @@
   },
   "dependencies": {
     "element-plus": "^2.2.25",
-    "vue": "^3.2.41"
+    "normalize.css": "^8.0.1",
+    "nprogress": "^0.2.0",
+    "sass": "^1.56.1",
+    "vue": "^3.2.41",
+    "vue-router": "^4.1.6"
   },
   "devDependencies": {
     "@types/node": "^18.11.9",

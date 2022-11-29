@@ -1,31 +1,33 @@
-<script setup lang="ts">
-  // This starter template is using Vue 3 <script setup> SFCs
-  // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-  import HelloWorld from './components/HelloWorld.vue'
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div>
-    <el-button>Default</el-button>
-    <el-button type="primary">Primary</el-button>
-    <el-button type="success">Success</el-button>
-    <el-button type="info">Info</el-button>
-    <el-button type="warning">Warning</el-button>
-    <el-button type="danger">Danger</el-button>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <router-view></router-view>
 </template>
 
-<style scoped>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
+<style lang="scss" scoped>
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
   }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
+
+  ::-webkit-scrollbar-track {
+    width: 6px;
+    background: rgba(#101f1c, 0.1);
+    -webkit-border-radius: 2em;
+    -moz-border-radius: 2em;
+    border-radius: 2em;
   }
-  .logo.vue:hover {
-    filter: drop-shadow(0 0 2em #42b883aa);
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(#101f1c, 0.5);
+    background-clip: padding-box;
+    min-height: 28px;
+    -webkit-border-radius: 2em;
+    -moz-border-radius: 2em;
+    border-radius: 2em;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(#101f1c, 1);
   }
 </style>
