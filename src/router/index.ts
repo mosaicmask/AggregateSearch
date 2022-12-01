@@ -8,6 +8,31 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     name: 'home',
     component: () => import('../views/index.vue')
+  },
+  {
+    path: '/concern',
+    name: 'concern',
+    component: () => import('../views/concern/concern.vue')
+  },
+  {
+    path: '/concerning',
+    name: 'concerning',
+    component: () => import('../views/concerning/concerning.vue')
+  },
+  {
+    path: '/landing',
+    name: 'landing',
+    component: () => import('../views/landing/landing.vue')
+  },
+  {
+    path: '/donation',
+    name: 'donation',
+    component: () => import('../views/donation/donation.vue')
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('../views/register/register.vue')
   }
 ]
 
