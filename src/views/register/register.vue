@@ -1,6 +1,6 @@
 <template>
-  <div class="landing-body">
-    <form class="landing-box">
+  <div class="register-body">
+    <form class="register-box" @submit.prevent="register">
       <h1>注册</h1>
       <div class="input-group">
         <label class="label" for="Email">邮箱</label>
@@ -45,10 +45,14 @@
       name: where
     })
   }
+
+  const register = () => {
+    console.log('点击了注册按钮！！！')
+  }
 </script>
 
 <style lang="scss" scoped>
-  .landing-body {
+  .register-body {
     max-width: 700px;
     height: calc(100vh - 75px);
     margin: 0 auto;
@@ -56,7 +60,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    .landing-box {
+    .register-box {
       // 让元素的长宽包括内边框
       box-sizing: border-box;
       padding: 1rem;
@@ -64,6 +68,7 @@
       height: 720px;
       border-radius: 10px;
       box-shadow: 5px 5px 10px 3px rgba(102, 102, 102, 0.344);
+      background-color: #fff;
       h1 {
         text-align: center;
       }
@@ -113,7 +118,7 @@
         margin: 0.8rem 0;
         span {
           margin: 0 0.3rem;
-          font-size: 14px;
+          font-size: 12px;
           em {
             color: #6871f1;
           }
