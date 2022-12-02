@@ -80,11 +80,12 @@
         margin-top: 2rem;
         margin-bottom: 1.2rem;
         span {
-          font-size: 12px;
+          font-size: 14px;
           cursor: pointer;
           position: relative;
           display: inline-block;
           height: 25px;
+          color: #666;
 
           &::after {
             content: '';
@@ -106,7 +107,7 @@
           // }
         }
         span:nth-child(2) {
-          margin: 0 0.5rem;
+          margin: 0 1rem;
         }
         .pick {
           color: #5e4dcd;
