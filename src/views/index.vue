@@ -184,7 +184,7 @@
       display: flex;
       align-items: center;
       border: none;
-      border-radius: 0 16px 16px 0;
+      border-radius: 0 6px 6px 0;
       overflow: hidden;
       transition: all 0.2s;
       cursor: pointer;
