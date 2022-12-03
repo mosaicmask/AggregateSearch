@@ -84,6 +84,7 @@
     align-items: center;
     justify-content: flex-start;
     box-shadow: 0px 0px 8px 6px #413a6d4f;
+    background-color: #fff;
 
     .git-box {
       display: flex;
@@ -246,7 +247,7 @@
       }
     }
     .text-serch {
-      margin: 0 3rem;
+      margin: 0 0 0 3rem;
     }
     .button-box {
       flex: 1;
