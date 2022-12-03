@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import NavbarHome from './components/NavbarHome.vue'
+  import NavbarHome from './components/navbar/NavbarHome.vue'
 </script>
 
 <template>

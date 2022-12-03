@@ -19,6 +19,7 @@
         placeholder="输入你要搜索的内容"
         autocomplete="off"
         :value="inputVal"
+        @keyup.enter.exact="searchData"
       />
       <!-- <input class="button--submit" value="Subscribe" type="submit" /> -->
       <button class="button--submit">
@@ -44,10 +45,18 @@
 
 <script setup lang="ts">
   import { ref } from 'vue'
+  import { useRouter } from 'vue-router'
+  const router = useRouter()
   const inputVal = ref('')
   const labelFlg = ref(1)
   const changeLabel = (flg: number) => {
     labelFlg.value = flg
+  }
+
+  const searchData = () => {
+    router.push({
+      name: 'searchResults'
+    })
   }
 </script>
 
