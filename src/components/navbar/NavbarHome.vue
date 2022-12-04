@@ -27,10 +27,10 @@
       <router-link to="/" class="nav-item">
         <span> 首页 </span>
       </router-link>
-      <router-link to="/concerning" class="nav-item">
+      <router-link to="/concern" class="nav-item">
         <span> 关注 </span>
       </router-link>
-      <router-link to="/concern" class="nav-item">
+      <router-link to="/concerning" class="nav-item">
         <span>关于</span>
       </router-link>
       <router-link to="/donation" class="nav-item">
