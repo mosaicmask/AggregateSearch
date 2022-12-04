@@ -18,11 +18,11 @@
         name="value"
         placeholder="输入你要搜索的内容"
         autocomplete="off"
-        :value="inputVal"
+        v-model="inputVal"
         @keyup.enter.exact="searchData"
       />
       <!-- <input class="button--submit" value="Subscribe" type="submit" /> -->
-      <button class="button--submit">
+      <button @click="searchData" class="button--submit">
         <div class="svg-wrapper-1">
           <div class="svg-wrapper">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
@@ -54,6 +54,11 @@
   }
 
   const searchData = () => {
+    console.log('inputVal.value :>> ', inputVal.value)
+    if (!inputVal.value) {
+      router.go(0)
+      return
+    }
     router.push({
       name: 'searchResults'
     })
