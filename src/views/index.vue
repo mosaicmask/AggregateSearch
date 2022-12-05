@@ -39,6 +39,12 @@
     </div>
     <footer class="footer">
       <a href="https://beian.miit.gov.cn">桂ICP备2021009358号-3</a>
+      <span class="gongan">
+        <img src="../assets/image/gongan.png" alt="公安备案标" />
+        <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=45010702001971">
+          桂公网安备 45010702001971号
+        </a>
+      </span>
     </footer>
   </div>
 </template>
@@ -246,11 +252,33 @@
     .footer {
       position: fixed;
       bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       a {
         color: rgb(162, 162, 162);
+        height: 18px;
         font-size: 12px;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.5s ease-in-out;
+        &:hover {
+          color: #5e4dcd;
+        }
+      }
+
+      .gongan {
+        margin: 0 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+          margin: 0 5px;
+        }
       }
     }
   }
