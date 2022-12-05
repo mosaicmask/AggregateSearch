@@ -34,7 +34,7 @@
             </svg>
           </div>
         </div>
-        <span>Send</span>
+        <span>Search</span>
       </button>
     </div>
     <footer class="footer">
@@ -194,7 +194,7 @@
       }
     }
     .button--submit {
-      min-width: 120px;
+      min-width: 130px;
       max-height: 50px;
       font-size: 20px;
       background: #5e4dcd;
