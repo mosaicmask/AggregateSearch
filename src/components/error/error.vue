@@ -280,9 +280,9 @@
       z-index: 0;
     }
     .crane-cable-1 {
-      width: 60%;
-      top: 0;
-      left: 11%;
+      width: 50%;
+      top: 4%;
+      left: 25%;
       transform-origin: right 0;
       animation: cable-1__movement 12s infinite alternate;
     }
@@ -296,7 +296,7 @@
     .crane-cable-3 {
       height: 30%;
       top: 22%;
-      left: 9%;
+      left: 16%;
       transform-origin: right center;
       animation: cable-3__movement 12s ease-in-out infinite alternate;
       &::after {
