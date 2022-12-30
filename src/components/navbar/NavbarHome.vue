@@ -23,7 +23,7 @@
         </div>
       </label>
     </div>
-    <div :class="['text-box', navbarFlg ? 'text-serch' : '']">
+    <div :class="['text-box', navbarFlg ? 'text-search' : '']">
       <router-link to="/" class="nav-item">
         <span> 首页 </span>
       </router-link>
@@ -246,7 +246,7 @@
         }
       }
     }
-    .text-serch {
+    .text-search {
       margin: 0 0 0 3rem;
     }
     .button-box {

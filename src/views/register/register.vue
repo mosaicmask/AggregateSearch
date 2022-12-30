@@ -2,21 +2,41 @@
   <div class="register-body">
     <form class="register-box" @submit.prevent="register">
       <h1>注册</h1>
-      <div class="input-group">
+      <div class="select-box">
+        <span :class="[typeFlg ? '' : 'pick']" @click="checkType(0)">手机号注册</span>
+        <span :class="[typeFlg ? 'pick' : '']" @click="checkType(1)">邮箱注册</span>
+      </div>
+      <div class="input-group" v-if="typeFlg">
         <label class="label" for="Email">邮箱</label>
         <input autocomplete="off" type="email" class="input" id="Email" />
       </div>
-      <div class="input-group">
-        <label class="label" for="Username">用户名</label>
-        <input autocomplete="off" type="text" class="input" id="Username" />
+      <div class="input-group" v-else>
+        <label class="label" for="Email">手机号</label>
+        <input autocomplete="off" type="email" class="input" id="Email" />
       </div>
       <div class="input-group">
         <label class="label" for="Password">密码</label>
-        <input autocomplete="off" type="password" class="input" id="Password" />
+        <input autocomplete="off" type="password" class="input" id="PasswordOne" />
+      </div>
+      <div class="input-group">
+        <label class="label" for="Password">再次输入密码</label>
+        <input autocomplete="off" type="password" class="input" id="PasswordTwo" />
       </div>
       <div class="input-group">
         <label class="label" for="Captcha">校验码</label>
-        <input autocomplete="off" type="text" class="input" id="Captcha" />
+        <div class="input-line">
+          <input autocomplete="off" type="text" class="input" id="Captcha" />
+          <div class="supplement"> 123123 </div>
+        </div>
+      </div>
+      <div class="input-group">
+        <label class="label" for="Captcha">{{ typeFlg ? '邮箱' : '手机' }}回执码</label>
+        <div class="input-line">
+          <input autocomplete="off" type="text" class="input" id="receiptCode" />
+          <div class="supplement">
+            <el-button class="login-button" color="#5e4dcd"> 获取回执码 </el-button>
+          </div>
+        </div>
       </div>
       <div class="cntr">
         <input :checked="chickFlg" type="checkbox" id="cbx" class="hidden-xs-up" />
@@ -37,13 +57,22 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
+  import { v4 as uuidV4 } from 'uuid'
+
   const router = useRouter()
   const chickFlg = ref(false)
+  const typeFlg = ref(0)
+
+  const uuid = uuidV4()
+  console.log('uuid :>> ', uuid)
 
   const toPage = (where: string) => {
     router.push({
       name: where
     })
+  }
+  const checkType = (type: number) => {
+    typeFlg.value = type
   }
 
   const register = () => {
@@ -53,7 +82,7 @@
 
 <style lang="scss" scoped>
   .register-body {
-    max-width: 700px;
+    max-width: 900px;
     height: calc(100vh - 75px);
     margin: 0 auto;
     display: flex;
@@ -65,12 +94,62 @@
       box-sizing: border-box;
       padding: 1rem;
       width: 540px;
-      height: 720px;
+      height: auto;
       border-radius: 10px;
       box-shadow: 5px 5px 10px 3px rgba(102, 102, 102, 0.344);
       background-color: #fff;
       h1 {
         text-align: center;
+      }
+      .select-box {
+        width: 350px;
+        margin: 0 auto;
+        margin-top: 2rem;
+        margin-bottom: 1.2rem;
+        span {
+          font-size: 14px;
+          cursor: pointer;
+          position: relative;
+          display: inline-block;
+          height: 25px;
+          color: #666;
+
+          &::after {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            bottom: 4px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: #5e4dcd;
+            transition: all 0.32s ease-out;
+          }
+          &:hover {
+            color: #5e4dcd;
+          }
+          // &:hover:after {
+          //   left: 0;
+          //   width: 100%;
+          // }
+        }
+        span:nth-child(2) {
+          margin: 0 1rem;
+        }
+        .pick {
+          color: #5e4dcd;
+          &:after {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            bottom: 4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #5e4dcd;
+            transition: all 0.32s ease-out;
+          }
+        }
       }
 
       .input-group {
@@ -108,6 +187,22 @@
         &:hover .label,
         .input:focus {
           color: #05060fc2;
+        }
+        .input-line {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          .input {
+            min-width: 230px;
+            height: 45px;
+          }
+          .supplement {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 45px;
+          }
         }
       }
       .cntr {
