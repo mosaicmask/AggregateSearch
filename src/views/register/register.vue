@@ -1,6 +1,6 @@
 <template>
   <div class="register-body">
-    <form class="register-box" @submit.prevent="register">
+    <form class="register-box" @submit.prevent="toRegister">
       <h1>注册</h1>
       <div class="select-box">
         <span :class="[typeFlg ? '' : 'pick']" @click="checkType(0)">手机号注册</span>
@@ -8,19 +8,43 @@
       </div>
       <div class="input-group" v-if="typeFlg">
         <label class="label" for="Email">邮箱</label>
-        <input autocomplete="off" type="email" class="input" id="Email" />
+        <input
+          autocomplete="off"
+          v-model="formData.userEmail"
+          type="email"
+          class="input"
+          id="Email"
+        />
       </div>
       <div class="input-group" v-else>
         <label class="label" for="Email">手机号</label>
-        <input autocomplete="off" type="email" class="input" id="Email" />
+        <input
+          autocomplete="off"
+          v-model="formData.userPhoneNum"
+          type="email"
+          class="input"
+          id="Email"
+        />
       </div>
       <div class="input-group">
         <label class="label" for="Password">密码</label>
-        <input autocomplete="off" type="password" class="input" id="PasswordOne" />
+        <input
+          autocomplete="off"
+          v-model="formData.userPassword"
+          type="password"
+          class="input"
+          id="PasswordOne"
+        />
       </div>
       <div class="input-group">
         <label class="label" for="Password">再次输入密码</label>
-        <input autocomplete="off" type="password" class="input" id="PasswordTwo" />
+        <input
+          autocomplete="off"
+          v-model="formData.scendPassword"
+          type="password"
+          class="input"
+          id="PasswordTwo"
+        />
       </div>
       <div class="input-group">
         <label class="label" for="Captcha">校验码</label>
@@ -40,7 +64,13 @@
       <div class="input-group">
         <label class="label" for="Captcha">{{ typeFlg ? '邮箱' : '手机' }}回执码</label>
         <div class="input-line">
-          <input autocomplete="off" type="text" class="input" id="receiptCode" />
+          <input
+            autocomplete="off"
+            type="text"
+            v-model="formData.receiptCode"
+            class="input"
+            id="receiptCode"
+          />
           <div class="supplement">
             <el-button
               class="login-button"
@@ -60,7 +90,7 @@
         <span>注册即表示您已同意我们的 <em>服务协议</em> 和 <em>隐私政策</em> </span>
       </div>
       <div class="submit">
-        <input class="submit-button" type="submit" />
+        <input class="submit-button" @click="toRegister" type="submit" />
       </div>
       <div class="text-box">
         <em @click="toPage('landing')">遇到问题？</em>
@@ -74,36 +104,60 @@
   import { ref, reactive } from 'vue'
   import { useRouter } from 'vue-router'
   // import { v4 as uuidV4 } from 'uuid'
-  import { getCaptcha } from '../../http/api/users'
+  import { getCaptcha, getEmailCode, register } from '../../http/api/users'
+  interface FormData {
+    userEmail: string
+    captchaText: string
+    userPhoneNum: string
+    userPassword: string
+    scendPassword: string
+    receiptCode: string
+    agree: boolean
+  }
   const router = useRouter()
   // 隐私政策状态
   const chickFlg = ref(false)
   //  注册类型的标签切换状态
-  const typeFlg = ref(0)
+  const typeFlg = ref(1)
   // 切换按钮状态
   const loadingFlg = ref(false)
   const buttonText = ref('获取回执码')
   // 表单数据
-  const formData = reactive({
-    captchaText: ''
+  const formData: FormData = reactive({
+    userEmail: '',
+    captchaText: '',
+    userPhoneNum: '',
+    userPassword: '',
+    scendPassword: '',
+    receiptCode: '',
+    agree: chickFlg
   })
-
   // const uuid = uuidV4()
   let captcha = ref(await getCaptcha())
-  // 修改验证码
+  // 修改验证码 这里可以添加一个防抖
   const changeCaptcha = async () => {
     captcha.value = await getCaptcha()
   }
   //  获取回执
   const getReceiptCode = () => {
-    if (formData.captchaText !== captcha.value.text) {
-      console.log('请检查验证码是否输入正确！')
-      return
+    if (typeFlg.value) {
+      console.log('formData.email :>> ', formData.userEmail)
+      // 邮箱回执
+      getEmailCode(formData).then((res) => {
+        console.log('res :>> ', res)
+      })
+    } else {
+      // 手机回执
     }
+    // if (formData.captchaText !== captcha.value.text) {
+    //   console.log('请检查验证码是否输入正确！')
+    //   return
+    // }
     let countdown = 60
     loadingFlg.value = true
     setTime(countdown)
   }
+  // 回执倒计时函数
   const setTime = (countdown) => {
     if (countdown == 0) {
       buttonText.value = '获取回执码'
@@ -117,6 +171,14 @@
     }
   }
 
+  // 注册按钮点击事件
+  const toRegister = () => {
+    register(formData).then((res) => {
+      console.log('res :>> ', res)
+    })
+    console.log('点击了注册按钮！！！')
+  }
+
   const toPage = (where: string) => {
     router.push({
       name: where
@@ -125,14 +187,6 @@
   const checkType = (type: number) => {
     typeFlg.value = type
     changeCaptcha()
-  }
-
-  // 注册按钮点击事件
-  const register = () => {
-    if (formData.captchaText == captcha.value.text) {
-      console.log('验证通过！！！')
-    }
-    console.log('点击了注册按钮！！！')
   }
 </script>
 

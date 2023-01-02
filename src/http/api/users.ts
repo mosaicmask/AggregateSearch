@@ -1,5 +1,13 @@
 import { axios } from '../axios'
-
+interface FormData {
+  userEmail: string
+  captchaText: string
+  userPhoneNum: string
+  userPassword: string
+  scendPassword: string
+  receiptCode: string
+  agree: boolean
+}
 // getJson Data
 export const getJsonData = () => {
   return axios({
@@ -19,13 +27,15 @@ export const getJsonData = () => {
  * @param {any} params
  * @return {*}
  */
-export const register = (params: any) => {
+export const register = (params: FormData) => {
+  const { userEmail, userPassword, receiptCode } = params
   return axios({
-    url: '/api/users/login',
+    url: '/api/users/register',
     method: 'post',
     data: {
-      userName: params.userName,
-      password: params.password
+      userEmail,
+      userPassword,
+      receiptCode
     }
   }).then((res) => res)
 }
@@ -42,5 +52,16 @@ export const getCaptcha = async () => {
   }).then((res) => {
     return res.data
   })
+  return res
+}
+
+export const getEmailCode = async (params) => {
+  const res = await axios({
+    url: '/api/users/sendEmailCode',
+    method: 'post',
+    data: {
+      toEmail: params.userEmail
+    }
+  }).then((res) => res)
   return res
 }
