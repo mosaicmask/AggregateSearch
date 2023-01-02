@@ -15,9 +15,8 @@ export const getJsonData = () => {
     })
 }
 /**
- *
- *
- * @param {*} params
+ * @description 注册接口
+ * @param {any} params
  * @return {*}
  */
 export const register = (params: any) => {
@@ -28,7 +27,20 @@ export const register = (params: any) => {
       userName: params.userName,
       password: params.password
     }
+  }).then((res) => res)
+}
+
+/**
+ *
+ * @description 获取图形校验码
+ * @return {string}
+ */
+export const getCaptcha = async () => {
+  const res = await axios({
+    url: '/api/users/captcha',
+    method: 'get'
   }).then((res) => {
-    return res
+    return res.data
   })
+  return res
 }

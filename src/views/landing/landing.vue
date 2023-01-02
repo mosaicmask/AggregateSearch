@@ -36,11 +36,9 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
-  import { register, getJsonData } from '../../http/api/users'
+  import { getJsonData } from '../../http/api/users'
   const router = useRouter()
   const typeFlg = ref(0)
-  const password = 123
-  const userName = 'mosaic'
 
   const toPage = (where: string) => {
     router.push({
@@ -55,10 +53,6 @@
     getJsonData().then((res) => {
       console.log('res :>> ', res)
     })
-    register({ userName, password }).then((res) => {
-      console.log('res :>> ', res)
-    })
-    console.log('点击了登陆按钮！!!')
   }
 </script>
 

@@ -25,8 +25,16 @@
       <div class="input-group">
         <label class="label" for="Captcha">校验码</label>
         <div class="input-line">
-          <input autocomplete="off" type="text" class="input" id="Captcha" />
-          <div class="supplement"> 123123 </div>
+          <input
+            autocomplete="off"
+            v-model="formData.captchaText"
+            type="text"
+            class="input"
+            id="Captcha"
+          />
+          <div class="supplement" @click="changeCaptcha()">
+            <div v-dompurify-html="captcha.data"></div>
+          </div>
         </div>
       </div>
       <div class="input-group">
@@ -34,7 +42,15 @@
         <div class="input-line">
           <input autocomplete="off" type="text" class="input" id="receiptCode" />
           <div class="supplement">
-            <el-button class="login-button" color="#5e4dcd"> 获取回执码 </el-button>
+            <el-button
+              class="login-button"
+              color="#5e4dcd"
+              plain
+              :loading="loadingFlg"
+              @click="getReceiptCode"
+            >
+              {{ buttonText }}
+            </el-button>
           </div>
         </div>
       </div>
@@ -55,16 +71,51 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref, reactive } from 'vue'
   import { useRouter } from 'vue-router'
-  import { v4 as uuidV4 } from 'uuid'
-
+  // import { v4 as uuidV4 } from 'uuid'
+  import { getCaptcha } from '../../http/api/users'
   const router = useRouter()
+  // 隐私政策状态
   const chickFlg = ref(false)
+  //  注册类型的标签切换状态
   const typeFlg = ref(0)
+  // 切换按钮状态
+  const loadingFlg = ref(false)
+  const buttonText = ref('获取回执码')
+  // 表单数据
+  const formData = reactive({
+    captchaText: ''
+  })
 
-  const uuid = uuidV4()
-  console.log('uuid :>> ', uuid)
+  // const uuid = uuidV4()
+  let captcha = ref(await getCaptcha())
+  // 修改验证码
+  const changeCaptcha = async () => {
+    captcha.value = await getCaptcha()
+  }
+  //  获取回执
+  const getReceiptCode = () => {
+    if (formData.captchaText !== captcha.value.text) {
+      console.log('请检查验证码是否输入正确！')
+      return
+    }
+    let countdown = 60
+    loadingFlg.value = true
+    setTime(countdown)
+  }
+  const setTime = (countdown) => {
+    if (countdown == 0) {
+      buttonText.value = '获取回执码'
+      loadingFlg.value = false
+    } else {
+      buttonText.value = `${countdown}秒后重发`
+      --countdown
+      setTimeout(() => {
+        setTime(countdown)
+      }, 1000)
+    }
+  }
 
   const toPage = (where: string) => {
     router.push({
@@ -73,9 +124,14 @@
   }
   const checkType = (type: number) => {
     typeFlg.value = type
+    changeCaptcha()
   }
 
+  // 注册按钮点击事件
   const register = () => {
+    if (formData.captchaText == captcha.value.text) {
+      console.log('验证通过！！！')
+    }
     console.log('点击了注册按钮！！！')
   }
 </script>
