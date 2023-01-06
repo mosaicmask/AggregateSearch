@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vueuse/core": "^9.10.0",
     "dotenv": "^16.0.3",
     "element-plus": "^2.2.25",
     "normalize.css": "^8.0.1",
