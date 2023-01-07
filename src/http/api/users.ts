@@ -4,20 +4,13 @@
  */
 
 import { axios } from '../axios'
-interface FormData {
-  userEmail: string
-  captchaText: string
-  userPhoneNum: string
-  userPassword: string
-  scendPassword: string
-  receiptCode: string
-  agree: boolean
-}
+
 // getJson Data
-export const getJsonData = () => {
+export const isExist = (data) => {
   return axios({
-    url: '/api/json',
-    method: 'get'
+    url: '/api/users/isExist',
+    method: 'post',
+    data
   })
     .then((res) => res)
     .catch((error: any) => {
@@ -32,7 +25,7 @@ export const getJsonData = () => {
  * @param {any} params
  * @return {*}
  */
-export const register = (params: FormData) => {
+export const register = (params) => {
   const { userEmail, userPassword, receiptCode } = params
   return axios({
     url: '/api/users/register',

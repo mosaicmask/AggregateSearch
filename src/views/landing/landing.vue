@@ -36,7 +36,7 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
-  import { getJsonData } from '../../http/api/users'
+  // import { getJsonData } from '../../http/api/users'
   const router = useRouter()
   const typeFlg = ref(0)
 
@@ -49,11 +49,7 @@
     typeFlg.value = type
   }
 
-  const login = () => {
-    getJsonData().then((res) => {
-      console.log('res :>> ', res)
-    })
-  }
+  const login = () => {}
 </script>
 
 <style lang="scss" scoped>
@@ -68,7 +64,7 @@
     .landing-box {
       // 让元素的长宽包括内边框
       width: 540px;
-      height: 720px;
+      height: 620px;
       box-sizing: border-box;
       padding: 1rem;
       border-radius: 10px;
