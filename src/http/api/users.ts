@@ -53,12 +53,13 @@ export const getCaptcha = async () => {
   return res
 }
 
-export const getEmailCode = async (params) => {
+export const getEmailCode = async (userEmail) => {
   const res = await axios({
     url: '/api/users/sendEmailCode',
     method: 'post',
     data: {
-      toEmail: params.userEmail
+      // 接收邮箱
+      toEmail: userEmail
     }
   }).then((res) => res)
   return res

@@ -89,7 +89,7 @@
         <span>注册即表示您已同意我们的 <em>服务协议</em> 和 <em>隐私政策</em> </span>
       </div>
       <div class="submit">
-        <input class="submit-button" @click="toRegister" type="submit" />
+        <input class="submit-button" type="submit" />
       </div>
       <div class="text-box">
         <em @click="toPage('landing')">遇到问题？</em>
@@ -150,6 +150,7 @@
     }
     checkUser()
   })
+  // 验证用户是否存在
   const checkUser = () => {
     const sendData = {
       userEmail: userEmail.value,
@@ -157,9 +158,9 @@
     }
     isExist(sendData).then((res) => {
       console.log('res :>> ', res)
-      if (res.errno == 1001) {
+      if (res.errno != 1001) {
         message.emailTipMessage = `用户已存在,是否前往`
-        message.phoneTipMessage = '用户已存在,是否前往'
+        message.phoneTipMessage = `用户已存在,是否前往`
         showLoginText.value = true
         return
       }
@@ -209,13 +210,17 @@
 
   // 注册按钮点击事件
   const toRegister = () => {
+    console.log('点击了注册按钮！！！')
+
     const formData = {
-      userEmail
+      userEmail: userEmail.value,
+      userPhone: userPhone.value,
+      userPassword: userPassword.value,
+      receiptCode: receiptCode.value
     }
     register(formData).then((res) => {
       console.log('res :>> ', res)
     })
-    console.log('点击了注册按钮！！！')
   }
 
   const toPage = (where: string) => {
