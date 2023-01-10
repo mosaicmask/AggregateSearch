@@ -2,11 +2,10 @@
  * @description 表单验证的封装 (可以进行数据类型标注的优化)
  * @author mosaic
  */
-import { isExist } from '../http/api/users'
 import { emailRegex, phoneNoRegex, pwdRegex } from './regex'
 
 export class FormFormatCheck {
-  checkEmail({ userEmail, message, showLoginText, exist }) {
+  checkEmail({ userEmail, message }) {
     if (!userEmail) {
       message.emailTipMessage = '请先输入邮箱'
       return false
@@ -15,15 +14,14 @@ export class FormFormatCheck {
       message.emailTipMessage = '请输入正确的邮箱'
       return false
     }
-    this.checkUser({ message, userPhone: '', userEmail, showLoginText, exist })
     return true
   }
-  checkPhone({ userPhone, message, showLoginText, exist }) {
+  checkPhone({ userPhone, message }) {
     if (!phoneNoRegex.test(userPhone)) {
       message.phoneTipMessage = '请输入正确的手机号'
       return false
     }
-    this.checkUser({ message, userPhone: userPhone, userEmail: '', showLoginText, exist })
+    // this.checkUser({ message, userPhone: userPhone, userEmail: '', showLoginText, exist })
     return true
   }
   checkCaptcha({ captchaText, message, captcha }) {
@@ -57,25 +55,5 @@ export class FormFormatCheck {
     }
     message.receiptCodeTipMessage = ''
     return true
-  }
-
-  // 验证用户是否存在
-  async checkUser({ message, userEmail, userPhone, showLoginText, exist }) {
-    const sendData = {
-      userEmail: userEmail,
-      userPhone: userPhone
-    }
-    await isExist(sendData).then((res) => {
-      if (res.errno != 1001) {
-        message.emailTipMessage = `用户已存在,是否前往`
-        message.phoneTipMessage = `用户已存在,是否前往`
-        showLoginText.value = true
-        exist.value = true
-      }
-      message.emailTipMessage = ''
-      message.phoneTipMessage = ''
-      showLoginText.value = false
-      exist.value = false
-    })
   }
 }

@@ -111,7 +111,7 @@
         </span>
       </div>
       <div class="cntr">
-        <input :checked="chickFlg" type="checkbox" id="cbx" class="hidden-xs-up" />
+        <input :checked="checkFlg" type="checkbox" id="cbx" class="hidden-xs-up" />
         <label for="cbx" class="cbx"></label>
         <span>注册即表示您已同意我们的 <em>服务协议</em> 和 <em>隐私政策</em> </span>
       </div>
@@ -130,13 +130,14 @@
   import { ref, reactive } from 'vue'
   import { useRouter } from 'vue-router'
   import { refDebounced } from '@vueuse/core'
+  import { isExist } from '../../http/api/users'
   import { messageAlerts } from '../../utils/tip'
   // import { v4 as uuidV4 } from 'uuid'
   import { getCaptcha, getEmailCode, register } from '../../http/api/users'
   import { FormFormatCheck } from '../../utils/Check'
   const router = useRouter()
   // 隐私政策状态
-  const chickFlg = ref(false)
+  const checkFlg = ref(false)
   //  注册类型的标签切换状态
   const typeFlg = ref(1)
   // 登陆文字显示状态
@@ -145,7 +146,7 @@
   const loadingFlg = ref(false)
   const buttonText = ref('获取回执码')
   // 用户是否已存在
-  const exist = ref(true)
+  const exist = ref(false)
   // 提示文字显示flg
   const message = reactive({
     emailTipMessage: '',
@@ -167,12 +168,14 @@
   // 使用 VueUse 的 refDebounced 实现防抖验证参数
   const emailDebounced = refDebounced(userEmail, 2000)
   watch(emailDebounced, () => {
-    formCheck.checkEmail({ userEmail: userEmail.value, message, showLoginText, exist })
+    formCheck.checkEmail({ userEmail: userEmail.value, message })
+    checkUser()
   })
   // 验证手机号
   const phoneDebounced = refDebounced(userPhone, 1500)
   watch(phoneDebounced, () => {
-    formCheck.checkPhone({ userPhone: userPhone.value, message, showLoginText, exist })
+    formCheck.checkPhone({ userPhone: userPhone.value, message })
+    checkUser()
   })
   // 验证校验码
   const captchaDebounced = refDebounced(captchaText, 1000)
@@ -197,6 +200,26 @@
       userPassword: userPassword.value
     })
   })
+  // 验证用户是否存在
+  const checkUser = async () => {
+    const sendData = {
+      userEmail: userEmail.value,
+      userPhone: userPhone.value
+    }
+    await isExist(sendData).then((res) => {
+      if (res.errno != 1001) {
+        message.emailTipMessage = `用户已存在,是否前往`
+        message.phoneTipMessage = `用户已存在,是否前往`
+        showLoginText.value = true
+        exist.value = true
+        return
+      }
+      message.emailTipMessage = ''
+      message.phoneTipMessage = ''
+      showLoginText.value = false
+      exist.value = false
+    })
+  }
   // 验证回执码
   const receiptCodeDebounced = refDebounced(receiptCode, 1000)
   watch(receiptCodeDebounced, () => {
@@ -219,9 +242,7 @@
       }) &&
       formCheck.checkEmail({
         userEmail: userEmail.value,
-        message,
-        showLoginText,
-        exist
+        message
       })
     if (!check) return
     if (exist.value) {
@@ -262,7 +283,7 @@
   }
 
   // 注册按钮点击事件
-  const toRegister = () => {
+  const toRegister = async () => {
     // 构建数据
     const formData = {
       userEmail: userEmail.value,
@@ -274,17 +295,33 @@
     const check =
       (formCheck.checkEmail({
         userEmail: userEmail.value,
-        message,
-        showLoginText,
-        exist
+        message
       }) ||
-        formCheck.checkPhone({ userPhone: userPhone.value, message, showLoginText, exist })) &&
+        formCheck.checkPhone({ userPhone: userPhone.value, message })) &&
       formCheck.checkPassword({ message, userPassword: userPassword.value }) &&
       formCheck.checkReceiptCode({ receiptCode: receiptCode.value, message })
     // 如果验证不通过，不能进行注册
-    if (!check) return
-    register(formData).then((res) => {
-      console.log('res :>> ', res)
+    if (!check && exist.value) return
+    if (!checkFlg.value) {
+      messageAlerts({
+        title: '请勾选同意政策',
+        message: '需要您同意我们的 服务协议 和 隐私政策',
+        type: 'warning'
+      })
+      return
+    }
+    await register(formData).then((res) => {
+      if (res.errno != 200) {
+        return
+      }
+      setTimeout(() => {
+        toPage('landing')
+      }, 3000)
+      messageAlerts({
+        title: '注册成功',
+        message: '3s后自动跳转到登陆页面',
+        type: 'success'
+      })
     })
   }
 
