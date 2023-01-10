@@ -8,7 +8,14 @@
       </div>
       <div class="input-group" v-if="typeFlg">
         <label class="label" for="Email">邮箱</label>
-        <input autocomplete="off" v-model="userEmail" type="email" class="input" id="Email" />
+        <input
+          autocomplete="off"
+          placeholder="请输入邮箱"
+          v-model="userEmail"
+          type="email"
+          class="input"
+          id="Email"
+        />
         <span class="message">
           {{ message.emailTipMessage }}
           <a @click="toPage('landing')" v-if="showLoginText">登陆</a>
@@ -16,7 +23,14 @@
       </div>
       <div class="input-group" v-else>
         <label class="label" for="Email">手机号</label>
-        <input autocomplete="off" v-model="userPhone" type="email" class="input" id="Email" />
+        <input
+          autocomplete="off"
+          placeholder="请输入手机号"
+          v-model="userPhone"
+          type="email"
+          class="input"
+          id="Email"
+        />
         <span class="message">
           {{ message.phoneTipMessage }}
           <a @click="toPage('landing')" v-if="showLoginText">登陆</a>
@@ -26,6 +40,7 @@
         <label class="label" for="Password">密码</label>
         <input
           autocomplete="off"
+          placeholder="请输入密码"
           v-model="userPassword"
           type="password"
           class="input"
@@ -39,6 +54,7 @@
         <label class="label" for="Password">再次输入密码</label>
         <input
           autocomplete="off"
+          placeholder="请再次输入密码"
           v-model="scendPassword"
           type="password"
           class="input"
@@ -51,20 +67,28 @@
       <div class="input-group">
         <label class="label" for="Captcha">校验码</label>
         <div class="input-line">
-          <input autocomplete="off" v-model="captchaText" type="text" class="input" id="Captcha" />
+          <input
+            autocomplete="off"
+            placeholder="请输入右侧图形校验码"
+            v-model="captchaText"
+            type="text"
+            class="input"
+            id="Captcha"
+          />
           <div class="supplement" @click="changeCaptcha()">
             <div v-dompurify-html="captcha.data"></div>
           </div>
-          <span class="message">
-            {{ message.captchaTextTipMessage }}
-          </span>
         </div>
+        <span class="message">
+          {{ message.captchaTextTipMessage }}
+        </span>
       </div>
       <div class="input-group">
         <label class="label" for="Captcha">{{ typeFlg ? '邮箱' : '手机' }}回执码</label>
         <div class="input-line">
           <input
             autocomplete="off"
+            :placeholder="typeFlg ? '请输入邮箱回执码' : '请输入手机回执码'"
             type="text"
             v-model="receiptCode"
             class="input"
@@ -82,6 +106,9 @@
             </el-button>
           </div>
         </div>
+        <span class="message">
+          {{ message.receiptCodeTipMessage }}
+        </span>
       </div>
       <div class="cntr">
         <input :checked="chickFlg" type="checkbox" id="cbx" class="hidden-xs-up" />
@@ -103,9 +130,10 @@
   import { ref, reactive } from 'vue'
   import { useRouter } from 'vue-router'
   import { refDebounced } from '@vueuse/core'
-  import { emailRegex, phoneNoRegex } from '../../utils/regex'
+  import { messageAlerts } from '../../utils/tip'
   // import { v4 as uuidV4 } from 'uuid'
-  import { getCaptcha, getEmailCode, register, isExist } from '../../http/api/users'
+  import { getCaptcha, getEmailCode, register } from '../../http/api/users'
+  import { FormFormatCheck } from '../../utils/Check'
   const router = useRouter()
   // 隐私政策状态
   const chickFlg = ref(false)
@@ -116,13 +144,16 @@
   // 切换按钮状态
   const loadingFlg = ref(false)
   const buttonText = ref('获取回执码')
+  // 用户是否已存在
+  const exist = ref(true)
   // 提示文字显示flg
   const message = reactive({
     emailTipMessage: '',
     phoneTipMessage: '',
     PasswordTipMessage: '',
     scendPasswordTipMessage: '',
-    captchaTextTipMessage: ''
+    captchaTextTipMessage: '',
+    receiptCodeTipMessage: ''
   })
   // 表单数据
   const userEmail = ref('')
@@ -131,45 +162,46 @@
   const scendPassword = ref('')
   const captchaText = ref('')
   const receiptCode = ref('')
-  // 状态数据
-  const exist = ref(true)
-  // 使用 VueUse 的 refDebounced 实现防抖更改参数
+
+  const formCheck = new FormFormatCheck()
+  // 使用 VueUse 的 refDebounced 实现防抖验证参数
   const emailDebounced = refDebounced(userEmail, 2000)
-  watch(emailDebounced, (newVal) => {
-    if (!emailRegex.test(newVal)) {
-      message.emailTipMessage = '请输入正确的邮箱'
-      return
-    }
-    checkUser()
+  watch(emailDebounced, () => {
+    formCheck.checkEmail({ userEmail: userEmail.value, message, showLoginText, exist })
   })
+  // 验证手机号
   const phoneDebounced = refDebounced(userPhone, 1500)
-  watch(phoneDebounced, (newVal) => {
-    if (!phoneNoRegex.test(newVal)) {
-      message.phoneTipMessage = '请输入正确的手机号'
-      return
-    }
-    checkUser()
+  watch(phoneDebounced, () => {
+    formCheck.checkPhone({ userPhone: userPhone.value, message, showLoginText, exist })
   })
-  // 验证用户是否存在
-  const checkUser = () => {
-    const sendData = {
-      userEmail: userEmail.value,
-      userPhone: userPhone.value
-    }
-    isExist(sendData).then((res) => {
-      console.log('res :>> ', res)
-      if (res.errno != 1001) {
-        message.emailTipMessage = `用户已存在,是否前往`
-        message.phoneTipMessage = `用户已存在,是否前往`
-        showLoginText.value = true
-        return
-      }
-      message.emailTipMessage = ''
-      message.phoneTipMessage = ''
-      showLoginText.value = false
-      exist.value = false
+  // 验证校验码
+  const captchaDebounced = refDebounced(captchaText, 1000)
+  watch(captchaDebounced, () => {
+    formCheck.checkCaptcha({ captchaText: captchaText.value, message, captcha })
+  })
+  // 验证密码
+  const passwordDebounced = refDebounced(userPassword, 1500)
+  watch(passwordDebounced, () => {
+    formCheck.checkPassword({ message, userPassword: userPassword.value })
+    formCheck.checkScendPassword({
+      scendPassword: scendPassword.value,
+      message,
+      userPassword: userPassword.value
     })
-  }
+  })
+  const scendPasswordDebounced = refDebounced(scendPassword, 1500)
+  watch(scendPasswordDebounced, () => {
+    formCheck.checkScendPassword({
+      scendPassword: scendPassword.value,
+      message,
+      userPassword: userPassword.value
+    })
+  })
+  // 验证回执码
+  const receiptCodeDebounced = refDebounced(receiptCode, 1000)
+  watch(receiptCodeDebounced, () => {
+    formCheck.checkReceiptCode({ receiptCode: receiptCode.value, message })
+  })
   // const uuid = uuidV4()
   const captcha = ref(await getCaptcha())
   // 修改验证码 这里可以添加一个防抖
@@ -179,7 +211,28 @@
   //  获取回执
   const getReceiptCode = () => {
     let countdown = 60
-    if (typeFlg.value && !exist.value) {
+    const check =
+      formCheck.checkCaptcha({
+        captchaText: captchaText.value,
+        message,
+        captcha
+      }) &&
+      formCheck.checkEmail({
+        userEmail: userEmail.value,
+        message,
+        showLoginText,
+        exist
+      })
+    if (!check) return
+    if (exist.value) {
+      messageAlerts({
+        title: '用户已存在',
+        message: '该用户已存在，请直接前往登陆',
+        type: 'warning'
+      })
+      return
+    }
+    if (typeFlg.value) {
       loadingFlg.value = true
       setTime(countdown)
       // 邮箱回执
@@ -210,14 +263,26 @@
 
   // 注册按钮点击事件
   const toRegister = () => {
-    console.log('点击了注册按钮！！！')
-
+    // 构建数据
     const formData = {
       userEmail: userEmail.value,
       userPhone: userPhone.value,
       userPassword: userPassword.value,
       receiptCode: receiptCode.value
     }
+    // 注册前进行所有验证
+    const check =
+      (formCheck.checkEmail({
+        userEmail: userEmail.value,
+        message,
+        showLoginText,
+        exist
+      }) ||
+        formCheck.checkPhone({ userPhone: userPhone.value, message, showLoginText, exist })) &&
+      formCheck.checkPassword({ message, userPassword: userPassword.value }) &&
+      formCheck.checkReceiptCode({ receiptCode: receiptCode.value, message })
+    // 如果验证不通过，不能进行注册
+    if (!check) return
     register(formData).then((res) => {
       console.log('res :>> ', res)
     })
@@ -330,6 +395,10 @@
             border-color: #05060f;
           }
         }
+        .input::-webkit-input-placeholder {
+          font-size: 12px;
+          border-color: #6b6b6b;
+        }
 
         .label {
           display: block;
@@ -359,7 +428,6 @@
             height: 45px;
           }
         }
-
         .message {
           font-size: 10px;
           color: red;
