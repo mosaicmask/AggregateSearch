@@ -111,7 +111,7 @@
         </span>
       </div>
       <div class="cntr">
-        <input :checked="checkFlg" type="checkbox" id="cbx" class="hidden-xs-up" />
+        <input v-model="checkFlg" type="checkbox" id="cbx" class="hidden-xs-up" />
         <label for="cbx" class="cbx"></label>
         <span>注册即表示您已同意我们的 <em>服务协议</em> 和 <em>隐私政策</em> </span>
       </div>
