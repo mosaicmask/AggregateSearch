@@ -6,22 +6,30 @@ import { emailRegex, phoneNoRegex, pwdRegex } from './regex'
 
 export class FormFormatCheck {
   checkEmail({ userEmail, message }) {
+    console.log('!userEmail :>> ', !userEmail)
     if (!userEmail) {
       message.emailTipMessage = '请先输入邮箱'
       return false
     }
+    console.log('!emailRegex.test(userEmail) :>> ', !emailRegex.test(userEmail))
     if (!emailRegex.test(userEmail)) {
       message.emailTipMessage = '请输入正确的邮箱'
       return false
     }
+    message.emailTipMessage = ''
     return true
   }
   checkPhone({ userPhone, message }) {
+    if (!userPhone) {
+      message.phoneTipMessage = '请输入手机号'
+      return false
+    }
     if (!phoneNoRegex.test(userPhone)) {
       message.phoneTipMessage = '请输入正确的手机号'
       return false
     }
     // this.checkUser({ message, userPhone: userPhone, userEmail: '', showLoginText, exist })
+    message.phoneTipMessage = ''
     return true
   }
   checkCaptcha({ captchaText, message, captcha }) {
@@ -33,6 +41,11 @@ export class FormFormatCheck {
     return true
   }
   checkPassword({ userPassword, message }) {
+    if (!userPassword) {
+      message.PasswordTipMessage = '请输入密码'
+      return false
+    }
+
     if (!pwdRegex.test(userPassword)) {
       message.PasswordTipMessage = '请检查密码格式是否正确'
       return false
@@ -41,6 +54,11 @@ export class FormFormatCheck {
     return true
   }
   checkScendPassword({ scendPassword, message, userPassword }) {
+    if (!scendPassword) {
+      message.scendPasswordTipMessage = '请再次输入密码'
+      return false
+    }
+
     if (scendPassword != userPassword) {
       message.scendPasswordTipMessage = '两次输入密码不一致'
       return false

@@ -75,8 +75,9 @@
             class="input"
             id="Captcha"
           />
-          <div class="supplement" @click="changeCaptcha()">
-            <div v-dompurify-html="captcha.data"></div>
+          <div class="supplement">
+            <div @click="changeCaptcha()" v-dompurify-html="captcha.data" class="captcha-svg"></div>
+            <span> 点击图片换一张 </span>
           </div>
         </div>
         <span class="message">
@@ -200,6 +201,11 @@
       userPassword: userPassword.value
     })
   })
+  // 验证回执码
+  const receiptCodeDebounced = refDebounced(receiptCode, 1000)
+  watch(receiptCodeDebounced, () => {
+    formCheck.checkReceiptCode({ receiptCode: receiptCode.value, message })
+  })
   // 验证用户是否存在
   const checkUser = async () => {
     const sendData = {
@@ -220,11 +226,6 @@
       exist.value = false
     })
   }
-  // 验证回执码
-  const receiptCodeDebounced = refDebounced(receiptCode, 1000)
-  watch(receiptCodeDebounced, () => {
-    formCheck.checkReceiptCode({ receiptCode: receiptCode.value, message })
-  })
   // const uuid = uuidV4()
   const captcha = ref(await getCaptcha())
   // 修改验证码 这里可以添加一个防抖
@@ -301,7 +302,7 @@
       formCheck.checkPassword({ message, userPassword: userPassword.value }) &&
       formCheck.checkReceiptCode({ receiptCode: receiptCode.value, message })
     // 如果验证不通过，不能进行注册
-    if (!check && exist.value) return
+    if (!check && !exist.value) return
     if (!checkFlg.value) {
       messageAlerts({
         title: '请勾选同意政策',
@@ -459,10 +460,19 @@
           }
           .supplement {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             width: 100px;
             height: 45px;
+            // cursor: pointer;
+            .captcha-svg {
+              margin: 15px 0 0 0;
+            }
+            span {
+              font-size: 12px;
+              color: #05060fc2;
+            }
           }
         }
         .message {

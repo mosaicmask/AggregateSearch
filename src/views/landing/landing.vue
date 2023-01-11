@@ -3,24 +3,63 @@
     <form class="landing-box" @submit.prevent="login">
       <h1>登陆</h1>
       <div class="select-box">
-        <span :class="[typeFlg ? '' : 'pick']" @click="checkType(0)">用户名登陆</span>
+        <span :class="[typeFlg ? '' : 'pick']" @click="checkType(0)">手机登陆</span>
         <span :class="[typeFlg ? 'pick' : '']" @click="checkType(1)">邮箱登陆</span>
       </div>
       <div class="input-group" v-if="typeFlg">
         <label class="label" for="Email">邮箱</label>
-        <input autocomplete="off" type="email" class="input" id="Email" />
+        <input
+          autocomplete="off"
+          v-model="userEmail"
+          placeholder="请输入邮箱"
+          type="email"
+          class="input"
+          id="Email"
+        />
+        <span class="message">
+          {{ message.emailTipMessage }}
+          <a @click="toPage('register')" v-if="exist">注册</a>
+        </span>
       </div>
       <div class="input-group" v-else>
-        <label class="label" for="Username">用户名</label>
-        <input autocomplete="off" type="text" class="input" id="Username" />
+        <label class="label" for="Username">手机号</label>
+        <input
+          autocomplete="off"
+          placeholder="请输入手机号"
+          type="text"
+          class="input"
+          id="Username"
+          v-model="userPhone"
+        />
+        <span class="message">
+          {{ message.phoneTipMessage }}
+          <a @click="toPage('register')" v-if="exist">注册</a>
+        </span>
       </div>
-      <div class="input-group">
+      <div class="input-group" v-if="typeFlg">
         <label class="label" for="Password">密码</label>
-        <input autocomplete="off" type="password" class="input" id="Password" />
+        <input
+          autocomplete="off"
+          placeholder="请输入密码"
+          type="password"
+          class="input"
+          id="Password"
+          v-model="userPassword"
+        />
+        <span class="message">
+          {{ message.PasswordTipMessage }}
+        </span>
       </div>
-      <div class="input-group">
+      <div class="input-group" v-else>
         <label class="label" for="Captcha">校验码</label>
-        <input autocomplete="off" type="text" class="input" id="Captcha" />
+        <input
+          autocomplete="off"
+          placeholder="请输入六位校验码"
+          type="text"
+          class="input"
+          id="Captcha"
+          v-model="receiptCode"
+        />
       </div>
       <div class="submit">
         <input class="submit-button" type="submit" />
@@ -36,9 +75,67 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
+  import { refDebounced } from '@vueuse/core'
+  import { FormFormatCheck } from '../../utils/Check'
+  import { isExist } from '../../http/api/users'
   // import { getJsonData } from '../../http/api/users'
   const router = useRouter()
   const typeFlg = ref(0)
+  const exist = ref(false)
+  // 提示文字显示flg
+  const message = reactive({
+    emailTipMessage: '',
+    phoneTipMessage: '',
+    PasswordTipMessage: '',
+    receiptCodeTipMessage: ''
+  })
+  // 表单数据
+  const userEmail = ref('')
+  const userPhone = ref('')
+  const userPassword = ref('')
+  const receiptCode = ref('')
+
+  const formCheck = new FormFormatCheck()
+  // 使用 VueUse 的 refDebounced 实现防抖验证参数
+  const emailDebounced = refDebounced(userEmail, 2000)
+  watch(emailDebounced, () => {
+    if (!formCheck.checkEmail({ userEmail: userEmail.value, message })) return
+    checkUser()
+  })
+  // 验证手机号
+  const phoneDebounced = refDebounced(userPhone, 1500)
+  watch(phoneDebounced, () => {
+    if (!formCheck.checkPhone({ userPhone: userPhone.value, message })) return
+    checkUser()
+  })
+  // 验证密码
+  const passwordDebounced = refDebounced(userPassword, 1500)
+  watch(passwordDebounced, () => {
+    formCheck.checkPassword({ message, userPassword: userPassword.value })
+  })
+  // 验证回执码
+  const receiptCodeDebounced = refDebounced(receiptCode, 1000)
+  watch(receiptCodeDebounced, () => {
+    formCheck.checkReceiptCode({ receiptCode: receiptCode.value, message })
+  })
+  // 验证用户是否存在
+  const checkUser = async () => {
+    const sendData = {
+      userEmail: userEmail.value,
+      userPhone: userPhone.value
+    }
+    await isExist(sendData).then((res) => {
+      if (res.errno == 1001) {
+        message.emailTipMessage = `用户不存在,是否前往`
+        message.phoneTipMessage = `用户不存在,是否前往`
+        exist.value = true
+        return
+      }
+      message.emailTipMessage = ''
+      message.phoneTipMessage = ''
+      exist.value = false
+    })
+  }
 
   const toPage = (where: string) => {
     router.push({
@@ -64,7 +161,7 @@
     .landing-box {
       // 让元素的长宽包括内边框
       width: 540px;
-      height: 620px;
+      height: 520px;
       box-sizing: border-box;
       padding: 1rem;
       border-radius: 10px;
@@ -126,6 +223,7 @@
 
       .input-group {
         max-width: 350px;
+        min-height: 85px;
         margin: 0 auto;
         padding: 0.8rem 0;
         .input {
@@ -147,6 +245,9 @@
             border-color: #05060f;
           }
         }
+        .input::-webkit-input-placeholder {
+          font-size: 12px;
+        }
 
         .label {
           display: block;
@@ -159,6 +260,16 @@
         &:hover .label,
         .input:focus {
           color: #05060fc2;
+        }
+      }
+      .message {
+        font-size: 10px;
+        color: red;
+        a {
+          color: #28a1f7;
+          &:hover {
+            color: #28a1f7b9;
+          }
         }
       }
 

@@ -4,7 +4,7 @@
     <h4>要开始，请选择版本并在搜索框内输入内容</h4>
     <div class="label-box">
       <div :class="['label', labelFlg == 1 ? 'label-pick' : '']" @click="changeLabel(1)">
-        无限制版
+        简单版
       </div>
       <div :class="['label', labelFlg == 0 ? 'label-pick' : '']" @click="changeLabel(0)">
         前端版
