@@ -77,10 +77,11 @@
   import { useRouter } from 'vue-router'
   import { refDebounced } from '@vueuse/core'
   import { FormFormatCheck } from '../../utils/Check'
-  import { isExist } from '../../http/api/users'
+  import { isExist, userLogin } from '../../http/api/users'
+  import { messageAlerts } from '@/utils/tip'
   // import { getJsonData } from '../../http/api/users'
   const router = useRouter()
-  const typeFlg = ref(0)
+  const typeFlg = ref(1)
   const exist = ref(false)
   // 提示文字显示flg
   const message = reactive({
@@ -146,7 +147,29 @@
     typeFlg.value = type
   }
 
-  const login = () => {}
+  const login = async () => {
+    console.log('userPassword.value :>> ', userPassword.value)
+    const formData = {
+      userEmail: userEmail.value,
+      userPhone: userPhone.value,
+      userPassword: userPassword.value,
+      receiptCode: receiptCode.value
+    }
+    await userLogin(formData).then((res) => {
+      const { title, message, type } = res
+      messageAlerts({
+        title,
+        message,
+        type
+      })
+      // 登陆成功
+      // if (res.errno == 2001) {
+      //   setTimeout(() => {
+      //     toPage('home')
+      //   }, 3000)
+      // }
+    })
+  }
 </script>
 
 <style lang="scss" scoped>
