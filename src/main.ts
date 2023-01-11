@@ -15,4 +15,3 @@ createApp(App)
   .use(VueDOMPurifyHTML)
   .use(ElementPlus, { size: 'small', zIndex: 3000 })
   .mount('#app')
-

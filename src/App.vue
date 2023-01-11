@@ -1,5 +1,8 @@
 <script setup lang="ts">
   import NavbarHome from './components/navbar/NavbarHome.vue'
+  import { loginStatus } from './stores/loginStateStore'
+  loginStatus.verifyLoginTime()
+  console.log('loginStatus.isLogin :>> ', loginStatus.isLogin)
 </script>
 
 <template>

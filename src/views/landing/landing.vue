@@ -77,6 +77,7 @@
   import { useRouter } from 'vue-router'
   import { refDebounced } from '@vueuse/core'
   import { FormFormatCheck } from '../../utils/Check'
+  import { loginStatus } from '../../stores/loginStateStore'
   import { isExist, userLogin } from '../../http/api/users'
   import { messageAlerts } from '@/utils/tip'
   // import { getJsonData } from '../../http/api/users'
@@ -163,11 +164,12 @@
         type
       })
       // 登陆成功
-      // if (res.errno == 2001) {
-      //   setTimeout(() => {
-      //     toPage('home')
-      //   }, 3000)
-      // }
+      if (res.errno == 2001) {
+        loginStatus.setLoginTime(res.data)
+        setTimeout(() => {
+          toPage('home')
+        }, 3000)
+      }
     })
   }
 </script>
