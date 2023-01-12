@@ -1,6 +1,6 @@
 <template>
   <div class="search-box">
-    <h1>在可视化图谱中开始 <em class="typewriter">多引擎</em> 探索</h1>
+    <h1>在聚合搜索中开始 <em class="typewriter">多引擎</em> 探索</h1>
     <h4>要开始，请选择版本并在搜索框内输入内容</h4>
     <div class="label-box">
       <div :class="['label', labelFlg == 1 ? 'label-pick' : '']" @click="changeLabel(1)">
@@ -97,9 +97,9 @@
           left: 0;
           width: 0;
           height: 100%;
-          border-right: 4px solid #000;
+          border-right: 4px solid #5e4dcd;
           overflow: hidden;
-          color: #000;
+          color: #5e4dcd;
           animation: load91371 2s linear infinite;
         }
 
@@ -132,7 +132,7 @@
           71%,
           81%,
           91% {
-            border-right-color: #000;
+            border-right-color: #5e4dcd;
           }
 
           60%,
