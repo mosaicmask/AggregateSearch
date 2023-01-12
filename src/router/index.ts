@@ -38,6 +38,16 @@ const routes: Array<RouteRecordRaw> = [
     path: '/searchResults',
     name: 'searchResults',
     component: () => import('../views/searchResults/searchResults.vue')
+  },
+  {
+    path: '/personalCenter',
+    name: 'personalCenter',
+    component: () => import('../views/personalCenter/personalCenter.vue')
+  },
+  {
+    path: '/:catchAll(.*)', // 不识别的path自动匹配404
+    redirect: '/404',
+    children: [{ path: '/404', name: 'error', component: () => import('../views/notFound.vue') }]
   }
 ]
 
