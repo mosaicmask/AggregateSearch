@@ -12,9 +12,11 @@ declare module '@vue/runtime-core' {
     ElCollapseItem: typeof import('element-plus/es')['ElCollapseItem']
     ElDrawer: typeof import('element-plus/es')['ElDrawer']
     ElIcon: typeof import('element-plus/es')['ElIcon']
+    ElTooltip: typeof import('element-plus/es')['ElTooltip']
     Error: typeof import('./components/error/error.vue')['default']
     NavbarHome: typeof import('./components/navbar/NavbarHome.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Smiley: typeof import('./components/smiley/Smiley.vue')['default']
   }
 }

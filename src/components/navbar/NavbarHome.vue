@@ -43,19 +43,29 @@
         <use xlink:href="#icon-androidgengduo"></use>
       </svg>
     </div>
-    <div class="button-box" v-if="!navbarFlg">
-      <el-button class="login-button" color="#5e4dcd" @click="toPage('landing')">登陆</el-button>
-      <el-button class="enroll-button" color="#3d3285" @click="toPage('register')">注册</el-button>
-    </div>
+    <template v-if="!loginStatus.isLogin">
+      <div class="button-box" v-if="!navbarFlg">
+        <el-button class="login-button" color="#5e4dcd" @click="toPage('landing')">
+          登陆
+        </el-button>
+        <el-button class="enroll-button" color="#3d3285" @click="toPage('register')">
+          注册
+        </el-button>
+      </div>
+    </template>
+    <template v-else>
+      <Smiley v-if="!navbarFlg"></Smiley>
+    </template>
   </nav>
 </template>
 
 <script setup lang="ts">
   import { useRouter, useRoute } from 'vue-router'
   import { ref, watch } from 'vue'
+  import { loginStatus } from '@/stores/loginStateStore'
+  import Smiley from '../smiley/Smiley.vue'
   const router = useRouter()
   const route = useRoute()
-
   // 监听路由
   const navbarFlg = ref(false)
   watch(
