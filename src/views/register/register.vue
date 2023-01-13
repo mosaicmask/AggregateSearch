@@ -312,7 +312,7 @@
       return
     }
     await register(formData).then((res) => {
-      if (res.errno != 200) {
+      if (res.errno != 2000) {
         return
       }
       setTimeout(() => {

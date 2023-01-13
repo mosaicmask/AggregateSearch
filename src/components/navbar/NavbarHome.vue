@@ -4,7 +4,7 @@
       <svg class="icon" aria-hidden="true">
         <use xlink:href="#icon-github-fill"></use>
       </svg>
-      <a href="https://github.com/mosaicmask">mosaic</a>
+      <a href="http://www.xz-code.com/">mosaic</a>
     </div>
     <div class="input-box" v-if="navbarFlg">
       <label for="search">
@@ -54,7 +54,7 @@
       </div>
     </template>
     <template v-else>
-      <Smiley v-if="!navbarFlg"></Smiley>
+      <Smiley v-if="!navbarFlg" @click="toPage('personalCenter')"></Smiley>
     </template>
   </nav>
 </template>
