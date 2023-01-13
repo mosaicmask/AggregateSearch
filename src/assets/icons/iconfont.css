@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3798072 */
-  src: url('iconfont.woff2?t=1670056903249') format('woff2'),
-       url('iconfont.woff?t=1670056903249') format('woff'),
-       url('iconfont.ttf?t=1670056903249') format('truetype');
+  src: url('iconfont.woff2?t=1673581901587') format('woff2'),
+       url('iconfont.woff?t=1673581901587') format('woff'),
+       url('iconfont.ttf?t=1673581901587') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,26 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-yahoo-fill:before {
+  content: "\eabe";
+}
+
+.icon-baidu_logo_icon:before {
+  content: "\e601";
+}
+
+.icon-bing_logo_icon:before {
+  content: "\e602";
+}
+
+.icon-google_icon:before {
+  content: "\e603";
+}
+
+.icon-sougoushuru:before {
+  content: "\faef";
 }
 
 .icon-wangzhanshezhi:before {
@@ -31,10 +51,6 @@
 
 .icon-bokeyuan:before {
   content: "\e623";
-}
-
-.icon-sogou:before {
-  content: "\e649";
 }
 
 .icon-github-fill:before {

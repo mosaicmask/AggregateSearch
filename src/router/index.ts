@@ -46,8 +46,9 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/:catchAll(.*)', // 不识别的path自动匹配404
-    redirect: '/404',
-    children: [{ path: '/404', name: 'error', component: () => import('../views/notFound.vue') }]
+    component: () => import('../views/notFound.vue')
+    // redirect: '/404',
+    // children: [{ path: '/404', name: 'error', component: () => import('../views/notFound.vue') }]
   }
 ]
 
