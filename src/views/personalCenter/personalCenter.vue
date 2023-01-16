@@ -340,7 +340,7 @@
         }
       }
       .litter-conf-box {
-        background: #1e293b;
+        background: #fff;
       }
     }
   }

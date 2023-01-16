@@ -89,24 +89,22 @@
     display: flex;
     align-items: center;
     gap: 0 0.2rem;
-    color: #e2e8f0;
+    color: #fff;
     font-size: 0.9rem;
-    background-color: #334155;
+    background-color: #442c94;
     border-radius: 0.4rem;
     padding: 0.7rem 1rem;
     margin-right: 1rem; // Must used margin-right instead of gap for the loop to be smooth
-    box-shadow: 0 0.1rem 0.2rem rgb(0 0 0 / 20%), 0 0.1rem 0.5rem rgb(0 0 0 / 30%),
-      0 0.2rem 1.5rem rgb(0 0 0 / 40%);
-
+    box-shadow: 0 0.1rem 0.5rem rgb(0 0 0 / 20%);
     span {
       font-size: 1.2rem;
-      color: #64748b;
+      color: rgb(155, 155, 155);
     }
   }
 
   .fade {
     pointer-events: none;
-    background: linear-gradient(90deg, #1e293b, transparent 30%, transparent 70%, #1e293b);
+    background: linear-gradient(90deg, #fff, transparent 30%, transparent 70%, #fff);
     position: absolute;
     inset: 0;
   }

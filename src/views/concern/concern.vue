@@ -1,10 +1,10 @@
 <template>
   <!-- 关注页面 -->
-  <Error />
+  <underConstruction />
 </template>
 
 <script setup lang="ts">
-  import Error from '../../components/error/error.vue'
+  import underConstruction from '../../components/error/underConstruction.vue'
 </script>
 
 <style lang="scss" scoped></style>
