@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3798072 */
-  src: url('iconfont.woff2?t=1673581901587') format('woff2'),
-       url('iconfont.woff?t=1673581901587') format('woff'),
-       url('iconfont.ttf?t=1673581901587') format('truetype');
+  src: url('iconfont.woff2?t=1673861028535') format('woff2'),
+       url('iconfont.woff?t=1673861028535') format('woff'),
+       url('iconfont.ttf?t=1673861028535') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-shuaxin:before {
+  content: "\e604";
 }
 
 .icon-yahoo-fill:before {

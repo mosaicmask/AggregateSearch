@@ -62,13 +62,13 @@ export const register = (params) => {
  * @return {string}
  */
 export const getCaptcha = async () => {
-  const res = await axios({
+  return await axios({
     url: '/api/users/captcha',
     method: 'get'
   }).then((res) => {
+    console.log('res.data :>> ', res.data)
     return res.data
   })
-  return res
 }
 /**
  *
@@ -77,7 +77,7 @@ export const getCaptcha = async () => {
  * @return {*}
  */
 export const getEmailCode = async (userEmail) => {
-  const res = await axios({
+  return await axios({
     url: '/api/users/sendEmailCode',
     method: 'post',
     data: {
@@ -85,5 +85,4 @@ export const getEmailCode = async (userEmail) => {
       toEmail: userEmail
     }
   }).then((res) => res)
-  return res
 }

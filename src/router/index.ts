@@ -57,12 +57,12 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach(() => {
-  NProgress.start()
+router.beforeEach(async () => {
+  await NProgress.start()
 })
 
-router.afterEach(() => {
-  NProgress.done()
+router.afterEach(async () => {
+  await NProgress.done()
 })
 
 export default router
