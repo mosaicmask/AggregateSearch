@@ -11,7 +11,6 @@ export class FormFormatCheck {
       message.emailTipMessage = '请先输入邮箱'
       return false
     }
-    console.log('!emailRegex.test(userEmail) :>> ', !emailRegex.test(userEmail))
     if (!emailRegex.test(userEmail)) {
       message.emailTipMessage = '请输入正确的邮箱'
       return false
@@ -33,7 +32,11 @@ export class FormFormatCheck {
     return true
   }
   checkCaptcha({ captchaText, message, captcha }) {
-    if (captchaText != captcha.value.text) {
+    if (!captcha.data) {
+      message.captchaTextTipMessage = '请先获取校验码，进行校验'
+      return false
+    }
+    if (captchaText != captcha.text) {
       message.captchaTextTipMessage = '请检查验证码是否输入正确'
       return false
     }
