@@ -14,7 +14,7 @@ const ls = new SecureLS({
 
 // 存储注册数据
 const signUpData = reactive({
-  data: ls.get('_SUD') ? true : false,
+  data: ls.get('_SUD'),
   removeSignUpData() {
     ls.removeAll()
   },

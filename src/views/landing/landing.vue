@@ -1,6 +1,13 @@
 <template>
   <div class="landing-body">
     <form class="landing-box" @submit.prevent="login">
+      <el-alert
+        title="邮箱注册的用户，请记住系统赋予您的初始密码，或者登陆后立即前往修改！"
+        type="warning"
+        center
+        show-icon
+        :closable="false"
+      />
       <h1>登陆</h1>
       <div class="select-box">
         <span :class="[typeFlg ? '' : 'pick']" @click="checkType(0)">手机登陆</span>
@@ -41,7 +48,7 @@
         <input
           autocomplete="off"
           placeholder="请输入密码"
-          type="password"
+          :type="showPSW ? 'text' : 'password'"
           class="input"
           id="Password"
           v-model="userPassword"
@@ -49,6 +56,9 @@
         <span class="message">
           {{ message.PasswordTipMessage }}
         </span>
+        <svg class="show-or-hide-icon" aria-hidden="true" @click="showPSW = !showPSW">
+          <use :xlink:href="showPSW ? '#icon-xianshimima' : '#icon-yincangmima'"></use>
+        </svg>
       </div>
       <div class="input-group" v-else>
         <label class="label" for="Captcha">校验码</label>
@@ -80,10 +90,12 @@
   import { loginStatus } from '../../stores/loginStateStore'
   import { isExist, userLogin } from '../../http/api/users'
   import { messageAlerts } from '@/utils/tip'
-  // import { getJsonData } from '../../http/api/users'
+  import { signUpData } from '@/stores/signUpStore'
+
   const router = useRouter()
   const typeFlg = ref(1)
   const exist = ref(false)
+  const showPSW = ref(false)
   // 提示文字显示flg
   const message = reactive({
     emailTipMessage: '',
@@ -92,9 +104,9 @@
     receiptCodeTipMessage: ''
   })
   // 表单数据
-  const userEmail = ref('')
+  const userEmail = ref((await signUpData.data.userEmail) || '')
   const userPhone = ref('')
-  const userPassword = ref('')
+  const userPassword = ref((await signUpData.data.userPassword) || '')
   const receiptCode = ref('')
 
   const formCheck = new FormFormatCheck()
@@ -149,7 +161,6 @@
   }
 
   const login = async () => {
-    console.log('userPassword.value :>> ', userPassword.value)
     const formData = {
       userEmail: userEmail.value,
       userPhone: userPhone.value,
@@ -157,7 +168,7 @@
       receiptCode: receiptCode.value
     }
     await userLogin(formData).then((res) => {
-      const { title, message, type } = res
+      const { title, message, type, data } = res
       messageAlerts({
         title,
         message,
@@ -165,7 +176,10 @@
       })
       // 登陆成功
       if (res.errno == 2001) {
-        loginStatus.setLoginTime(res.data)
+        // 清除用户注册信息
+        signUpData.removeSignUpData()
+        // 存储用户登陆状态
+        loginStatus.setLoginTime(data)
         setTimeout(() => {
           toPage('home')
         }, 3000)
@@ -183,15 +197,25 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
     .landing-box {
       // 让元素的长宽包括内边框
       width: 540px;
-      height: 520px;
+      min-height: 520px;
       box-sizing: border-box;
       padding: 1rem;
       border-radius: 10px;
       box-shadow: 5px 5px 10px 3px rgba(102, 102, 102, 0.344);
       background-color: #fff;
+      .el-alert {
+        margin: 20px 0 0;
+        :deep(.el-alert__content) {
+          .el-alert__title {
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
       h1 {
         text-align: center;
       }
@@ -251,6 +275,7 @@
         min-height: 85px;
         margin: 0 auto;
         padding: 0.8rem 0;
+        position: relative;
         .input {
           box-sizing: border-box;
           min-width: 350px;
@@ -285,6 +310,13 @@
         &:hover .label,
         .input:focus {
           color: #05060fc2;
+        }
+        .show-or-hide-icon {
+          width: 1.5rem;
+          height: 1.5rem;
+          position: absolute;
+          right: 15px;
+          top: 45px;
         }
       }
       .message {
