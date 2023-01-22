@@ -6,7 +6,6 @@ import { emailRegex, phoneNoRegex, pwdRegex } from './regex'
 
 export class FormFormatCheck {
   checkEmail({ userEmail, message }) {
-    console.log('!userEmail :>> ', !userEmail)
     if (!userEmail) {
       message.emailTipMessage = '请先输入邮箱'
       return false
@@ -27,7 +26,6 @@ export class FormFormatCheck {
       message.phoneTipMessage = '请输入正确的手机号'
       return false
     }
-    // this.checkUser({ message, userPhone: userPhone, userEmail: '', showLoginText, exist })
     message.phoneTipMessage = ''
     return true
   }

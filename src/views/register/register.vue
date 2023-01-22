@@ -36,7 +36,8 @@
           <a @click="toPage('landing')" v-if="showLoginText">登陆</a>
         </span>
       </div>
-      <div class="input-group">
+      <!-- 此代码 该页面已启用，单后续可能会有需要，暂时保留 -->
+      <!-- <div class="input-group">
         <label class="label" for="Password">密码</label>
         <input
           autocomplete="off"
@@ -49,8 +50,8 @@
         <span class="message">
           {{ message.PasswordTipMessage }}
         </span>
-      </div>
-      <div class="input-group">
+      </div> -->
+      <!-- <div class="input-group">
         <label class="label" for="Password">再次输入密码</label>
         <input
           autocomplete="off"
@@ -63,7 +64,7 @@
         <span class="message">
           {{ message.scendPasswordTipMessage }}
         </span>
-      </div>
+      </div> -->
       <div class="input-group">
         <label class="label" for="Captcha">校验码</label>
         <div class="input-line">
@@ -75,9 +76,15 @@
             class="input"
             id="Captcha"
           />
-          <div class="supplement">
+          <div class="supplement" v-if="captcha.data">
             <div @click="changeCaptcha()" v-dompurify-html="captcha.data" class="captcha-svg"></div>
             <span> 点击图片换一张 </span>
+          </div>
+          <div class="supplement-error" v-else @click="changeCaptcha()">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-shuaxin"></use>
+            </svg>
+            <span> 获取验证码 </span>
           </div>
         </div>
         <span class="message">
@@ -133,9 +140,10 @@
   import { refDebounced } from '@vueuse/core'
   import { isExist } from '../../http/api/users'
   import { messageAlerts } from '../../utils/tip'
-  // import { v4 as uuidV4 } from 'uuid'
+  import { v4 as uuidV4 } from 'uuid'
   import { getCaptcha, getEmailCode, register } from '../../http/api/users'
   import { FormFormatCheck } from '../../utils/Check'
+  import { signUpData } from '../../stores/signUpStore'
   const router = useRouter()
   // 隐私政策状态
   const checkFlg = ref(false)
@@ -152,60 +160,37 @@
   const message = reactive({
     emailTipMessage: '',
     phoneTipMessage: '',
-    PasswordTipMessage: '',
-    scendPasswordTipMessage: '',
     captchaTextTipMessage: '',
     receiptCodeTipMessage: ''
   })
   // 表单数据
   const userEmail = ref('')
   const userPhone = ref('')
-  const userPassword = ref('')
-  const scendPassword = ref('')
   const captchaText = ref('')
   const receiptCode = ref('')
 
   const formCheck = new FormFormatCheck()
   // 使用 VueUse 的 refDebounced 实现防抖验证参数
-  const emailDebounced = refDebounced(userEmail, 2000)
+  const emailDebounced = refDebounced(userEmail, 1500)
   watch(emailDebounced, () => {
-    formCheck.checkEmail({ userEmail: userEmail.value, message })
-    checkUser()
+    formCheck.checkEmail({ userEmail: userEmail.value, message }) ? checkUser() : ''
   })
   // 验证手机号
   const phoneDebounced = refDebounced(userPhone, 1500)
   watch(phoneDebounced, () => {
-    formCheck.checkPhone({ userPhone: userPhone.value, message })
-    checkUser()
+    formCheck.checkPhone({ userPhone: userPhone.value, message }) ? checkUser() : ''
   })
   // 验证校验码
   const captchaDebounced = refDebounced(captchaText, 1000)
   watch(captchaDebounced, () => {
     formCheck.checkCaptcha({ captchaText: captchaText.value, message, captcha })
   })
-  // 验证密码
-  const passwordDebounced = refDebounced(userPassword, 1500)
-  watch(passwordDebounced, () => {
-    formCheck.checkPassword({ message, userPassword: userPassword.value })
-    formCheck.checkScendPassword({
-      scendPassword: scendPassword.value,
-      message,
-      userPassword: userPassword.value
-    })
-  })
-  const scendPasswordDebounced = refDebounced(scendPassword, 1500)
-  watch(scendPasswordDebounced, () => {
-    formCheck.checkScendPassword({
-      scendPassword: scendPassword.value,
-      message,
-      userPassword: userPassword.value
-    })
-  })
   // 验证回执码
   const receiptCodeDebounced = refDebounced(receiptCode, 1000)
   watch(receiptCodeDebounced, () => {
     formCheck.checkReceiptCode({ receiptCode: receiptCode.value, message })
   })
+
   // 验证用户是否存在
   const checkUser = async () => {
     const sendData = {
@@ -226,12 +211,26 @@
       exist.value = false
     })
   }
-  // const uuid = uuidV4()
-  const captcha = ref(await getCaptcha())
+
+  const captcha = reactive({
+    data: '',
+    text: ''
+  })
   // 修改验证码 这里可以添加一个防抖
   const changeCaptcha = async () => {
-    captcha.value = await getCaptcha()
+    const res = await getCaptcha()
+    if (!res) {
+      messageAlerts({
+        title: '服务器错误',
+        message: '获取图形校验码失败！',
+        type: 'error'
+      })
+      return
+    }
+    captcha.data = res.data
+    captcha.text = res.text
   }
+
   //  获取回执
   const getReceiptCode = () => {
     let countdown = 60
@@ -264,11 +263,8 @@
     } else {
       // 手机回执
     }
-    // if ( captchaText !== captcha.value.text) {
-    //   console.log('请检查验证码是否输入正确！')
-    //   return
-    // }
   }
+
   // 回执倒计时函数
   const setTime = (countdown) => {
     if (countdown == 0) {
@@ -289,18 +285,31 @@
     const formData = {
       userEmail: userEmail.value,
       userPhone: userPhone.value,
-      userPassword: userPassword.value,
+      // 随机生成密码
+      userPassword: uuidV4().substring(0, 14),
       receiptCode: receiptCode.value
     }
+    if (typeFlg.value) {
+      // 使用邮箱注册
+      await signUpWithEmail(formData)
+    } else {
+      // 使用手机注册
+      await signUpWithPhone()
+    }
+  }
+
+  // 注册时使用邮箱
+  const signUpWithEmail = async (formData) => {
     // 注册前进行所有验证
     const check =
-      (formCheck.checkEmail({
+      formCheck.checkEmail({
         userEmail: userEmail.value,
         message
-      }) ||
-        formCheck.checkPhone({ userPhone: userPhone.value, message })) &&
-      formCheck.checkPassword({ message, userPassword: userPassword.value }) &&
-      formCheck.checkReceiptCode({ receiptCode: receiptCode.value, message })
+      }) &&
+      formCheck.checkReceiptCode({
+        receiptCode: receiptCode.value,
+        message
+      })
     // 如果验证不通过，不能进行注册
     if (!check && !exist.value) return
     if (!checkFlg.value) {
@@ -311,6 +320,7 @@
       })
       return
     }
+    // 注册接口
     await register(formData).then((res) => {
       if (res.errno != 2000) {
         return
@@ -318,12 +328,32 @@
       setTimeout(() => {
         toPage('landing')
       }, 3000)
+      // 存储用户注册的数据
+      signUpData.setSignUpData(formData)
+      // 注册成功后的逻辑还需要优化
       messageAlerts({
         title: '注册成功',
         message: '3s后自动跳转到登陆页面',
         type: 'success'
       })
     })
+  }
+
+  // 注册时使用手机号
+  const signUpWithPhone = async () => {
+    console.log('1 :>> ', 1)
+  }
+
+  // 重置表单数据
+  const resetFormData = () => {
+    userEmail.value = ''
+    userPhone.value = ''
+    captchaText.value = ''
+    receiptCode.value = ''
+    message.emailTipMessage = ''
+    message.phoneTipMessage = ''
+    message.captchaTextTipMessage = ''
+    message.receiptCodeTipMessage = ''
   }
 
   const toPage = (where: string) => {
@@ -333,7 +363,7 @@
   }
   const checkType = (type: number) => {
     typeFlg.value = type
-    changeCaptcha()
+    resetFormData()
   }
 </script>
 
@@ -458,7 +488,8 @@
             min-width: 230px;
             height: 45px;
           }
-          .supplement {
+          .supplement,
+          .supplement-error {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -471,7 +502,25 @@
             }
             span {
               font-size: 12px;
-              color: #05060fc2;
+              color: #6871f1;
+            }
+          }
+          .supplement-error {
+            flex-direction: row;
+            .icon {
+              width: 14px;
+              height: 14px;
+              margin: 0 5px;
+            }
+            span,
+            .icon {
+              color: #6871f1;
+            }
+            &:hover {
+              span,
+              .icon {
+                color: #5e4dcd;
+              }
             }
           }
         }
