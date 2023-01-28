@@ -59,14 +59,14 @@
     labelFlg.value = flg
   }
 
-  const searchData = () => {
-    console.log('inputVal.value :>> ', inputVal.value)
+  const searchData = async () => {
     if (!inputVal.value) {
       router.go(0)
       return
     }
     router.push({
-      name: 'searchResults'
+      name: 'searchResults',
+      params: { keyword: inputVal.value }
     })
   }
 </script>
