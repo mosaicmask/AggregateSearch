@@ -1,7 +1,7 @@
 <template>
   <div class="search-box">
     <h1>在聚合搜索中开始 <em class="typewriter">多引擎</em> 探索</h1>
-    <h4>要开始，请选择版本并在搜索框内输入内容</h4>
+    <h4>🥳 专注于程序员搜索 🥳</h4>
     <div class="label-box">
       <div :class="['label', labelFlg == 1 ? 'label-pick' : '']" @click="changeLabel(1)">
         简单版
