@@ -91,96 +91,112 @@
     </el-drawer>
     <!-- 搜索内容 第一列 -->
     <div class="result-item">
-      <div class="engine">
-        <svg class="icon icon-engine" aria-hidden="true">
-          <use xlink:href="#icon-baidu"></use>
-        </svg>
-        <h1>百度 Baidu</h1>
-      </div>
-      <div class="content-box">
-        <div class="content-item" v-for="item in 10" :key="item">
-          <div class="item-title">
-            <h2>{{ item }}VUE跳转外部链接的方法 - 掘金 </h2>
-          </div>
-          <div class="item-description">
-            <span>
-              2021年11月8日 — vue单页应用项目直接使用a标签跳转到外部链接报错问题分析：
-              a标记触发的跳转默认被router处理，加上了前缀，见如下代码: 解决方法： 使用浏览器BOM ...
-            </span>
-          </div>
-          <div class="item-url">
-            <span>https://juejin.cn › 前端</span>
-          </div>
-        </div>
-      </div>
+      <searchResultCard v-model:typeData="type[0]"></searchResultCard>
     </div>
 
     <!-- 搜索内容 第二列 -->
     <div class="result-item">
-      <div class="engine">
-        <svg class="icon icon-engine" aria-hidden="true">
-          <use xlink:href="#icon-weiruan1"></use>
-        </svg>
-        <h1>必应 Bing</h1>
-      </div>
-      <div class="content-box">
-        <div class="content-item" v-for="item in 10" :key="item">
-          <div class="item-title">
-            <h2>{{ item }}VUE跳转外部链接的方法 - 掘金 </h2>
-          </div>
-          <div class="item-description">
-            <span>
-              2021年11月8日 — vue单页应用项目直接使用a标签跳转到外部链接报错问题分析：
-              a标记触发的跳转默认被router处理，加上了前缀，见如下代码: 解决方法： 使用浏览器BOM ...
-            </span>
-          </div>
-          <div class="item-url">
-            <span>https://juejin.cn › 前端</span>
-          </div>
-        </div>
-      </div>
+      <searchResultCard v-model:typeData="type[1]"></searchResultCard>
     </div>
     <!-- 搜索内容第三列 -->
-    <div class="result-item">
-      <div class="engine">
-        <svg class="icon icon-engine" aria-hidden="true">
-          <use xlink:href="#icon-google"></use>
-        </svg>
-        <h1>谷歌 Googles</h1>
-      </div>
-      <div class="content-box">
-        <div class="content-item" v-for="item in 10" :key="item">
-          <div class="item-title">
-            <h2>{{ item }}VUE跳转外部链接的方法 - 掘金 </h2>
-          </div>
-          <div class="item-description">
-            <span>
-              2021年11月8日 — vue单页应用项目直接使用a标签跳转到外部链接报错问题分析：
-              a标记触发的跳转默认被router处理，加上了前缀，见如下代码: 解决方法： 使用浏览器BOM ...
-            </span>
-          </div>
-          <div class="item-url">
-            <span>https://juejin.cn › 前端</span>
-          </div>
-        </div>
-      </div>
+    <div class="result-item last">
+      <informationCard></informationCard>
+      <moreSearchCard :data="informationLabel">
+        <template #title> 资源搜索</template>
+      </moreSearchCard>
+      <moreSearchCard :data="blogLabel">
+        <template #title> 博客搜索</template>
+      </moreSearchCard>
+      <toolCard :toolList="tools">
+        <template #title> 开发工具</template>
+      </toolCard>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref, reactive } from 'vue'
   import { InfoFilled } from '@element-plus/icons-vue'
+  import searchResultCard from '../../components/searchResultCard/searchResultCard.vue'
+  import informationCard from '../../components/informationCard/informationCard.vue'
+  import moreSearchCard from '../../components/moreSearchCard/moreSearchCard.vue'
+  import toolCard from '../../components/toolCard/toolCard.vue'
+  import { useRoute } from 'vue-router'
+  interface Label {
+    name: string
+    href: string
+  }
+  interface Tool {
+    [key: string]: string
+  }
+  const type = ['Bing', 'Google']
+  const route = useRoute()
   const drawerLeft = ref(false)
   const drawerRight = ref(false)
+  // 搜索关键字
+  const keyword = route.params.keyword
+  // 标签数据
+  const informationLabel = reactive<Label[]>([
+    {
+      name: '百度百科',
+      href: `https://baike.baidu.com/item/${keyword}?fromModule=lemma_search-history`
+    },
+    {
+      name: '维基百科',
+      href: `https://zh.wikipedia.org/w/index.php?search=${keyword}`
+    },
+    { name: 'B站搜索', href: `https://search.bilibili.com/all?keyword=${keyword}` },
+    { name: '抖音搜索', href: `https://www.douyin.com/search/${keyword}` }
+  ])
+  const blogLabel = reactive<Label[]>([
+    {
+      name: '博客园',
+      href: `https://zzk.cnblogs.com/s/blogpost?Keywords=${keyword}&ViewCount=500&DiggCount=10
+`
+    },
+    { name: 'CSDN', href: `https://so.csdn.net/so/search?spm=1000.2115.3001.4498&q=${keyword}` },
+    { name: '思否', href: `https://segmentfault.com/search?q=${keyword}` },
+    { name: '知乎', href: `https://www.zhihu.com/search?type=content&q=${keyword}` }
+  ])
+  // 工具数据
+  const tools = reactive<Tool[]>([
+    {
+      name: 'Json格式化',
+      icon: 'https://kaifa.baidu.com/images/tool/json_format.png',
+      href: 'https://c.runoob.com/front-end/53/'
+    },
+    {
+      name: '时间戳转换',
+      icon: 'https://kaifa.baidu.com/images/tool/timestamp_convert.png',
+      href: 'https://c.runoob.com/front-end/852/'
+    },
+    {
+      name: '进制转换',
+      icon: 'https://kaifa.baidu.com/images/tool/jinzhi_convert.png',
+      href: 'https://c.runoob.com/front-end/58/'
+    },
+    {
+      name: '正则测试工具',
+      icon: 'https://kaifa.baidu.com/images/tool/regular_test.png',
+      href: 'https://tool.lu/regex/'
+    }
+  ])
+  // 获取搜狗数据
+  // await crawlingData.getSouGouData(route.params.keyword)
+  // 获取百度数据
+  // await crawlingData.getBaiduData(route.params.keyword)
+  //获取google数据
+  // await crawlingData.getGoogleData(route.params.keyword)
 </script>
 
 <style lang="scss" scoped>
   .result-body {
     width: 100%;
-    height: calc(100vh - 75px);
-    display: flex;
+    display: grid;
+    grid-template-columns: auto auto 430px;
+    grid-row: calc(100vh - 75px);
     position: relative;
+    background-color: #e6e6e6d1;
     .drawer-switch,
     .drawer-setting {
       position: absolute;
@@ -383,69 +399,23 @@
     }
 
     .result-item {
-      flex: 1;
-      padding: 1.5rem 0 0 3rem;
+      // min-width: 500px;
+      min-height: calc(100vh - 110px);
+      padding: 1.5rem 0.1rem 0 2rem;
       box-sizing: border-box;
-      .engine {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        margin: 0 0 2rem 0;
+      background-color: #ffffff;
+      border-radius: 10px;
+      margin: 15px;
+      overflow: hidden;
+    }
 
-        .icon-engine {
-          width: 2.5rem;
-          height: 2.5rem;
-          margin: 0 1rem 0 0;
-        }
-      }
-      .content-box {
-        height: calc(100vh - 228px);
-        overflow-x: auto;
-        padding: 0 1rem 1rem 0;
-        transition: background-color var(--el-transition-duration-fast), opacity 0.25s,
-          transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-
-        .content-item {
-          max-width: 560px;
-          min-width: 470px;
-          box-sizing: border-box;
-          margin: 4rem 0 0 0;
-          .item-title {
-            h2 {
-              overflow: hidden;
-              text-overflow: ellipsis;
-              display: -webkit-box;
-              -webkit-line-clamp: 1;
-              -webkit-box-orient: vertical;
-              color: #5e4dcd;
-            }
-          }
-          .item-description {
-            font-size: 12px;
-            span {
-              overflow: hidden;
-              text-overflow: ellipsis;
-              display: -webkit-box;
-              -webkit-line-clamp: 3;
-              -webkit-box-orient: vertical;
-            }
-          }
-          .item-url {
-            font-size: 10px;
-            margin-top: 0.5rem;
-            span {
-              overflow: hidden;
-              text-overflow: ellipsis;
-              display: -webkit-box;
-              -webkit-line-clamp: 1;
-              -webkit-box-orient: vertical;
-            }
-          }
-        }
-        .content-item:nth-child(1) {
-          margin: 1rem 0 0 0;
-        }
-      }
+    .last {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background-color: transparent;
+      padding: 0;
     }
   }
 </style>
