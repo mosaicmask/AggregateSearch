@@ -3,8 +3,8 @@
   <div class="information-body">
     <h3 class="title">最新资讯</h3>
     <ul class="information-box">
-      <li v-for="item in informationData" :key="item.href">
-        <a href="#">{{ item.title }}</a>
+      <li v-for="item in informationData" :key="item.title">
+        <a :href="item.href" target="_blank">{{ item.title }}</a>
         <span>{{ item.time }}</span>
       </li>
     </ul>
@@ -13,14 +13,11 @@
 </template>
 
 <script setup lang="ts">
-  const informationData = [
-    { title: 'Kotlin 已发布 2023 年路线图：K2 编译器、完善文档教程', time: '01/29', href: '#' },
-    { title: 'Kotlin 已发布 2023 年路线图：K2 编译器、完善文档教程', time: '01/29', href: '#' },
-    { title: 'Kotlin 已发布 2023 年路线图：K2 编译器、完善文档教程', time: '01/29', href: '#' },
-    { title: 'Kotlin 已发布 2023 年路线图：K2 编译器、完善文档教程', time: '01/29', href: '#' },
-    { title: 'Kotlin 已发布 2023 年路线图：K2 编译器、完善文档教程', time: '01/29', href: '#' },
-    { title: 'Kotlin 已发布 2023 年路线图：K2 编译器、完善文档教程', time: '01/29', href: '#' }
-  ]
+  import { crawlingInformationData } from '@/http/api/reptile'
+
+  const informationData = await crawlingInformationData().then((res) => {
+    return res.data.splice(0, 5)
+  })
 </script>
 
 <style lang="scss" scoped>

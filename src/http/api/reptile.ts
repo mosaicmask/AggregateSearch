@@ -88,3 +88,23 @@ export const crawlingGoogleData = (data) => {
       }
     })
 }
+
+/**
+ *
+ * 爬取资讯搜索数据
+ * @param {object} data
+ * @return {*}
+ */
+export const crawlingInformationData = () => {
+  return axios({
+    url: '/api/reptile/information',
+    method: 'get'
+  })
+    .then((res) => res)
+    .catch((error: any) => {
+      if (!error.isCancel) {
+        //错误数据处理
+        console.log(error.message)
+      }
+    })
+}
