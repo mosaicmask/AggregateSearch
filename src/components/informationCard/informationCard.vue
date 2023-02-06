@@ -8,7 +8,7 @@
         <span>{{ item.time }}</span>
       </li>
     </ul>
-    <a href="https://www.oschina.net/news" class="look-more">查看更多>></a>
+    <a href="https://www.oschina.net/news" class="look-more" target="_blank">查看更多>></a>
   </div>
 </template>
 

@@ -8,7 +8,14 @@
     </div>
     <div class="input-box" v-if="navbarFlg">
       <label for="search">
-        <input class="input" type="text" placeholder="Search twitter" id="search" />
+        <input
+          class="input"
+          type="text"
+          v-model="inputVal"
+          @keyup.enter.exact="searchData"
+          placeholder="Search twitter"
+          id="search"
+        />
         <div class="fancy-bg"></div>
         <div class="search">
           <svg
@@ -66,6 +73,18 @@
   import Smiley from '../smiley/Smiley.vue'
   const router = useRouter()
   const route = useRoute()
+  const inputVal = ref('')
+  const searchData = async () => {
+    if (!inputVal.value) {
+      router.go(0)
+      return
+    }
+    // 替换路由参数
+    await router.replace({
+      name: 'searchResults',
+      params: { keyword: inputVal.value }
+    })
+  }
   // 监听路由
   const navbarFlg = ref(false)
   watch(

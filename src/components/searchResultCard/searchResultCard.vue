@@ -5,10 +5,15 @@
     </svg>
     <h1>For {{ typeData }}</h1>
   </div>
-  <div class="content-box" v-if="searchData.length">
+  <div
+    class="content-box"
+    v-if="searchData?.length || typeof searchData == 'object' || searchData != null"
+  >
     <div class="content-item" v-for="item in searchData" :key="item.title">
       <div class="item-title">
-        <h2 v-dompurify-html="item.title"> </h2>
+        <a :href="item.href" target="_blank">
+          <h3 v-dompurify-html="item.title"> </h3>
+        </a>
       </div>
       <div class="item-description">
         <span v-dompurify-html="item.caption"> </span>
@@ -25,6 +30,7 @@
 </template>
 
 <script setup lang="ts">
+  import { ref, defineProps } from 'vue'
   import { crawlingData } from '@/stores/searchStore.js'
   import loaders from '../../components/loaders/loadersOne.vue'
   import { useRoute } from 'vue-router'
@@ -34,6 +40,7 @@
   const props = defineProps<{
     typeData: string
   }>()
+
   //  根据类型进行搜索内容爬取
   switch (props.typeData) {
     case 'Bing':
@@ -70,8 +77,7 @@
     }
   }
 
-  const searchData = await getSearchData()
-  console.log('searchData :>> ', searchData)
+  const searchData = reactive(await getSearchData())
 </script>
 
 <style lang="scss" scoped>
@@ -100,7 +106,7 @@
       box-sizing: border-box;
       margin: 4rem 0 0 0;
       .item-title {
-        h2 {
+        h3 {
           overflow: hidden;
           text-overflow: ellipsis;
           display: -webkit-box;

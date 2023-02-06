@@ -122,6 +122,7 @@
   import moreSearchCard from '../../components/moreSearchCard/moreSearchCard.vue'
   import toolCard from '../../components/toolCard/toolCard.vue'
   import { useRoute } from 'vue-router'
+  import router from '@/router'
   interface Label {
     name: string
     href: string
@@ -135,6 +136,13 @@
   const drawerRight = ref(false)
   // 搜索关键字
   const keyword = route.params.keyword
+  // 监听路由参数变化刷新页面（可以优化，只刷新子组件）
+  watch(
+    () => route.params.keyword,
+    async () => {
+      router.go(0)
+    }
+  )
   // 标签数据
   const informationLabel = reactive<Label[]>([
     {
@@ -399,7 +407,8 @@
     }
 
     .result-item {
-      // min-width: 500px;
+      width: auto;
+      max-width: 600px;
       min-height: calc(100vh - 110px);
       padding: 1.5rem 0.1rem 0 2rem;
       box-sizing: border-box;

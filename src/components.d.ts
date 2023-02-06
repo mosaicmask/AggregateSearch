@@ -18,7 +18,6 @@ declare module '@vue/runtime-core' {
     ElOption: typeof import('element-plus/es')['ElOption']
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
-    Error: typeof import('./components/error/404.vue')['default']
     InfiniteScroll: typeof import('./components/infiniteScroll/InfiniteScroll.vue')['default']
     InformationCard: typeof import('./components/informationCard/informationCard.vue')['default']
     LoadersOne: typeof import('./components/loaders/loadersOne.vue')['default']
@@ -29,7 +28,6 @@ declare module '@vue/runtime-core' {
     SearchResultCard: typeof import('./components/searchResultCard/searchResultCard.vue')['default']
     Smiley: typeof import('./components/smiley/Smiley.vue')['default']
     ToolCard: typeof import('./components/toolCard/toolCard.vue')['default']
-    underConstruction: typeof import('./components/error/underConstruction.vue')['default']
     UnderConstruction: typeof import('./components/error/underConstruction.vue')['default']
   }
 }

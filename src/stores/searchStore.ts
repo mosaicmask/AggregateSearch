@@ -11,8 +11,8 @@ import {
 } from '@/http/api/reptile'
 
 interface SearchData {
+  // errno: number
   [key: string]: string
-  errno?
 }
 
 interface CrawlingData {
@@ -30,7 +30,7 @@ interface CrawlingData {
   resolveKeywords: Function
 }
 
-const crawlingData: CrawlingData = reactive({
+const crawlingData = reactive<CrawlingData>({
   keyword: '',
   soGouData: [],
   baiduData: [],
@@ -53,7 +53,6 @@ const crawlingData: CrawlingData = reactive({
     this.keyword = keyword
     const res = await crawlingBaiduData({ keyword: this.keyword })
     this.baiduData = res?.data
-    console.log('res?.data :>> ', res?.data)
     if (!res?.data.errno) await this.init(this.baiduData)
   },
   async getGoogleData(keyword) {
@@ -63,6 +62,7 @@ const crawlingData: CrawlingData = reactive({
     if (!res?.data.errno) await this.init(this.googleData)
   },
   init(data) {
+    console.log('data :>> ', data)
     const resKeywords = this.resolveKeywords(`${this.keyword} `) || []
     data.map((item, index) => {
       // 高亮关键字中的英文
