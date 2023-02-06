@@ -12,7 +12,7 @@ import { loadEnv } from 'vite'
 import path from 'path'
 // 路径
 const pathSrc = path.resolve(__dirname, 'src')
-export default ({ command, mode }) => {
+export default ({ mode }) => {
   return defineConfig({
     plugins: [
       vue(),
@@ -63,12 +63,8 @@ export default ({ command, mode }) => {
       https: false,
       open: true, // 在开发服务器启动时自动在浏览器中打开应用程序
       proxy: {
-        '/api': {
-          target: 'http://localhost:3030', // 代理的目标地址
-          changeOrigin: true // 开发模式，默认的origin是真实的 origin:localhost:3000 代理服务会把origin修改为目标地址
-        },
         // 字符串简写写法
-        '^/api': {
+        '/api': {
           target:
             mode === 'development'
               ? loadEnv(mode, process.cwd()).VITE_APP_DEV_URL

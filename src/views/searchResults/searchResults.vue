@@ -130,7 +130,7 @@
   interface Tool {
     [key: string]: string
   }
-  const type = ['Bing', 'Google']
+  const type = ['Bing', 'Baidu']
   const route = useRoute()
   const drawerLeft = ref(false)
   const drawerRight = ref(false)
