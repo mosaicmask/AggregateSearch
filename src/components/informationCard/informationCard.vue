@@ -1,14 +1,19 @@
 <template>
   <!-- 搜索结果页的资讯卡片组件 -->
   <div class="information-body">
-    <h3 class="title">最新资讯</h3>
-    <ul class="information-box">
-      <li v-for="item in informationData" :key="item.title">
-        <a :href="item.href" target="_blank">{{ item.title }}</a>
-        <span>{{ item.time }}</span>
-      </li>
-    </ul>
-    <a href="https://www.oschina.net/news" class="look-more" target="_blank">查看更多>></a>
+    <template v-if="informationData">
+      <h3 class="title">最新资讯</h3>
+      <ul class="information-box">
+        <li v-for="item in informationData" :key="item.title">
+          <a :href="item.href" target="_blank">{{ item.title }}</a>
+          <span>{{ item.time }}</span>
+        </li>
+      </ul>
+      <a href="https://www.oschina.net/news" class="look-more" target="_blank">查看更多>></a>
+    </template>
+    <template v-else>
+      <h3>抱歉！好像有什么东西坏掉了...</h3>
+    </template>
   </div>
 </template>
 
@@ -16,6 +21,7 @@
   import { crawlingInformationData } from '@/http/api/reptile'
 
   const informationData = await crawlingInformationData().then((res) => {
+    if (!res) return
     return res.data.splice(0, 5)
   })
 </script>
@@ -63,6 +69,7 @@
         }
         span {
           color: #c4c7ce;
+          margin: 0 0 0 5px;
         }
       }
     }

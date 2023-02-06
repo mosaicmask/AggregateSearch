@@ -89,27 +89,29 @@
     <el-drawer v-model="drawerRight" title="I am the title" :with-header="false">
       <span>this is setting!!!!</span>
     </el-drawer>
-    <!-- 搜索内容 第一列 -->
-    <div class="result-item">
-      <searchResultCard v-model:typeData="type[0]"></searchResultCard>
-    </div>
+    <div class="result-box">
+      <!-- 搜索内容 第一列 -->
+      <div class="result-item">
+        <searchResultCard v-model:typeData="type[0]"></searchResultCard>
+      </div>
 
-    <!-- 搜索内容 第二列 -->
-    <div class="result-item">
-      <searchResultCard v-model:typeData="type[1]"></searchResultCard>
-    </div>
-    <!-- 搜索内容第三列 -->
-    <div class="result-item last">
-      <informationCard></informationCard>
-      <moreSearchCard :data="informationLabel">
-        <template #title> 资源搜索</template>
-      </moreSearchCard>
-      <moreSearchCard :data="blogLabel">
-        <template #title> 博客搜索</template>
-      </moreSearchCard>
-      <toolCard :toolList="tools">
-        <template #title> 开发工具</template>
-      </toolCard>
+      <!-- 搜索内容 第二列 -->
+      <div class="result-item">
+        <searchResultCard v-model:typeData="type[1]"></searchResultCard>
+      </div>
+      <!-- 搜索内容第三列 -->
+      <div class="result-item last">
+        <informationCard></informationCard>
+        <moreSearchCard :data="informationLabel">
+          <template #title> 资源搜索</template>
+        </moreSearchCard>
+        <moreSearchCard :data="blogLabel">
+          <template #title> 博客搜索</template>
+        </moreSearchCard>
+        <toolCard :toolList="tools">
+          <template #title> 开发工具</template>
+        </toolCard>
+      </div>
     </div>
   </div>
 </template>
@@ -189,20 +191,14 @@
       href: 'https://tool.lu/regex/'
     }
   ])
-  // 获取搜狗数据
-  // await crawlingData.getSouGouData(route.params.keyword)
-  // 获取百度数据
-  // await crawlingData.getBaiduData(route.params.keyword)
-  //获取google数据
-  // await crawlingData.getGoogleData(route.params.keyword)
 </script>
 
 <style lang="scss" scoped>
   .result-body {
     width: 100%;
-    display: grid;
-    grid-template-columns: auto auto 430px;
-    grid-row: calc(100vh - 75px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
     background-color: #e6e6e6d1;
     .drawer-switch,
@@ -221,6 +217,7 @@
     }
     .drawer-switch {
       top: 10px;
+      left: 0;
       border-radius: 0 5px 5px 0;
       .icon-switch {
         width: 1.4rem;
@@ -405,26 +402,31 @@
         }
       }
     }
+    .result-box {
+      max-width: 1500px;
+      display: grid;
+      grid-template-columns: auto auto 430px;
+      grid-row: calc(100vh - 75px);
+      .result-item {
+        width: auto;
+        max-width: 600px;
+        min-height: calc(100vh - 110px);
+        padding: 1.5rem 0.1rem 0 2rem;
+        box-sizing: border-box;
+        background-color: #ffffff;
+        border-radius: 10px;
+        margin: 15px;
+        overflow: hidden;
+      }
 
-    .result-item {
-      width: auto;
-      max-width: 600px;
-      min-height: calc(100vh - 110px);
-      padding: 1.5rem 0.1rem 0 2rem;
-      box-sizing: border-box;
-      background-color: #ffffff;
-      border-radius: 10px;
-      margin: 15px;
-      overflow: hidden;
-    }
-
-    .last {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      background-color: transparent;
-      padding: 0;
+      .last {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        background-color: transparent;
+        padding: 0;
+      }
     }
   }
 </style>

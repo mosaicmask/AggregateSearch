@@ -39,30 +39,33 @@ const crawlingData = reactive<CrawlingData>({
   async getSouGouData(keyword) {
     this.keyword = keyword
     const res = await crawlingSouGouData({ keyword: this.keyword })
+    if (!res.data || typeof res.data != 'object' || res.data == null || res.data.errno) return
     this.soGouData = res?.data
-    if (!res?.data.errno) await this.init(this.soGouData)
+    await this.init(this.soGouData)
   },
 
   async getBingData(keyword) {
     this.keyword = keyword
     const res = await crawlingBingData({ keyword: this.keyword })
+    if (!res.data || typeof res.data != 'object' || res.data == null || res.data.errno) return
     this.bingData = res?.data
-    if (!res?.data.errno) await this.init(this.bingData)
+    await this.init(this.bingData)
   },
   async getBaiduData(keyword) {
     this.keyword = keyword
     const res = await crawlingBaiduData({ keyword: this.keyword })
+    if (!res.data || typeof res.data != 'object' || res.data == null || res.data.errno) return
     this.baiduData = res?.data
-    if (!res?.data.errno) await this.init(this.baiduData)
+    await this.init(this.baiduData)
   },
   async getGoogleData(keyword) {
     this.keyword = keyword
     const res = await crawlingGoogleData({ keyword: this.keyword })
+    if (!res.data || typeof res.data != 'object' || res.data == null || res.data.errno) return
     this.googleData = res?.data
-    if (!res?.data.errno) await this.init(this.googleData)
+    await this.init(this.googleData)
   },
   init(data) {
-    console.log('data :>> ', data)
     const resKeywords = this.resolveKeywords(`${this.keyword} `) || []
     data.map((item, index) => {
       // 高亮关键字中的英文

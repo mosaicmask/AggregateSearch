@@ -5,10 +5,7 @@
     </svg>
     <h1>For {{ typeData }}</h1>
   </div>
-  <div
-    class="content-box"
-    v-if="searchData?.length || typeof searchData == 'object' || searchData != null"
-  >
+  <div class="content-box" v-if="searchData?.length">
     <div class="content-item" v-for="item in searchData" :key="item.title">
       <div class="item-title">
         <a :href="item.href" target="_blank">
