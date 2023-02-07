@@ -74,17 +74,17 @@ export const crawlingBaiduData = (data) => {
  * @param {object} data
  * @return {*}
  */
-export const crawlingGoogleData = (data) => {
+export const crawlingGoogleData = async (data) => {
   return axios({
     url: '/api/reptile/google',
     method: 'get',
     data
   })
-    .then((res) => res)
+    .then(async (res) => res)
     .catch((error: any) => {
       if (!error.isCancel) {
         //错误数据处理
-        console.log(error.message)
+        console.log('error.message :>> ', error.message);
       }
     })
 }

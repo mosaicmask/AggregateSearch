@@ -36,35 +36,6 @@
           <a @click="toPage('landing')" v-if="showLoginText">登陆</a>
         </span>
       </div>
-      <!-- 此代码 该页面已启用，单后续可能会有需要，暂时保留 -->
-      <!-- <div class="input-group">
-        <label class="label" for="Password">密码</label>
-        <input
-          autocomplete="off"
-          placeholder="请输入密码"
-          v-model="userPassword"
-          type="password"
-          class="input"
-          id="PasswordOne"
-        />
-        <span class="message">
-          {{ message.PasswordTipMessage }}
-        </span>
-      </div> -->
-      <!-- <div class="input-group">
-        <label class="label" for="Password">再次输入密码</label>
-        <input
-          autocomplete="off"
-          placeholder="请再次输入密码"
-          v-model="scendPassword"
-          type="password"
-          class="input"
-          id="PasswordTwo"
-        />
-        <span class="message">
-          {{ message.scendPasswordTipMessage }}
-        </span>
-      </div> -->
       <div class="input-group">
         <label class="label" for="Captcha">校验码</label>
         <div class="input-line">
@@ -131,6 +102,9 @@
         <span>已有账号？<em @click="toPage('landing')">前往登陆</em></span>
       </div>
     </form>
+    <div class="notify-body" v-show="!typeFlg">
+      <h3>QAQ该功能正在开发中...</h3>
+    </div>
   </div>
 </template>
 
@@ -371,6 +345,7 @@
   .register-body {
     max-width: 900px;
     height: calc(100vh - 75px);
+    position: relative;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -672,6 +647,21 @@
           cursor: pointer;
         }
       }
+    }
+
+    .notify-body{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 350px;
+      width: 540px;
+      height: 533px;
+      border-radius: 0 0 10px 10px;
+      /* 主要内容 */
+      background: rgba(255, 255, 255, 0.096);
+      /* 模糊大小就是靠的blur这个函数中的数值大小 */
+      backdrop-filter: blur(10px);
     }
   }
 </style>
