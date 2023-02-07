@@ -13,7 +13,7 @@
           type="text"
           v-model="inputVal"
           @keyup.enter.exact="searchData"
-          placeholder="Search twitter"
+          placeholder="Search for something"
           id="search"
         />
         <div class="fancy-bg"></div>
