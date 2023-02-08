@@ -4,16 +4,13 @@
     <form class="body-left" @submit.prevent="changeUserInfo">
       <div class="user-info-box">
         <div class="user-img">
-          <img
-            src="https://my-note-images-mac.oss-cn-shanghai.aliyuncs.com/code-image/user-nv.png"
-            alt="用户头像"
-          />
+          <img :src="userData.picture" alt="用户头像" />
         </div>
         <div class="input-line">
           <label for="userName">用户名</label>
           <input
             id="userName"
-            placeholder="聚合搜索_QAQ_新用户"
+            :placeholder="userData.userName"
             type="text"
             name="text"
             class="input"
@@ -25,7 +22,7 @@
           <label for="userEmail">邮箱</label>
           <input
             id="userEmail"
-            placeholder="2515548348@qq.com"
+            :placeholder="userData.userEmail"
             type="text"
             name="text"
             class="input"
@@ -37,7 +34,7 @@
           <label for="userPhone">手机号</label>
           <input
             id="userPhone"
-            placeholder="未绑定"
+            :placeholder="userData.userPhone ? userData.userPhone : '未绑定'"
             type="text"
             name="text"
             class="input"
@@ -57,26 +54,26 @@
           />
           <span class="operate-text">更改</span>
         </div>
-        <div class="input-line">
+        <!-- <div class="input-line">
           <fieldset>
             <legend for="gender">性别</legend>
             <div class="radio-box">
               <div class="radio-item">
-                <input type="radio" id="gender1" name="gender" value="email" />
+                <input type="radio" id="gender1" name="gender" value="1" />
                 <label for="gender1">男</label>
               </div>
               <div class="radio-item">
-                <input type="radio" id="gender2" name="gender" value="phone" />
+                <input type="radio" id="gender2" name="gender" value="2" />
                 <label for="gender2">女</label>
               </div>
               <div class="radio-item">
-                <input type="radio" id="gender3" name="gender" value="mail" />
+                <input type="radio" id="gender3" name="gender" value="3" />
                 <label for="gender3">保密</label>
               </div>
             </div>
           </fieldset>
-        </div>
-        <div class="input-line">
+        </div> -->
+        <!-- <div class="input-line">
           <fieldset>
             <legend for="occupation">职业</legend>
             <div class="radio-box">
@@ -94,12 +91,29 @@
               </div>
             </div>
           </fieldset>
-        </div>
+        </div> -->
         <div class="bottom-box">
           <el-button class="login-button" @click="changeUserInfo" color="#5e4dcd" size="large">
             保存修改
           </el-button>
+          <el-button
+            class="login-button"
+            @click="dialogVisible = true"
+            color="#aa0d0d"
+            size="large"
+          >
+            退出登录
+          </el-button>
         </div>
+        <el-dialog v-model="dialogVisible" title="提示" width="30%" draggable>
+          <span>确定要退出登录吗？</span>
+          <template #footer>
+            <span class="dialog-footer">
+              <el-button @click="dialogVisible = false" size="large">取消</el-button>
+              <el-button type="primary" @click="signOut" size="large"> 确定 </el-button>
+            </span>
+          </template>
+        </el-dialog>
       </div>
     </form>
     <div class="body-right">
@@ -156,14 +170,16 @@
 
 <script lang="ts">
   import { defineComponent, reactive, toRefs } from 'vue'
+  import { loginStatus } from '../../stores/loginStateStore'
   // 这里有个坑，不能直接用组合是API 也就是setup 写在script标签里，这样会导致拖动数据不更新
   import draggable from 'vuedraggable'
 
   export default defineComponent({
     components: { draggable },
-    setup() {
+    async setup() {
       const data = reactive({
         drag: false,
+        dialogVisible: false,
         value: '',
         myArray: [
           { id: 1, value: 'baidu' },
@@ -196,13 +212,21 @@
             label: '雅虎',
             icon: 'yahoo-fill'
           }
-        ]
+        ],
+        userData: await loginStatus.getUserInfo()
       })
       return { ...toRefs(data) }
     },
     methods: {
       changeUserInfo() {
-        console.log('1 :>> ', 1)
+        loginStatus.getUserInfo()
+      },
+      // 退出登录
+      signOut() {
+        loginStatus.singOut()
+        this.$router.push({
+          name: 'home'
+        })
       }
     }
   })

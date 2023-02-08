@@ -38,6 +38,16 @@ const loginStatus = reactive({
     Object.assign(data, { expire: Date.now() + 24 * 60 * 60 * 1000 })
     //设置localStorage保存到本地，第一个为变量名，第二个是值
     ls.set('_UD', data)
+  },
+  // 清除登录状态
+  singOut() {
+    // 清除缓存
+    ls.removeAll()
+  },
+  // 获取用户信息
+  getUserInfo() {
+    const userData = ls.get('_UD')
+    return userData
   }
 })
 

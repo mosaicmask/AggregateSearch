@@ -86,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref,watch } from 'vue'
+  import { ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
   import { refDebounced } from '@vueuse/core'
   import { FormFormatCheck } from '../../utils/Check'
@@ -124,11 +124,6 @@
   watch(phoneDebounced, () => {
     if (!formCheck.checkPhone({ userPhone: userPhone.value, message })) return
     checkUser()
-  })
-  // 验证密码
-  const passwordDebounced = refDebounced(userPassword, 1500)
-  watch(passwordDebounced, () => {
-    formCheck.checkPassword({ message, userPassword: userPassword.value })
   })
   // 验证回执码
   const receiptCodeDebounced = refDebounced(receiptCode, 1000)
@@ -380,21 +375,21 @@
           cursor: pointer;
         }
       }
-      .notify-body{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      top: 185px;
-      left: 0;
-      width: 540px;
-      height: 380px;
-      border-radius: 0 0 10px 10px;
-      /* 主要内容 */
-      background: rgba(255, 255, 255, 0.096);
-      /* 模糊大小就是靠的blur这个函数中的数值大小 */
-      backdrop-filter: blur(10px);
-    }
+      .notify-body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 185px;
+        left: 0;
+        width: 540px;
+        height: 380px;
+        border-radius: 0 0 10px 10px;
+        /* 主要内容 */
+        background: rgba(255, 255, 255, 0.096);
+        /* 模糊大小就是靠的blur这个函数中的数值大小 */
+        backdrop-filter: blur(10px);
+      }
     }
   }
 </style>

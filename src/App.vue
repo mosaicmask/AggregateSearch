@@ -1,21 +1,28 @@
 <script setup lang="ts">
   import NavbarHome from './components/navbar/NavbarHome.vue'
   import { loginStatus } from './stores/loginStateStore'
-  import { useRoute,useRouter } from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
   loginStatus.verifyLoginTime()
   const route = useRoute()
   const router = useRouter()
   // 用于处理特定页面跳转不刷新
-  watch(()=>route.fullPath,(newVal,oldVal)=>{
-    if(oldVal == '/register' && newVal == "/landing"){
-      router.go(0)
-      return
+  watch(
+    () => route.fullPath,
+    (newVal, oldVal) => {
+      if (oldVal == '/register' && newVal == '/landing') {
+        router.go(0)
+        return
+      }
+      if (oldVal == '/landing' && newVal == '/') {
+        router.go(0)
+        return
+      }
+      if (oldVal == '/personalCenter' && newVal == '/') {
+        router.go(0)
+        return
+      }
     }
-    if(oldVal == '/landing' && newVal == "/"){
-      router.go(0)
-      return
-    }
-  })
+  )
 </script>
 
 <template>
