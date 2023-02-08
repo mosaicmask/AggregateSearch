@@ -78,15 +78,15 @@
         <em @click="toPage('register')">遇到问题？</em>
         <span>没有账号？<em @click="toPage('register')">前往注册</em></span>
       </div>
+      <div class="notify-body" v-show="!typeFlg">
+        <h3>QAQ该功能正在开发中...</h3>
+      </div>
     </form>
-    <div class="notify-body" v-show="!typeFlg">
-      <h3>QAQ该功能正在开发中...</h3>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref,watch } from 'vue'
   import { useRouter } from 'vue-router'
   import { refDebounced } from '@vueuse/core'
   import { FormFormatCheck } from '../../utils/Check'
@@ -210,6 +210,7 @@
       border-radius: 10px;
       box-shadow: 5px 5px 10px 3px rgba(102, 102, 102, 0.344);
       background-color: #fff;
+      position: relative;
       .el-alert {
         margin: 20px 0 0;
         :deep(.el-alert__content) {
@@ -379,20 +380,21 @@
           cursor: pointer;
         }
       }
-    }
-    .notify-body{
+      .notify-body{
       display: flex;
       align-items: center;
       justify-content: center;
       position: absolute;
-      top: 522px;
+      top: 185px;
+      left: 0;
       width: 540px;
-      height: 390px;
+      height: 380px;
       border-radius: 0 0 10px 10px;
       /* 主要内容 */
       background: rgba(255, 255, 255, 0.096);
       /* 模糊大小就是靠的blur这个函数中的数值大小 */
       backdrop-filter: blur(10px);
+    }
     }
   }
 </style>

@@ -101,10 +101,10 @@
         <em @click="toPage('landing')">遇到问题？</em>
         <span>已有账号？<em @click="toPage('landing')">前往登陆</em></span>
       </div>
+      <div class="notify-body" v-show="!typeFlg">
+        <h3>QAQ该功能正在开发中...</h3>
+      </div>
     </form>
-    <div class="notify-body" v-show="!typeFlg">
-      <h3>QAQ该功能正在开发中...</h3>
-    </div>
   </div>
 </template>
 
@@ -345,7 +345,6 @@
   .register-body {
     max-width: 900px;
     height: calc(100vh - 75px);
-    position: relative;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -360,6 +359,7 @@
       border-radius: 10px;
       box-shadow: 5px 5px 10px 3px rgba(102, 102, 102, 0.344);
       background-color: #fff;
+      position: relative;
       h1 {
         text-align: center;
       }
@@ -647,21 +647,22 @@
           cursor: pointer;
         }
       }
+      .notify-body{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 136px;
+        left: 0;
+        width: 540px;
+        height: 533px;
+        border-radius: 0 0 10px 10px;
+        /* 主要内容 */
+        background: rgba(255, 255, 255, 0.096);
+        /* 模糊大小就是靠的blur这个函数中的数值大小 */
+        backdrop-filter: blur(10px);
+      }
     }
 
-    .notify-body{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      top: 350px;
-      width: 540px;
-      height: 533px;
-      border-radius: 0 0 10px 10px;
-      /* 主要内容 */
-      background: rgba(255, 255, 255, 0.096);
-      /* 模糊大小就是靠的blur这个函数中的数值大小 */
-      backdrop-filter: blur(10px);
-    }
   }
 </style>
