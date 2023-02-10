@@ -123,6 +123,7 @@
   import informationCard from '../../components/informationCard/informationCard.vue'
   import moreSearchCard from '../../components/moreSearchCard/moreSearchCard.vue'
   import toolCard from '../../components/toolCard/toolCard.vue'
+  import { engineConfData } from '@/stores/engineConfStore'
   import { useRoute } from 'vue-router'
   import router from '@/router'
   interface Label {
@@ -132,7 +133,7 @@
   interface Tool {
     [key: string]: string
   }
-  const type = ['Bing', 'Google']
+  const type = [engineConfData.data.firstEngine, engineConfData.data.lastEngine]
   const route = useRoute()
   const drawerLeft = ref(false)
   const drawerRight = ref(false)

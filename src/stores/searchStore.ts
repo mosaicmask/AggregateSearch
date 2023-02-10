@@ -61,7 +61,14 @@ const crawlingData = reactive<CrawlingData>({
   async getGoogleData(keyword) {
     this.keyword = keyword
     const res = await crawlingGoogleData({ keyword: this.keyword })
-    if (typeof res == 'undefined' || !res.data || typeof res.data != 'object' ||  res.data == null || res.data.errno) return
+    if (
+      typeof res == 'undefined' ||
+      !res.data ||
+      typeof res.data != 'object' ||
+      res.data == null ||
+      res.data.errno
+    )
+      return
     this.googleData = res?.data
     await this.init(this.googleData)
   },

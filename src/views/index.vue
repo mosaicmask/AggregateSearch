@@ -52,12 +52,23 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
+  import { getEngineConf } from '@/http/api/users'
+  import { engineConfData } from '@/stores/engineConfStore'
   const router = useRouter()
   const inputVal = ref('')
   const labelFlg = ref(1)
   const changeLabel = (flg: number) => {
     labelFlg.value = flg
   }
+
+  //获取并存储 搜索引擎配置
+  const getConf = async () => {
+    await getEngineConf().then((res) => {
+      const { firstEngine, lastEngine } = res
+      engineConfData.setEngineConfData({ firstEngine, lastEngine })
+    })
+  }
+  getConf()
 
   const searchData = async () => {
     if (!inputVal.value) {

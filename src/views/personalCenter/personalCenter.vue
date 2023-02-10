@@ -210,6 +210,7 @@
   import draggable from 'vuedraggable'
   import { logout, getEngineConf, changeEngineConf } from '@/http/api/users'
   import { messageAlerts } from '@/utils/tip'
+  import { engineConfData } from '@/stores/engineConfStore'
 
   export default defineComponent({
     components: { draggable },
@@ -277,6 +278,8 @@
         }
         await changeEngineConf(conf).then((res) => {
           messageAlerts(res)
+          if (res.errno != 2000) return
+          engineConfData.setEngineConfData(conf)
         })
       },
       // 退出登录
