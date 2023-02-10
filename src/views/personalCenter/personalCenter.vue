@@ -232,8 +232,8 @@
           newPassword: ''
         },
         myArray: [
-          { id: 1, value: 'baidu' },
-          { id: 2, value: 'google' }
+          { id: 1, value: 'Bing' },
+          { id: 2, value: 'Baidu' }
         ],
         options: [
           {
@@ -261,9 +261,10 @@
       })
       return { ...toRefs(data) }
     },
-    async beforeCreate() {
+    async created() {
       // 获取数据库的搜索配置
       const conf = await getEngineConf()
+      if (!conf) return
       this.myArray[0].value = conf.firstEngine
       this.myArray[1].value = conf.lastEngine
     },
@@ -286,7 +287,7 @@
       signOut() {
         logout().then((res) => {
           messageAlerts({ ...res })
-          if (res.errno == 2002) {
+          if (res.errno == 2000) {
             loginStatus.singOut()
             setTimeout(() => {
               this.$router.push({

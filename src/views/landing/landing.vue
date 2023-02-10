@@ -173,7 +173,7 @@
           type
         })
         // 登陆成功
-        if (res.errno == 2001) {
+        if (res.errno == 2000) {
           // 清除用户注册信息
           signUpData.removeSignUpData()
           // 存储用户登陆状态
