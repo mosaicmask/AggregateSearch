@@ -3,10 +3,10 @@
     <form class="register-box" @submit.prevent="toRegister">
       <h1>注册</h1>
       <div class="select-box">
-        <span :class="[typeFlg ? '' : 'pick']" @click="checkType(0)">手机号注册</span>
-        <span :class="[typeFlg ? 'pick' : '']" @click="checkType(1)">邮箱注册</span>
+        <span @click="toPage('landing')">手机号注册</span>
+        <span class="pick">邮箱注册</span>
       </div>
-      <div class="input-group" v-if="typeFlg">
+      <div class="input-group">
         <label class="label" for="Email">邮箱</label>
         <input
           autocomplete="off"
@@ -18,21 +18,6 @@
         />
         <span class="message">
           {{ message.emailTipMessage }}
-          <a @click="toPage('landing')" v-if="showLoginText">登陆</a>
-        </span>
-      </div>
-      <div class="input-group" v-else>
-        <label class="label" for="Email">手机号</label>
-        <input
-          autocomplete="off"
-          placeholder="请输入手机号"
-          v-model="userPhone"
-          type="email"
-          class="input"
-          id="Email"
-        />
-        <span class="message">
-          {{ message.phoneTipMessage }}
           <a @click="toPage('landing')" v-if="showLoginText">登陆</a>
         </span>
       </div>
@@ -63,11 +48,11 @@
         </span>
       </div>
       <div class="input-group">
-        <label class="label" for="Captcha">{{ typeFlg ? '邮箱' : '手机' }}回执码</label>
+        <label class="label" for="Captcha">邮箱回执码</label>
         <div class="input-line">
           <input
             autocomplete="off"
-            :placeholder="typeFlg ? '请输入邮箱回执码' : '请输入手机回执码'"
+            placeholder="请输入邮箱回执码"
             type="text"
             v-model="receiptCode"
             class="input"
@@ -101,9 +86,6 @@
         <em @click="toPage('landing')">遇到问题？</em>
         <span>已有账号？<em @click="toPage('landing')">前往登陆</em></span>
       </div>
-      <div class="notify-body" v-show="!typeFlg">
-        <h3>QAQ该功能正在开发中...</h3>
-      </div>
     </form>
   </div>
 </template>
@@ -121,8 +103,6 @@
   const router = useRouter()
   // 隐私政策状态
   const checkFlg = ref(false)
-  //  注册类型的标签切换状态
-  const typeFlg = ref(1)
   // 登陆文字显示状态
   const showLoginText = ref(false)
   // 切换按钮状态
@@ -227,16 +207,12 @@
       })
       return
     }
-    if (typeFlg.value) {
-      loadingFlg.value = true
-      setTime(countdown)
-      // 邮箱回执
-      getEmailCode(userEmail.value).then((res) => {
-        console.log('res :>> ', res)
-      })
-    } else {
-      // 手机回执
-    }
+    loadingFlg.value = true
+    setTime(countdown)
+    // 邮箱回执
+    getEmailCode(userEmail.value).then((res) => {
+      console.log('res :>> ', res)
+    })
   }
 
   // 回执倒计时函数
@@ -263,13 +239,8 @@
       userPassword: uuidV4().substring(0, 14),
       receiptCode: receiptCode.value
     }
-    if (typeFlg.value) {
-      // 使用邮箱注册
-      await signUpWithEmail(formData)
-    } else {
-      // 使用手机注册
-      await signUpWithPhone()
-    }
+    // 使用邮箱注册
+    await signUpWithEmail(formData)
   }
 
   // 注册时使用邮箱
@@ -313,31 +284,10 @@
     })
   }
 
-  // 注册时使用手机号
-  const signUpWithPhone = async () => {
-    console.log('1 :>> ', 1)
-  }
-
-  // 重置表单数据
-  const resetFormData = () => {
-    userEmail.value = ''
-    userPhone.value = ''
-    captchaText.value = ''
-    receiptCode.value = ''
-    message.emailTipMessage = ''
-    message.phoneTipMessage = ''
-    message.captchaTextTipMessage = ''
-    message.receiptCodeTipMessage = ''
-  }
-
   const toPage = (where: string) => {
     router.push({
       name: where
     })
-  }
-  const checkType = (type: number) => {
-    typeFlg.value = type
-    resetFormData()
   }
 </script>
 
@@ -647,22 +597,6 @@
           cursor: pointer;
         }
       }
-      .notify-body{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        top: 136px;
-        left: 0;
-        width: 540px;
-        height: 533px;
-        border-radius: 0 0 10px 10px;
-        /* 主要内容 */
-        background: rgba(255, 255, 255, 0.096);
-        /* 模糊大小就是靠的blur这个函数中的数值大小 */
-        backdrop-filter: blur(10px);
-      }
     }
-
   }
 </style>

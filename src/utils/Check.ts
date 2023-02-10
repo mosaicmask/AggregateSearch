@@ -34,7 +34,7 @@ export class FormFormatCheck {
       message.captchaTextTipMessage = '请先获取校验码，进行校验'
       return false
     }
-    if (captchaText != captcha.text) {
+    if (!captcha.text.includes(captchaText)) {
       message.captchaTextTipMessage = '请检查验证码是否输入正确'
       return false
     }

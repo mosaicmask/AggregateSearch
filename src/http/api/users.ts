@@ -25,6 +25,13 @@ export const isExist = (data) => {
       }
     })
 }
+/**
+ *
+ * 用户登陆
+ * @param {*} params
+ * @return {*}
+ */
+
 export const userLogin = async (params) => {
   const { userEmail, userPassword, userPhone, receiptCode } = params
   return axios({
@@ -44,13 +51,15 @@ export const userLogin = async (params) => {
  * @return {*}
  */
 export const register = (params) => {
-  const { userEmail, userPassword, receiptCode } = params
+  const { userEmail, userPhone, userPassword, receiptCode } = params
+
   return axios({
     url: '/api/users/register',
     method: 'post',
     data: {
       userEmail,
       userPassword,
+      userPhone,
       receiptCode
     }
   }).then((res) => res)
@@ -66,7 +75,6 @@ export const getCaptcha = async () => {
     url: '/api/users/captcha',
     method: 'get'
   }).then((res) => {
-    console.log('res.data :>> ', res.data)
     return res.data
   })
 }
@@ -84,5 +92,34 @@ export const getEmailCode = async (userEmail) => {
       // 接收邮箱
       toEmail: userEmail
     }
+  }).then((res) => res)
+}
+
+/**
+ *
+ * 发送手机校验码
+ * @param {*} userPhone
+ * @return {*}
+ */
+export const getPhoneCheckCode = async (userPhone) => {
+  return await axios({
+    url: '/api/users/sendPhoneCode',
+    method: 'post',
+    data: {
+      //接收手机
+      toPhoneNumber: userPhone
+    }
+  }).then((res) => res)
+}
+
+/**
+ *
+ * 退出登录
+ * @return {*}
+ */
+export const logout = async () => {
+  return await axios({
+    url: '/api/users/logout',
+    method: 'post'
   }).then((res) => res)
 }

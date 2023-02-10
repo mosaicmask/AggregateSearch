@@ -28,21 +28,10 @@
           <a @click="toPage('register')" v-if="exist">注册</a>
         </span>
       </div>
-      <div class="input-group" v-else>
-        <label class="label" for="Username">手机号</label>
-        <input
-          autocomplete="off"
-          placeholder="请输入手机号"
-          type="text"
-          class="input"
-          id="Username"
-          v-model="userPhone"
-        />
-        <span class="message">
-          {{ message.phoneTipMessage }}
-          <a @click="toPage('register')" v-if="exist">注册</a>
-        </span>
-      </div>
+      <template v-else>
+        <!-- 手机号输入框组件 -->
+        <phoneOnInput v-model:user-phone="userPhone"></phoneOnInput>
+      </template>
       <div class="input-group" v-if="typeFlg">
         <label class="label" for="Password">密码</label>
         <input
@@ -60,26 +49,22 @@
           <use :xlink:href="showPSW ? '#icon-xianshimima' : '#icon-yincangmima'"></use>
         </svg>
       </div>
-      <div class="input-group" v-else>
-        <label class="label" for="Captcha">校验码</label>
-        <input
-          autocomplete="off"
-          placeholder="请输入六位校验码"
-          type="text"
-          class="input"
-          id="Captcha"
-          v-model="receiptCode"
-        />
-      </div>
+      <template v-else>
+        <!-- 进行人机验证 -->
+        <verifyInput v-model:captcha-text="captchaText" ref="RefVerifyInput"></verifyInput>
+        <!-- 验证码输入框组件 -->
+        <checkingInput
+          @use-check-captcha="useCheckCaptcha"
+          v-model:user-phone="userPhone"
+          v-model:receipt-code="receiptCode"
+        ></checkingInput>
+      </template>
       <div class="submit">
-        <input class="submit-button" type="submit" />
+        <input class="submit-button" type="submit" :value="typeFlg ? '登陆' : '一键注册登陆'" />
       </div>
       <div class="text-box">
         <em @click="toPage('register')">遇到问题？</em>
         <span>没有账号？<em @click="toPage('register')">前往注册</em></span>
-      </div>
-      <div class="notify-body" v-show="!typeFlg">
-        <h3>QAQ该功能正在开发中...</h3>
       </div>
     </form>
   </div>
@@ -91,12 +76,16 @@
   import { refDebounced } from '@vueuse/core'
   import { FormFormatCheck } from '../../utils/Check'
   import { loginStatus } from '../../stores/loginStateStore'
-  import { isExist, userLogin } from '../../http/api/users'
+  import { isExist, userLogin, register } from '../../http/api/users'
   import { messageAlerts } from '@/utils/tip'
   import { signUpData } from '@/stores/signUpStore'
+  import verifyInput from '../../components/input/verifyInput/verifyInput.vue'
+  import checkingInput from '../../components/input/checkingInput/checkingInput.vue'
+  import phoneOnInput from '../../components/input/phoneOnInput/phoneOnInput.vue'
 
+  const RefVerifyInput = ref<any>() //子组件实例
   const router = useRouter()
-  const typeFlg = ref(1)
+  const typeFlg = ref(0)
   const exist = ref(false)
   const showPSW = ref(false)
   // 提示文字显示flg
@@ -107,13 +96,19 @@
     receiptCodeTipMessage: ''
   })
   // 表单数据
-  const userEmail = ref((await signUpData.data.userEmail) || '')
+  const userEmail = ref('')
   const userPhone = ref('')
-  const userPassword = ref((await signUpData.data.userPassword) || '')
-  const receiptCode = ref('')
+  const userPassword = ref('')
+  const captchaText = ref('')
+  const receiptCode = ref('') // 这里用作手机校验码
 
-  const formCheck = new FormFormatCheck()
+  // 传递给校验码组件的验证方法 让B组件调用A组件的事件
+  const useCheckCaptcha = () => {
+    RefVerifyInput.value?.checkCaptcha()
+  }
+
   // 使用 VueUse 的 refDebounced 实现防抖验证参数
+  const formCheck = new FormFormatCheck()
   const emailDebounced = refDebounced(userEmail, 2000)
   watch(emailDebounced, () => {
     if (!formCheck.checkEmail({ userEmail: userEmail.value, message })) return
@@ -125,12 +120,7 @@
     if (!formCheck.checkPhone({ userPhone: userPhone.value, message })) return
     checkUser()
   })
-  // 验证回执码
-  const receiptCodeDebounced = refDebounced(receiptCode, 1000)
-  watch(receiptCodeDebounced, () => {
-    formCheck.checkReceiptCode({ receiptCode: receiptCode.value, message })
-  })
-  // 验证用户是否存在
+  // 验证(手机||邮箱)用户是否存在
   const checkUser = async () => {
     const sendData = {
       userEmail: userEmail.value,
@@ -139,13 +129,81 @@
     await isExist(sendData).then((res) => {
       if (res.errno == 1001) {
         message.emailTipMessage = `用户不存在,是否前往`
-        message.phoneTipMessage = `用户不存在,是否前往`
         exist.value = true
         return
       }
       message.emailTipMessage = ''
-      message.phoneTipMessage = ''
       exist.value = false
+    })
+  }
+  //  登陆按钮点击事件
+  const login = async () => {
+    const formData = {
+      userEmail: userEmail.value,
+      userPhone: userPhone.value,
+      userPassword: userPassword.value,
+      receiptCode: receiptCode.value
+    }
+    // 验证 验证码
+    RefVerifyInput.value?.checkCaptcha()
+    if (exist.value && !typeFlg.value) {
+      console.log('exist :>> ', exist)
+      //exist = true 表示用户不存在，走注册&登陆
+      await phoneUserRegister(formData)
+      await emailAndPhoneUserLogin(formData)
+      return
+    }
+    // 直接登陆
+    await emailAndPhoneUserLogin(formData)
+  }
+
+  // 邮箱||手机用户登陆
+  const emailAndPhoneUserLogin = async (formData) => {
+    if (!typeFlg.value) {
+      // 如果手机用户登陆 缓存中有可能有邮箱信息，删掉
+      formData.userEmail = ''
+      formData.userPassword = ''
+    }
+    await userLogin(formData)
+      .then((res) => {
+        const { title, message, type, data } = res
+        messageAlerts({
+          title,
+          message,
+          type
+        })
+        // 登陆成功
+        if (res.errno == 2001) {
+          // 清除用户注册信息
+          signUpData.removeSignUpData()
+          // 存储用户登陆状态
+          loginStatus.setLoginTime(data)
+          setTimeout(() => {
+            toPage('home')
+          }, 3000)
+        }
+      })
+      .catch((error) => {
+        if (error.response.status == 500) {
+          messageAlerts({
+            title: '验证码错误',
+            message: '请检查手机验证码是否填写错误或已过期',
+            type: 'error'
+          })
+        }
+      })
+  }
+
+  // 手机用户注册
+  const phoneUserRegister = async (formData) => {
+    // 如果手机用户登陆 缓存中有可能有邮箱信息，删掉
+    formData.userEmail = ''
+    formData.userPassword = ''
+    // 注册接口
+    await register(formData).then((res) => {
+      if (res.errno != 2000) {
+        return
+      }
     })
   }
 
@@ -154,35 +212,13 @@
       name: where
     })
   }
-  const checkType = (type: number) => {
+  const checkType = async (type: number) => {
     typeFlg.value = type
-  }
-
-  const login = async () => {
-    const formData = {
-      userEmail: userEmail.value,
-      userPhone: userPhone.value,
-      userPassword: userPassword.value,
-      receiptCode: receiptCode.value
-    }
-    await userLogin(formData).then((res) => {
-      const { title, message, type, data } = res
-      messageAlerts({
-        title,
-        message,
-        type
-      })
-      // 登陆成功
-      if (res.errno == 2001) {
-        // 清除用户注册信息
-        signUpData.removeSignUpData()
-        // 存储用户登陆状态
-        loginStatus.setLoginTime(data)
-        setTimeout(() => {
-          toPage('home')
-        }, 3000)
-      }
-    })
+    // 清空数据
+    userEmail.value = (await signUpData.data.userEmail) || ''
+    userPhone.value = ''
+    userPassword.value = (await signUpData.data.userPassword) || ''
+    receiptCode.value = ''
   }
 </script>
 
@@ -374,21 +410,6 @@
           color: #8e82dc;
           cursor: pointer;
         }
-      }
-      .notify-body {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        top: 185px;
-        left: 0;
-        width: 540px;
-        height: 380px;
-        border-radius: 0 0 10px 10px;
-        /* 主要内容 */
-        background: rgba(255, 255, 255, 0.096);
-        /* 模糊大小就是靠的blur这个函数中的数值大小 */
-        backdrop-filter: blur(10px);
       }
     }
   }
