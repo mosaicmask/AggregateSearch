@@ -208,7 +208,7 @@
   import { loginStatus } from '../../stores/loginStateStore'
   // 这里有个坑，不能直接用组合是API 也就是setup 写在script标签里，这样会导致拖动数据不更新
   import draggable from 'vuedraggable'
-  import { logout } from '@/http/api/users'
+  import { logout, getEngineConf, changeEngineConf } from '@/http/api/users'
   import { messageAlerts } from '@/utils/tip'
 
   export default defineComponent({
@@ -236,22 +236,22 @@
         ],
         options: [
           {
-            value: 'baidu',
+            value: 'Baidu',
             label: '百度',
             icon: 'baidu_logo_icon'
           },
           {
-            value: 'google',
+            value: 'Google',
             label: '谷歌',
             icon: 'google_icon'
           },
           {
-            value: 'bing',
+            value: 'Bing',
             label: '必应',
             icon: 'bing_logo_icon'
           },
           {
-            value: 'sougou',
+            value: 'SoGou',
             label: '搜狗',
             icon: 'sougoushuru'
           }
@@ -260,12 +260,24 @@
       })
       return { ...toRefs(data) }
     },
+    async beforeCreate() {
+      // 获取数据库的搜索配置
+      const conf = await getEngineConf()
+      this.myArray[0].value = conf.firstEngine
+      this.myArray[1].value = conf.lastEngine
+    },
     methods: {
       changeUserInfo() {
         loginStatus.getUserInfo()
       },
-      changeUserCnf() {
-        console.log('myArray :>> ', this.myArray)
+      async changeUserCnf() {
+        const conf = {
+          firstEngine: this.myArray[0].value,
+          lastEngine: this.myArray[1].value
+        }
+        await changeEngineConf(conf).then((res) => {
+          messageAlerts(res)
+        })
       },
       // 退出登录
       signOut() {

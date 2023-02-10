@@ -123,3 +123,29 @@ export const logout = async () => {
     method: 'post'
   }).then((res) => res)
 }
+
+/**
+ *
+ * 获取用户搜索引擎配置文件
+ * @return {*}
+ */
+export const getEngineConf = async () => {
+  return await axios({
+    url: 'api/users/engineConf',
+    method: 'get'
+  }).then((res) => res)
+}
+
+/**
+ *
+ * 修改用户搜索引擎配置文件
+ * @return {*}
+ */
+export const changeEngineConf = async (params) => {
+  const { firstEngine, lastEngine } = params
+  return await axios({
+    url: 'api/users/modifyEngineConf',
+    method: 'patch',
+    data: { firstEngine, lastEngine }
+  }).then((res) => res)
+}

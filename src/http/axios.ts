@@ -22,6 +22,8 @@ const axios = async ({ method, url, data, config }: any): Promise<any> => {
     })
   } else if (method == 'put') {
     return request.put(url, data, { ...config })
+  } else if (method == 'patch') {
+    return request.patch(url, data, { ...config })
   } else {
     console.error('未知的method' + method)
     return false
