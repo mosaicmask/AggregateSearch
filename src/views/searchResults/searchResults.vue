@@ -133,7 +133,10 @@
   interface Tool {
     [key: string]: string
   }
-  const type = [engineConfData.data.firstEngine, engineConfData.data.lastEngine]
+  const type = [
+    engineConfData.data.firstEngine || 'SoGou',
+    engineConfData.data.lastEngine || 'Baidu'
+  ]
   const route = useRoute()
   const drawerLeft = ref(false)
   const drawerRight = ref(false)
@@ -409,7 +412,8 @@
       grid-template-columns: auto auto 430px;
       grid-row: calc(100vh - 75px);
       .result-item {
-        width: auto;
+        // width: auto;
+        min-width: 400px;
         max-width: 600px;
         min-height: calc(100vh - 110px);
         padding: 1.5rem 0.1rem 0 2rem;

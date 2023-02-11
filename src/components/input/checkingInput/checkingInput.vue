@@ -74,8 +74,12 @@
   // 验证回执码
   const receiptCodeDebounced = refDebounced(itemValue, 1000)
   watch(receiptCodeDebounced, () => {
-    formCheck.checkReceiptCode({ receiptCode: itemValue.value, message })
+    checkReceiptCode()
   })
+
+  const checkReceiptCode = () => {
+    return formCheck.checkReceiptCode({ receiptCode: itemValue.value, message })
+  }
 
   //  获取回执
   const getReceiptCode = async () => {
@@ -109,6 +113,10 @@
       }, 1000)
     }
   }
+
+  defineExpose({
+    checkReceiptCode
+  })
 </script>
 
 <style lang="scss" scoped>

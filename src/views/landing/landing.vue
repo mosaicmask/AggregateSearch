@@ -30,7 +30,7 @@
       </div>
       <template v-else>
         <!-- 手机号输入框组件 -->
-        <phoneOnInput v-model:user-phone="userPhone"></phoneOnInput>
+        <phoneOnInput v-model:user-phone="userPhone" ref="RefPhoneInput"></phoneOnInput>
       </template>
       <div class="input-group" v-if="typeFlg">
         <label class="label" for="Password">密码</label>
@@ -57,6 +57,7 @@
           @use-check-captcha="useCheckCaptcha"
           v-model:user-phone="userPhone"
           v-model:receipt-code="receiptCode"
+          ref="RefCheckingInput"
         ></checkingInput>
       </template>
       <div class="submit">
@@ -83,7 +84,6 @@
   import checkingInput from '../../components/input/checkingInput/checkingInput.vue'
   import phoneOnInput from '../../components/input/phoneOnInput/phoneOnInput.vue'
 
-  const RefVerifyInput = ref<any>() //子组件实例
   const router = useRouter()
   const typeFlg = ref(0)
   const exist = ref(false)
@@ -102,9 +102,20 @@
   const captchaText = ref('')
   const receiptCode = ref('') // 这里用作手机校验码
 
+  const RefVerifyInput = ref<any>() //子组件实例
+  const RefPhoneInput = ref<any>()
+  const RefCheckingInput = ref<any>()
   // 传递给校验码组件的验证方法 让B组件调用A组件的事件
   const useCheckCaptcha = () => {
     RefVerifyInput.value?.checkCaptcha()
+  }
+
+  const checkPhoneFormData = () => {
+    const result =
+      RefPhoneInput.value?.checkPhone() &&
+      RefVerifyInput.value?.checkCaptcha() &&
+      RefCheckingInput.value?.checkReceiptCode()
+    return result
   }
 
   // 使用 VueUse 的 refDebounced 实现防抖验证参数
@@ -112,12 +123,6 @@
   const emailDebounced = refDebounced(userEmail, 2000)
   watch(emailDebounced, () => {
     if (!formCheck.checkEmail({ userEmail: userEmail.value, message })) return
-    checkUser()
-  })
-  // 验证手机号
-  const phoneDebounced = refDebounced(userPhone, 1500)
-  watch(phoneDebounced, () => {
-    if (!formCheck.checkPhone({ userPhone: userPhone.value, message })) return
     checkUser()
   })
   // 验证(手机||邮箱)用户是否存在
@@ -144,10 +149,9 @@
       userPassword: userPassword.value,
       receiptCode: receiptCode.value
     }
-    // 验证 验证码
-    RefVerifyInput.value?.checkCaptcha()
+    // 验证手机用户表单
+    if (!typeFlg.value && !checkPhoneFormData()) return
     if (exist.value && !typeFlg.value) {
-      console.log('exist :>> ', exist)
       //exist = true 表示用户不存在，走注册&登陆
       await phoneUserRegister(formData)
       await emailAndPhoneUserLogin(formData)
@@ -206,7 +210,7 @@
       }
     })
   }
-
+  // 跳转页面
   const toPage = (where: string) => {
     router.push({
       name: where

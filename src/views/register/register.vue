@@ -166,9 +166,13 @@
     })
   }
 
-  const captcha = reactive({
+  interface Captcha {
+    data: string
+    text: string[]
+  }
+  const captcha = reactive<Captcha>({
     data: '',
-    text: ''
+    text: []
   })
   // 修改验证码 这里可以添加一个防抖
   const changeCaptcha = async () => {
@@ -182,7 +186,7 @@
       return
     }
     captcha.data = res.data
-    captcha.text = res.text
+    captcha.text = [res.text.toLowerCase(), res.text]
   }
 
   //  获取回执

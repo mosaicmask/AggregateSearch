@@ -47,13 +47,20 @@
         width: 80px;
         height: 25px;
         border-radius: 7px;
-        border: 1px solid rgb(81, 5, 167);
+        box-shadow: 3px 5px 7px 1px rgb(234, 234, 234);
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 14px;
         a {
-          color: rgb(150, 76, 245);
+          color: #4e6ef2;
+        }
+        &:hover{
+          transition: all .4s;
+          box-shadow: 3px 5px 7px 1px rgb(212, 181, 247);
+          a{
+            color: rgb(176, 105, 251);
+          }
         }
       }
     }

@@ -46,9 +46,12 @@
   // 验证手机号
   const phoneDebounced = refDebounced(itemValue, 1000)
   watch(phoneDebounced, () => {
-    if (!formCheck.checkPhone({ userPhone: itemValue.value, message })) return
+    if (!checkPhone()) return
     checkUser()
   })
+  const checkPhone = () => {
+    return formCheck.checkPhone({ userPhone: itemValue.value, message })
+  }
   // 验证用户是否存在
   const checkUser = async () => {
     const sendData = {
@@ -64,6 +67,10 @@
       exist.value = false
     })
   }
+  // 暴露子组件方法
+  defineExpose({
+    checkPhone
+  })
 </script>
 
 <style lang="scss" scoped>

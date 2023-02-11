@@ -1,28 +1,34 @@
 <template>
-  <div class="engine">
-    <svg class="icon icon-engine" aria-hidden="true">
-      <use :xlink:href="iconText"></use>
-    </svg>
-    <h1>For {{ typeData }}</h1>
+  <div class="content-box loaders" v-if="flag">
+    <loadersTwo></loadersTwo>
+    <h4>加载中...</h4>
   </div>
-  <div class="content-box" v-if="searchData?.length">
-    <div class="content-item" v-for="item in searchData" :key="item.title">
-      <div class="item-title">
-        <a :href="item.href" target="_blank">
-          <h3 v-dompurify-html="item.title"> </h3>
-        </a>
-      </div>
-      <div class="item-description">
-        <span v-dompurify-html="item.caption"> </span>
-      </div>
-      <div class="item-url">
-        <span>{{ item.cite }}</span>
+  <div v-else>
+    <div class="engine">
+      <svg class="icon icon-engine" aria-hidden="true">
+        <use :xlink:href="iconText"></use>
+      </svg>
+      <h1>For {{ typeData }}</h1>
+    </div>
+    <div class="content-box" v-if="searchData?.length">
+      <div class="content-item" v-for="item in searchData" :key="item.title">
+        <div class="item-title">
+          <a :href="item.href" target="_blank">
+            <h3 v-dompurify-html="item.title"> </h3>
+          </a>
+        </div>
+        <div class="item-description">
+          <span v-dompurify-html="item.caption"> </span>
+        </div>
+        <div class="item-url">
+          <span>{{ item.cite }}</span>
+        </div>
       </div>
     </div>
-  </div>
-  <div v-else class="content-box error">
-    <loaders></loaders>
-    <h4>获取搜索数据被拦截，请稍后再试...</h4>
+    <div v-else class="content-box error">
+      <loaders></loaders>
+      <h4>获取搜索数据被拦截，请稍后再试...</h4>
+    </div>
   </div>
 </template>
 
@@ -30,6 +36,7 @@
   import { ref, defineProps } from 'vue'
   import { crawlingData } from '@/stores/searchStore.js'
   import loaders from '../../components/loaders/loadersOne.vue'
+  import loadersTwo from '../../components/loaders/loadersTwo.vue'
   import { useRoute } from 'vue-router'
   const route = useRoute()
   const iconText = ref('#icon-bing_logo_icon')
@@ -37,6 +44,12 @@
   const props = defineProps<{
     typeData: string
   }>()
+
+  // 加载动画
+  const flag = ref(true)
+  setTimeout(() => {
+    flag.value = false
+  }, 1500)
 
   //  根据类型进行搜索内容爬取
   switch (props.typeData) {
@@ -139,7 +152,8 @@
     }
   }
 
-  .error {
+  .error,
+  .loaders {
     display: flex;
     flex-direction: column;
     align-items: center;

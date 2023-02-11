@@ -12,7 +12,10 @@
       <a href="https://www.oschina.net/news" class="look-more" target="_blank">查看更多>></a>
     </template>
     <template v-else>
-      <h3>抱歉！好像有什么东西坏掉了...</h3>
+      <div class="error">
+        <span class="loader"></span>
+        <h4>抱歉！好像有什么东西坏掉了...</h4>
+      </div>
     </template>
   </div>
 </template>
@@ -84,6 +87,49 @@
       padding: 5px 10px;
       &:hover {
         color: #8c28f6;
+      }
+    }
+
+    .error {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      .loader {
+        width: 84px;
+        height: 84px;
+        position: relative;
+      }
+
+      .loader:before,
+      .loader:after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #8e38fe;
+        transform: translate(-50%, -100%) scale(0);
+        animation: push_401 2s infinite linear;
+      }
+
+      .loader:after {
+        animation-delay: 1s;
+      }
+
+      @keyframes push_401 {
+        0%,
+        50% {
+          transform: translate(-50%, 0%) scale(1);
+        }
+
+        100% {
+          transform: translate(-50%, -100%) scale(0);
+        }
       }
     }
   }
