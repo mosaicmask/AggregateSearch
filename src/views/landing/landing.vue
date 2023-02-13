@@ -151,7 +151,7 @@
     }
     // 验证手机用户表单
     if (!typeFlg.value && !checkPhoneFormData()) return
-    if (exist.value && !typeFlg.value) {
+    if (!exist.value && !typeFlg.value) {
       //exist = true 表示用户不存在，走注册&登陆
       await phoneUserRegister(formData)
       await emailAndPhoneUserLogin(formData)

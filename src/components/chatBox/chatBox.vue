@@ -44,7 +44,7 @@
       <div class="chat-message clearfix">
         <el-input
           v-model="textarea"
-          maxlength="500"
+          maxlength="200"
           placeholder="有问题尽管问我..."
           show-word-limit
           type="textarea"
