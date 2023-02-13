@@ -100,7 +100,7 @@
         <searchResultCard v-model:typeData="type[1]"></searchResultCard>
       </div>
       <!-- 搜索内容第三列 -->
-      <div class="result-item last">
+      <div class="result-item last" v-if="searchType == '0'">
         <informationCard></informationCard>
         <moreSearchCard :data="informationLabel">
           <template #title> 资源搜索</template>
@@ -112,6 +112,9 @@
           <template #title> 开发工具</template>
         </toolCard>
       </div>
+      <div class="result-item last" v-else>
+        <chatBox></chatBox>
+      </div>
     </div>
   </div>
 </template>
@@ -119,10 +122,11 @@
 <script setup lang="ts">
   import { ref, reactive } from 'vue'
   import { InfoFilled } from '@element-plus/icons-vue'
-  import searchResultCard from '../../components/searchResultCard/searchResultCard.vue'
-  import informationCard from '../../components/informationCard/informationCard.vue'
-  import moreSearchCard from '../../components/moreSearchCard/moreSearchCard.vue'
-  import toolCard from '../../components/toolCard/toolCard.vue'
+  import searchResultCard from '/src/components/searchResultCard/searchResultCard.vue'
+  import informationCard from '/src/components/informationCard/informationCard.vue'
+  import chatBox from '/src/components/chatBox/chatBox.vue'
+  import moreSearchCard from '/src/components/moreSearchCard/moreSearchCard.vue'
+  import toolCard from '/src/components/toolCard/toolCard.vue'
   import { engineConfData } from '@/stores/engineConfStore'
   import { useRoute } from 'vue-router'
   import router from '@/router'
@@ -137,6 +141,8 @@
     engineConfData.data.firstEngine || 'SoGou',
     engineConfData.data.lastEngine || 'Baidu'
   ]
+  const searchType = ref()
+  searchType.value = sessionStorage.getItem('search-type')
   const route = useRoute()
   const drawerLeft = ref(false)
   const drawerRight = ref(false)

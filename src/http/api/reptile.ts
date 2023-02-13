@@ -84,7 +84,7 @@ export const crawlingGoogleData = async (data) => {
     .catch((error: any) => {
       if (!error.isCancel) {
         //错误数据处理
-        console.log('error.message :>> ', error.message);
+        console.log('error.message :>> ', error.message)
       }
     })
 }

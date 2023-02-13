@@ -3,11 +3,11 @@
     <h1>在聚合搜索中开始 <em class="typewriter">多引擎</em> 探索</h1>
     <h4>🥳 专注于程序员搜索 🥳</h4>
     <div class="label-box">
-      <div :class="['label', labelFlg == 1 ? 'label-pick' : '']" @click="changeLabel(1)">
-        简单版
+      <div :class="['label', labelFlg == '0' ? 'label-pick' : '']" @click="changeLabel('0')">
+        程序猿版
       </div>
-      <div :class="['label', labelFlg == 0 ? 'label-pick' : '']" @click="changeLabel(0)">
-        前端版
+      <div :class="['label', labelFlg == '1' ? 'label-pick' : '']" @click="changeLabel('1')">
+        chatGPT版
       </div>
     </div>
     <div class="input-group">
@@ -56,9 +56,10 @@
   import { engineConfData } from '@/stores/engineConfStore'
   const router = useRouter()
   const inputVal = ref('')
-  const labelFlg = ref(1)
-  const changeLabel = (flg: number) => {
+  const labelFlg = ref(sessionStorage.getItem('search-type') || '0')
+  const changeLabel = (flg: string) => {
     labelFlg.value = flg
+    sessionStorage.setItem('search-type', `${flg}`)
   }
 
   //获取并存储 搜索引擎配置
@@ -160,7 +161,7 @@
       justify-content: flex-start;
       margin: 2rem 0 0 0;
       .label {
-        width: 80px;
+        width: 90px;
         height: 35px;
         border-radius: 20px;
         display: flex;

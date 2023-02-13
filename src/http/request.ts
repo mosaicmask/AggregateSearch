@@ -15,7 +15,7 @@ switch (import.meta.env.MODE) {
 //创建axios的一个实例
 const request = axios.create({
   baseURL,
-  timeout: 6000, //设置超时
+  timeout: 60000, //设置超时
   headers: {
     'X-Custom-Header': 'foobar'
   }
