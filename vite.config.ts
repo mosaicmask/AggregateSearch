@@ -7,6 +7,8 @@ import IconsResolver from 'unplugin-icons/resolver'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+// gzip
+import viteCompression from 'vite-plugin-compression'
 
 import { loadEnv } from 'vite'
 import path from 'path'
@@ -35,7 +37,9 @@ export default ({ mode }) => {
 
         dts: path.resolve(pathSrc, 'auto-imports.d.ts')
       }),
-
+      viteCompression({
+        threshold: 8000 // 对大于 8k 的文件进行压缩
+      }),
       Components({
         resolvers: [
           // Auto register icon components
