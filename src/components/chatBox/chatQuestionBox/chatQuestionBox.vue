@@ -1,9 +1,9 @@
 <template>
   <div class="message-data align-right">
-    <span class="message-data-time">{{ time }}, Today</span> &nbsp; &nbsp;
+    <span class="message-data-time">{{ time }}, Today </span>
     <span class="message-data-name">My</span> <i class="fa fa-circle me"></i>
   </div>
-  <div class="message other-message float-right">
+  <div class="message other-message float-right" style="white-space: pre-wrap">
     {{ text }}
   </div>
 </template>

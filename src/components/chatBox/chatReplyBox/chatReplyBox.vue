@@ -3,26 +3,27 @@
     <span class="message-data-name"> chatGPT</span>
     <span class="message-data-time"> {{ time }}, Today</span>
   </div>
-  <div class="message my-message">
+  <!-- white-space: pre-wrap 可以实现字符串中有换行符 \n  自动换行-->
+  <div class="message my-message" style="white-space: pre-wrap">
     {{ chatContent }}
   </div>
 </template>
 
 <script setup lang="ts">
   import { ref, defineProps } from 'vue'
+  // 获取当前日期
   const time = `${new Date().getHours()}:${
     new Date().getMinutes().toString().length == 2
       ? new Date().getMinutes()
       : `0${new Date().getMinutes()}`
   }`
-  console.log('new Date().getMinutes()。length :>> ')
-  const i = ref(0)
-  const chatContent = ref('')
 
   const props = defineProps<{
     text: string
   }>()
   // 实现打字机展示文字内容
+  const i = ref(0)
+  const chatContent = ref('')
   let timer
   function typewriter() {
     if (i.value <= props.text.length) {
