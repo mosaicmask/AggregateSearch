@@ -43,9 +43,11 @@
       <router-link to="/donation" class="nav-item">
         <span>捐赠</span>
       </router-link>
-      <svg class="icon icon-nav" aria-hidden="true" v-if="navbarFlg">
-        <use xlink:href="#icon-24gf-portraitMaleInfo2"></use>
-      </svg>
+      <el-tooltip effect="dark" content="个人中心" v-if="navbarFlg" placement="bottom-start">
+        <svg class="icon icon-nav" @click="toPage('personalCenter')" aria-hidden="true">
+          <use xlink:href="#icon-24gf-portraitMaleInfo2"></use>
+        </svg>
+      </el-tooltip>
       <svg class="icon icon-nav" aria-hidden="true">
         <use xlink:href="#icon-androidgengduo"></use>
       </svg>

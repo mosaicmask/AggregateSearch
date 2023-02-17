@@ -1,5 +1,6 @@
 //引入路由对象
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { loginStatus } from '@/stores/loginStateStore'
 // 使用 nprogress 对路由跳转时做一个伪进度条
 import NProgress from 'nprogress'
 
@@ -57,7 +58,17 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach(async () => {
+router.beforeEach(async (to, from, next) => {
+  // 1.如果访问的是登录页面（无需权限），直接放行
+  if (to.path !== '/personalCenter') return next()
+  // 2.如果访问的是有登录权限的页面，先要获取isLogin
+  const isLogin = loginStatus.isLogin
+  // 2.1如果token为空，强制跳转到登录页面；否则，直接放行
+  if (!isLogin) {
+    alert('请登录')
+    return next('/landing')
+  }
+  next()
   await NProgress.start()
 })
 
