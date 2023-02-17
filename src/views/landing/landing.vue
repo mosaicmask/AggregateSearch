@@ -13,42 +13,24 @@
         <span :class="[typeFlg ? '' : 'pick']" @click="checkType(0)">手机登陆</span>
         <span :class="[typeFlg ? 'pick' : '']" @click="checkType(1)">邮箱登陆</span>
       </div>
-      <div class="input-group" v-if="typeFlg">
-        <label class="label" for="Email">邮箱</label>
-        <input
-          autocomplete="off"
-          v-model="userEmail"
-          placeholder="请输入邮箱"
-          type="email"
-          class="input"
-          id="Email"
-        />
-        <span class="message">
-          {{ message.emailTipMessage }}
-          <a @click="toPage('register')" v-if="exist">注册</a>
-        </span>
-      </div>
+      <template v-if="typeFlg">
+        <emailInput
+          ref="RefEmailInput"
+          v-model:user-email="userEmail"
+          v-model:email-exist="emailExist"
+        ></emailInput>
+      </template>
       <template v-else>
         <!-- 手机号输入框组件 -->
-        <phoneOnInput v-model:user-phone="userPhone" ref="RefPhoneInput"></phoneOnInput>
+        <phoneOnInput
+          v-model:user-phone="userPhone"
+          v-model:phone-exist="phoneExist"
+          ref="RefPhoneInput"
+        ></phoneOnInput>
       </template>
-      <div class="input-group" v-if="typeFlg">
-        <label class="label" for="Password">密码</label>
-        <input
-          autocomplete="off"
-          placeholder="请输入密码"
-          :type="showPSW ? 'text' : 'password'"
-          class="input"
-          id="Password"
-          v-model="userPassword"
-        />
-        <span class="message">
-          {{ message.PasswordTipMessage }}
-        </span>
-        <svg class="show-or-hide-icon" aria-hidden="true" @click="showPSW = !showPSW">
-          <use :xlink:href="showPSW ? '#icon-xianshimima' : '#icon-yincangmima'"></use>
-        </svg>
-      </div>
+      <template v-if="typeFlg">
+        <passwordInput v-model:user-password="userPassword"></passwordInput>
+      </template>
       <template v-else>
         <!-- 进行人机验证 -->
         <verifyInput v-model:captcha-text="captchaText" ref="RefVerifyInput"></verifyInput>
@@ -72,74 +54,55 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { ref } from 'vue'
   import { useRouter } from 'vue-router'
-  import { refDebounced } from '@vueuse/core'
-  import { FormFormatCheck } from '../../utils/Check'
+
   import { loginStatus } from '../../stores/loginStateStore'
-  import { isExist, userLogin, register } from '../../http/api/users'
+  import { userLogin, register } from '../../http/api/users'
   import { messageAlerts } from '@/utils/tip'
   import { signUpData } from '@/stores/signUpStore'
+  import emailInput from '../../components/input/emailInput/emailInput.vue'
   import verifyInput from '../../components/input/verifyInput/verifyInput.vue'
   import checkingInput from '../../components/input/checkingInput/checkingInput.vue'
   import phoneOnInput from '../../components/input/phoneOnInput/phoneOnInput.vue'
+  import passwordInput from '../../components/input/passwordInput/passwordInput.vue'
 
   const router = useRouter()
   const typeFlg = ref(0)
-  const exist = ref(false)
-  const showPSW = ref(false)
-  // 提示文字显示flg
-  const message = reactive({
-    emailTipMessage: '',
-    phoneTipMessage: '',
-    PasswordTipMessage: '',
-    receiptCodeTipMessage: ''
-  })
+  const phoneExist = ref(false)
+  const emailExist = ref(false)
+
   // 表单数据
   const userEmail = ref('')
   const userPhone = ref('')
   const userPassword = ref('')
   const captchaText = ref('')
-  const receiptCode = ref('') // 这里用作手机校验码
-
-  const RefVerifyInput = ref<any>() //子组件实例
+  // 这里用作手机校验码
+  const receiptCode = ref('')
+  //子组件实例
+  const RefVerifyInput = ref<any>()
   const RefPhoneInput = ref<any>()
   const RefCheckingInput = ref<any>()
+  const RefEmailInput = ref<any>()
   // 传递给校验码组件的验证方法 让B组件调用A组件的事件
   const useCheckCaptcha = () => {
     RefVerifyInput.value?.checkCaptcha()
   }
 
+  interface FormData {
+    userEmail: string
+    userPhone: string
+    userPassword: string
+    receiptCode: string
+  }
+
+  // 手机登陆的表单校验
   const checkPhoneFormData = () => {
     const result =
       RefPhoneInput.value?.checkPhone() &&
       RefVerifyInput.value?.checkCaptcha() &&
       RefCheckingInput.value?.checkReceiptCode()
     return result
-  }
-
-  // 使用 VueUse 的 refDebounced 实现防抖验证参数
-  const formCheck = new FormFormatCheck()
-  const emailDebounced = refDebounced(userEmail, 2000)
-  watch(emailDebounced, () => {
-    if (!formCheck.checkEmail({ userEmail: userEmail.value, message })) return
-    checkUser()
-  })
-  // 验证(手机||邮箱)用户是否存在
-  const checkUser = async () => {
-    const sendData = {
-      userEmail: userEmail.value,
-      userPhone: userPhone.value
-    }
-    await isExist(sendData).then((res) => {
-      if (res.errno == 1001) {
-        message.emailTipMessage = `用户不存在,是否前往`
-        exist.value = true
-        return
-      }
-      message.emailTipMessage = ''
-      exist.value = false
-    })
   }
   //  登陆按钮点击事件
   const login = async () => {
@@ -149,25 +112,32 @@
       userPassword: userPassword.value,
       receiptCode: receiptCode.value
     }
-    // 验证手机用户表单
-    if (!typeFlg.value && !checkPhoneFormData()) return
-    if (!exist.value && !typeFlg.value) {
-      //exist = true 表示用户不存在，走注册&登陆
-      await phoneUserRegister(formData)
-      await emailAndPhoneUserLogin(formData)
+    if (typeFlg.value) {
+      // 邮箱用户登陆
+      // 如果邮箱未注册，直接退出
+      if (!emailExist.value) return
+      await emailUserLogin(formData)
       return
     }
+    // 手机用户登陆
+    // 验证手机用户表单
+    if (!checkPhoneFormData()) return
+    if (!phoneExist.value) {
+      //phoneUserExist = false 表示用户不存在，走注册&登陆
+      await phoneUserRegister(formData)
+      await phoneUserLogin(formData)
+      return
+    }
+    await phoneUserLogin(formData)
     // 直接登陆
-    await emailAndPhoneUserLogin(formData)
   }
 
-  // 邮箱||手机用户登陆
-  const emailAndPhoneUserLogin = async (formData) => {
-    if (!typeFlg.value) {
-      // 如果手机用户登陆 缓存中有可能有邮箱信息，删掉
-      formData.userEmail = ''
-      formData.userPassword = ''
-    }
+  // 手机用户登陆
+  const phoneUserLogin = async (formData: FormData) => {
+    // 手机用户登陆 缓存中有可能有邮箱信息，删掉
+    formData.userEmail = ''
+    formData.userPassword = ''
+
     await userLogin(formData)
       .then((res) => {
         const { title, message, type, data } = res
@@ -184,7 +154,7 @@
           loginStatus.setLoginTime(data)
           setTimeout(() => {
             toPage('home')
-          }, 3000)
+          }, 2000)
         }
       })
       .catch((error) => {
@@ -199,7 +169,7 @@
   }
 
   // 手机用户注册
-  const phoneUserRegister = async (formData) => {
+  const phoneUserRegister = async (formData: FormData) => {
     // 如果手机用户登陆 缓存中有可能有邮箱信息，删掉
     formData.userEmail = ''
     formData.userPassword = ''
@@ -210,6 +180,37 @@
       }
     })
   }
+  // 邮箱用户登陆
+  const emailUserLogin = async (formData: FormData) => {
+    await userLogin(formData)
+      .then((res) => {
+        const { title, message, type, data } = res
+        messageAlerts({
+          title,
+          message,
+          type
+        })
+        // 登陆成功
+        if (res.errno == 2000) {
+          // 清除用户注册信息
+          signUpData.removeSignUpData()
+          // 存储用户登陆状态
+          loginStatus.setLoginTime(data)
+          setTimeout(() => {
+            toPage('home')
+          }, 2000)
+        }
+      })
+      .catch((error) => {
+        console.log('error :>> ', error)
+        messageAlerts({
+          title: '登陆失败',
+          message: '可能是服务器出现错误，请稍后再试',
+          type: 'error'
+        })
+      })
+  }
+
   // 跳转页面
   const toPage = (where: string) => {
     router.push({

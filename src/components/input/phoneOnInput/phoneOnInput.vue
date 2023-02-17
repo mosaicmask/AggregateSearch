@@ -20,7 +20,6 @@
   import { refDebounced } from '@vueuse/core'
   import { FormFormatCheck } from '../../../utils/Check'
   import { isExist } from '../../../http/api/users'
-  const exist = ref(false)
   // 表单数据
   const itemValue = ref('')
   const message = reactive({
@@ -29,8 +28,9 @@
 
   defineProps<{
     userPhone: string
+    phoneExist: boolean
   }>()
-  const emit = defineEmits(['update:userPhone'])
+  const emit = defineEmits(['update:userPhone', 'update:phoneExist'])
   const handleChange = (e) => {
     emit('update:userPhone', e)
   }
@@ -60,11 +60,13 @@
     }
     await isExist(sendData).then((res) => {
       if (res.errno == 1001) {
-        exist.value = true
+        // 用户不存在
+        emit('update:phoneExist', false)
         return
       }
-      message.phoneTipMessage = ''
-      exist.value = false
+      // 用户存在
+      emit('update:phoneExist', true)
+      return
     })
   }
   // 暴露子组件方法
