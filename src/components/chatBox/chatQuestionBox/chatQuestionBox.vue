@@ -9,7 +9,6 @@
 </template>
 
 <script setup lang="ts">
-  import { defineProps } from 'vue'
   const time = `${new Date().getHours()}:${
     new Date().getMinutes().toString().length == 2
       ? new Date().getMinutes()

@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, defineProps } from 'vue'
+  import { ref } from 'vue'
   // 获取当前日期
   const time = `${new Date().getHours()}:${
     new Date().getMinutes().toString().length == 2

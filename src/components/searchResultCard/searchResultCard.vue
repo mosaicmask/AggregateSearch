@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, defineProps } from 'vue'
+  import { ref } from 'vue'
   import { crawlingData } from '@/stores/searchStore.js'
   import loaders from '../../components/loaders/loadersOne.vue'
   import loadersTwo from '../../components/loaders/loadersTwo.vue'

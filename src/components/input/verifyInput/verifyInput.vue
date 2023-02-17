@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-  import { defineEmits, defineProps, defineExpose, watch, ref } from 'vue'
+  import { watch, ref } from 'vue'
   import { refDebounced } from '@vueuse/core'
   import { FormFormatCheck } from '../../../utils/Check'
   import { getCaptcha } from '../../../http/api/users'
