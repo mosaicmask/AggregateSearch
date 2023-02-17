@@ -113,13 +113,12 @@
   // 提示文字显示flg
   const message = reactive({
     emailTipMessage: '',
-    phoneTipMessage: '',
     captchaTextTipMessage: '',
     receiptCodeTipMessage: ''
   })
   // 表单数据
   const userEmail = ref('')
-  const userPhone = ref('')
+
   const captchaText = ref('')
   const receiptCode = ref('')
 
@@ -128,11 +127,6 @@
   const emailDebounced = refDebounced(userEmail, 1500)
   watch(emailDebounced, () => {
     formCheck.checkEmail({ userEmail: userEmail.value, message }) ? checkUser() : ''
-  })
-  // 验证手机号
-  const phoneDebounced = refDebounced(userPhone, 1500)
-  watch(phoneDebounced, () => {
-    formCheck.checkPhone({ userPhone: userPhone.value, message }) ? checkUser() : ''
   })
   // 验证校验码
   const captchaDebounced = refDebounced(captchaText, 1000)
@@ -149,18 +143,16 @@
   const checkUser = async () => {
     const sendData = {
       userEmail: userEmail.value,
-      userPhone: userPhone.value
+      userPhone: ''
     }
     await isExist(sendData).then((res) => {
       if (res.errno != 1001) {
         message.emailTipMessage = `用户已存在,是否前往`
-        message.phoneTipMessage = `用户已存在,是否前往`
         showLoginText.value = true
         exist.value = true
         return
       }
       message.emailTipMessage = ''
-      message.phoneTipMessage = ''
       showLoginText.value = false
       exist.value = false
     })
@@ -238,7 +230,7 @@
     // 构建数据
     const formData = {
       userEmail: userEmail.value,
-      userPhone: userPhone.value,
+      userPhone: '',
       // 随机生成密码
       userPassword: uuidV4().substring(0, 14),
       receiptCode: receiptCode.value
