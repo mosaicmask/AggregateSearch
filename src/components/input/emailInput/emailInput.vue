@@ -22,6 +22,7 @@
   import { refDebounced } from '@vueuse/core'
   import { FormFormatCheck } from '@/utils/Check'
   import { isExist } from '@/http/api/users'
+  import { signUpData } from '@/stores/signUpStore'
   const router = useRouter()
   const exist = ref(true)
   // 提示文字显示flg
@@ -29,7 +30,7 @@
     emailTipMessage: ''
   })
   // 表单数据
-  const inputVal = ref('')
+  const inputVal = ref((await signUpData.data.userEmail) || '')
   // 跳转页面
   const toPage = (where: string) => {
     router.push({
@@ -72,6 +73,9 @@
       emit('update:emailExist', true)
       return
     })
+  }
+  if (inputVal.value) {
+    checkUser()
   }
 </script>
 

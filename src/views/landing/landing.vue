@@ -73,9 +73,9 @@
   const emailExist = ref(false)
 
   // 表单数据
-  const userEmail = ref('')
+  const userEmail = ref((await signUpData.data.userEmail) || '')
   const userPhone = ref('')
-  const userPassword = ref('')
+  const userPassword = ref((await signUpData.data.userPassword) || '')
   const captchaText = ref('')
   // 这里用作手机校验码
   const receiptCode = ref('')

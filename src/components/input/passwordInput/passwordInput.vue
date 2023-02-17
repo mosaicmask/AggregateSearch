@@ -24,7 +24,8 @@
 <script setup lang="ts">
   import { defineProps, defineEmits, watch } from 'vue'
   import { refDebounced } from '@vueuse/core'
-  const inputVal = ref('')
+  import { signUpData } from '@/stores/signUpStore'
+  const inputVal = ref((await signUpData.data.userPassword) || '')
   const showPSW = ref(false)
   const emit = defineEmits(['update:userPassword'])
   defineProps<{
