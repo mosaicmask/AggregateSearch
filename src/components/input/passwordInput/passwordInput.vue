@@ -1,12 +1,13 @@
 <template>
   <div class="input-group">
-    <label class="label" for="Password">密码</label>
+    <label class="label" for="Password">
+      <slot name="label"></slot>
+    </label>
     <input
       autocomplete="off"
       placeholder="请输入密码"
       :type="showPSW ? 'text' : 'password'"
       class="input"
-      id="Password"
       v-model="inputVal"
     />
     <span class="message">

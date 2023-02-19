@@ -149,3 +149,18 @@ export const changeEngineConf = async (params) => {
     data: { firstEngine, lastEngine }
   }).then((res) => res)
 }
+
+/**
+ *
+ * 修改用户密码
+ * @param {*} params
+ * @return {*}
+ */
+export const changePassword = async (params) => {
+  const { oldPassword, newPassword } = params
+  return await axios({
+    url: 'api/users/modifyPassword',
+    method: 'patch',
+    data: { oldPassword, newPassword }
+  })
+}

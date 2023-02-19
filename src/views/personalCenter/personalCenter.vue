@@ -16,7 +16,7 @@
             class="input"
             :disabled="userNameFlg"
           />
-          <span class="operate-text" @click="userNameFlg = false">更改</span>
+          <span class="operate-text" @click="() => (userNameFlg = false)">更改</span>
         </div>
         <div class="input-line">
           <label for="userEmail">邮箱</label>
@@ -28,7 +28,7 @@
             class="input"
             :disabled="userEmailFlg"
           />
-          <span class="operate-text" @click="userEmailFlg = false">更改</span>
+          <span class="operate-text" @click="() => (userEmailFlg = false)">更改</span>
         </div>
         <div class="bottom-box">
           <el-button class="login-button" @click="changeUserInfo" color="#5e4dcd" size="large">
@@ -45,21 +45,21 @@
             class="input"
             :disabled="true"
           />
-          <span class="operate-text" @click="dialogChangePhone = true">绑定</span>
+          <span class="operate-text" @click="() => (dialogChangePhone = true)">绑定</span>
         </div>
-        <!-- 修改密码弹窗 -->
+        <!--  绑定手机号弹窗 -->
         <el-dialog v-model="dialogChangePhone" title="绑定手机号码" center>
           <h3>该功能正在开发中...</h3>
           <template #footer>
             <span class="dialog-footer">
-              <el-button @click="dialogChangePhone = false" size="large">取消</el-button>
-              <el-button type="primary" @click="dialogChangePhone = false" size="large">
+              <el-button @click="() => (dialogChangePhone = false)" size="large">取消</el-button>
+              <el-button type="primary" @click="() => (dialogChangePhone = false)" size="large">
                 提交
               </el-button>
             </span>
           </template>
         </el-dialog>
-        <!-- 修改密码弹窗结束 -->
+        <!-- 绑定手机号弹窗结束 -->
         <div class="input-line">
           <label for="userPwd">密码</label>
           <input
@@ -72,60 +72,25 @@
             class="input"
             :disabled="true"
           />
-          <span class="operate-text" @click="dialogChangePassword = true">更改</span>
+          <span class="operate-text" @click="() => (dialogChangePassword = true)">更改</span>
         </div>
         <!-- 修改密码弹窗 -->
         <el-dialog v-model="dialogChangePassword" title="修改密码" center>
           <form>
-            <div class="input-group">
-              <label class="label" for="Password">请输入旧密码</label>
-              <input
-                autocomplete="off"
-                placeholder="请输入密码"
-                :type="showPSW1 ? 'text' : 'password'"
-                class="input"
-                id="Password"
-                v-model="passwordInfo.oldPassword"
-              />
-              <svg class="show-or-hide-icon" aria-hidden="true" @click="showPSW1 = !showPSW1">
-                <use :xlink:href="showPSW1 ? '#icon-xianshimima' : '#icon-yincangmima'"></use>
-              </svg>
-            </div>
-            <div class="input-group">
-              <label class="label" for="Password">请输入新密码</label>
-              <input
-                autocomplete="off"
-                placeholder="请输入密码"
-                :type="showPSW2 ? 'text' : 'password'"
-                class="input"
-                id="Password"
-                v-model="passwordInfo.newPasswordTest"
-              />
-              <svg class="show-or-hide-icon" aria-hidden="true" @click="showPSW2 = !showPSW2">
-                <use :xlink:href="showPSW2 ? '#icon-xianshimima' : '#icon-yincangmima'"></use>
-              </svg>
-            </div>
-            <div class="input-group">
-              <label class="label" for="Password">再次输入新密码</label>
-              <input
-                autocomplete="off"
-                placeholder="请输入密码"
-                :type="showPSW3 ? 'text' : 'password'"
-                class="input"
-                id="Password"
-                v-model="passwordInfo.newPassword"
-              />
-              <svg class="show-or-hide-icon" aria-hidden="true" @click="showPSW3 = !showPSW3">
-                <use :xlink:href="showPSW3 ? '#icon-xianshimima' : '#icon-yincangmima'"></use>
-              </svg>
-            </div>
+            <passwordInput v-model:user-password="oldPassword">
+              <template #label> 旧密码 </template>
+            </passwordInput>
+            <passwordInput v-model:user-password="newPassword">
+              <template #label> 新密码 </template>
+            </passwordInput>
+            <passwordInput v-model:user-password="userPassword">
+              <template #label> 再次输入密码 </template>
+            </passwordInput>
           </form>
           <template #footer>
             <span class="dialog-footer">
-              <el-button @click="dialogChangePassword = false" size="large">取消</el-button>
-              <el-button type="primary" @click="dialogChangePassword = false" size="large">
-                提交
-              </el-button>
+              <el-button @click="() => (dialogChangePassword = false)" size="large">取消</el-button>
+              <el-button type="primary" @click="changePassword()" size="large"> 提交 </el-button>
             </span>
           </template>
         </el-dialog>
@@ -133,7 +98,7 @@
         <div class="bottom-box">
           <el-button
             class="login-button"
-            @click="dialogVisible = true"
+            @click="() => (dialogVisible = true)"
             color="#aa0d0d"
             size="large"
           >
@@ -144,7 +109,7 @@
           <span>确定要退出登录吗？</span>
           <template #footer>
             <span class="dialog-footer">
-              <el-button @click="dialogVisible = false" size="large">取消</el-button>
+              <el-button @click="() => (dialogVisible = false)" size="large">取消</el-button>
               <el-button type="primary" @click="signOut" size="large"> 确定 </el-button>
             </span>
           </template>
@@ -205,15 +170,16 @@
 
 <script lang="ts">
   import { defineComponent, reactive, toRefs } from 'vue'
-  import { loginStatus } from '../../stores/loginStateStore'
+  import { loginStatus } from '@/stores/loginStateStore'
   // 这里有个坑，不能直接用组合是API 也就是setup 写在script标签里，这样会导致拖动数据不更新
+  import passwordInput from '@/components/input/passwordInput/passwordInput.vue'
   import draggable from 'vuedraggable'
-  import { logout, getEngineConf, changeEngineConf } from '@/http/api/users'
+  import { logout, getEngineConf, changeEngineConf, changePassword } from '@/http/api/users'
   import { messageAlerts } from '@/utils/tip'
   import { engineConfData } from '@/stores/engineConfStore'
 
   export default defineComponent({
-    components: { draggable },
+    components: { draggable, passwordInput },
     async setup() {
       const data = reactive({
         drag: false,
@@ -221,6 +187,9 @@
         dialogChangePassword: false,
         dialogChangePhone: false,
         value: '',
+        oldPassword: '',
+        newPassword: '',
+        userPassword: '',
         userEmailFlg: true,
         userNameFlg: true,
         showPSW1: false,
@@ -281,6 +250,26 @@
           messageAlerts(res)
           if (res.errno != 2000) return
           engineConfData.setEngineConfData(conf)
+        })
+      },
+      // 修改密码
+      async changePassword() {
+        console.log('this.newPassword :>> ', this.newPassword)
+        if (this.userPassword !== this.newPassword) {
+          messageAlerts({ title: '错误', message: '两次输入密码不一致', type: 'error' })
+          return
+        }
+        if (this.oldPassword === this.newPassword || this.oldPassword === this.userPassword) {
+          messageAlerts({ title: '错误', message: '旧密码不能与新密码相同', type: 'error' })
+          return
+        }
+        await changePassword({
+          oldPassword: this.oldPassword,
+          newPassword: this.userPassword
+        }).then((res) => {
+          messageAlerts(res)
+          if (res.errno != 2000) return
+          this.signOut()
         })
       },
       // 退出登录

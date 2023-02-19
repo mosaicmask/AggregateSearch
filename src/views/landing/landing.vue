@@ -29,7 +29,9 @@
         ></phoneOnInput>
       </template>
       <template v-if="typeFlg">
-        <passwordInput v-model:user-password="userPassword"></passwordInput>
+        <passwordInput v-model:user-password="userPassword">
+          <template #label> 密码 </template>
+        </passwordInput>
       </template>
       <template v-else>
         <!-- 进行人机验证 -->
@@ -128,8 +130,8 @@
       await phoneUserLogin(formData)
       return
     }
-    await phoneUserLogin(formData)
     // 直接登陆
+    await phoneUserLogin(formData)
   }
 
   // 手机用户登陆
@@ -148,8 +150,6 @@
         })
         // 登陆成功
         if (res.errno == 2000) {
-          // 清除用户注册信息
-          signUpData.removeSignUpData()
           // 存储用户登陆状态
           loginStatus.setLoginTime(data)
           setTimeout(() => {

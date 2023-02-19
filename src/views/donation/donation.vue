@@ -250,7 +250,7 @@
           margin-right: $padSpace;
           margin-top: 0.6em;
           line-height: normal;
-          text-wrap: nowrap;
+          // text-wrap: nowrap;
           height: 85px;
 
           .card-user-name {
