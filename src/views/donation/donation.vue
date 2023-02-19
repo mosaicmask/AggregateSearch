@@ -57,7 +57,7 @@
   // import underConstruction from '../../components/error/underConstruction.vue'
   // user details
   const userInfo = {
-    avatar: 'https://oss.aliyuncs.com/aliyun_id_photo_bucket/default_handsome.jpg',
+    avatar: 'https://my-note-images-mac.oss-cn-shanghai.aliyuncs.com/code-image/head.png',
     hero: 'https://blog-img-data.oss-cn-shanghai.aliyuncs.com/image-photography/image-list/%E5%A4%95%E9%98%B3%E4%B8%8E%E4%BA%91/7009.jpg',
     website: 'http://www.xz-code.com/',
     name: '捡破烂的小z',
@@ -185,6 +185,14 @@
     justify-content: center;
     width: 100%;
     height: calc(100vh - 75px);
+    background: rgb(26, 188, 156);
+    background: -moz-linear-gradient(-45deg, rgba(26, 188, 156, 1) 0%, rgba(142, 68, 173, 1) 100%);
+    background: -webkit-linear-gradient(
+      -45deg,
+      rgba(26, 188, 156, 1) 0%,
+      rgba(142, 68, 173, 1) 100%
+    );
+    background: linear-gradient(135deg, rgba(26, 188, 156, 1) 0%, rgba(142, 68, 173, 1) 100%);
   }
   .card-wrap {
     overflow: hidden;

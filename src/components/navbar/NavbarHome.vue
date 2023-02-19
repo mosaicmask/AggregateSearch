@@ -34,14 +34,14 @@
       <router-link to="/" class="nav-item">
         <span> 首页 </span>
       </router-link>
-      <router-link to="/concern" class="nav-item">
-        <span> 关注 </span>
-      </router-link>
       <router-link to="/concerning" class="nav-item">
         <span>关于</span>
       </router-link>
       <router-link to="/donation" class="nav-item">
         <span>捐赠</span>
+      </router-link>
+      <router-link to="/concern" class="nav-item">
+        <span> 关注 </span>
       </router-link>
       <el-tooltip effect="dark" content="个人中心" v-if="navbarFlg" placement="bottom-start">
         <svg class="icon icon-nav" @click="toPage('personalCenter')" aria-hidden="true">
