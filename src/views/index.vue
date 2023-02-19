@@ -61,6 +61,7 @@
     labelFlg.value = flg
     sessionStorage.setItem('search-type', `${flg}`)
   }
+  changeLabel('0')
 
   //获取并存储 搜索引擎配置
   const getConf = async () => {
