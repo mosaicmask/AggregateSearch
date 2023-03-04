@@ -89,6 +89,17 @@
     loadFlag.value = true
     // 请求接口 获取答案
     let chatAnswer = await getChatResponse(text)
+
+    //如果返回的参数为空
+    if (!chatAnswer) {
+      chatData.push({
+        type: 'error',
+        text: '抱歉，服务器好像挂掉了，请刷新重试。'
+      })
+      loadFlag.value = false
+      return
+    }
+
     // 如果返回超时或后台出错
     if (typeof chatAnswer != 'string') {
       if (chatAnswer.errno == 1004) {
