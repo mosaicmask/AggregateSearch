@@ -31,8 +31,9 @@
       chatContent.value = props.text.slice(0, i.value++)
       timer = setTimeout(() => {
         typewriter()
-      }, 100)
+      }, 10)
     } else {
+      i.value = 0
       clearTimeout(timer)
     }
   }
