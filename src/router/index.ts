@@ -46,6 +46,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/personalCenter/personalCenter.vue')
   },
   {
+    path: '/chat',
+    name: 'chat',
+    component: () => import('../views/chat/chat.vue')
+  },
+  {
     path: '/:catchAll(.*)', // 不识别的path自动匹配404
     component: () => import('../views/notFound.vue')
     // redirect: '/404',
