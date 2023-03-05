@@ -36,6 +36,19 @@
         </div>
       </li>
     </ul>
+    <div class="tips-box" v-show="examplesFlag">
+      <div class="examples">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-fasong"></use>
+        </svg>
+        <p>举个例子</p>
+      </div>
+      <template v-for="item in examples" :key="item">
+        <button class="item-examples" @click="() => (textarea = item)">
+          <span> "{{ item }}" </span>
+        </button>
+      </template>
+    </div>
     <div class="chat-input">
       <div class="input">
         <textarea rows="1" v-model="textarea" tabindex="0" @keyup.enter.exact="sendQuestion">
@@ -63,9 +76,16 @@
       text: '你好啊！有什么问题欢迎问我...'
     }
   ])
+  const examples = reactive([
+    '解释量子计算 简单的术语',
+    '给我一个海南的旅游计划',
+    '帮我用js写一个递归函数'
+  ])
   const load = ref(false)
+  const examplesFlag = ref(true)
   // 发送问题
   const sendQuestion = () => {
+    examplesFlag.value = false
     const text = textarea.value
     textarea.value = ''
     if (!text) {
@@ -230,6 +250,83 @@
       }
       .chat-ai-box {
         background-color: rgba(236, 236, 236, 0.571);
+      }
+    }
+    .tips-box {
+      min-width: 240px;
+      height: 300px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      .examples {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .item-examples {
+        position: relative;
+        height: 50px;
+        padding: 0 30px;
+        margin: 10px;
+        border: 2px solid #000;
+        background: #e8e8e8;
+        user-select: none;
+        white-space: nowrap;
+        transition: all 0.05s linear;
+        font-family: inherit;
+      }
+
+      .item-examples:before,
+      .item-examples:after {
+        content: '';
+        position: absolute;
+        background: #e8e8e8;
+        transition: all 0.2s linear;
+      }
+
+      .item-examples:before {
+        width: calc(100% + 6px);
+        height: calc(100% - 16px);
+        top: 8px;
+        left: -3px;
+      }
+
+      .item-examples:after {
+        width: calc(100% - 16px);
+        height: calc(100% + 6px);
+        top: -3px;
+        left: 8px;
+      }
+
+      .item-examples:hover {
+        cursor: crosshair;
+      }
+
+      .item-examples:active {
+        transform: scale(0.95);
+      }
+
+      .item-examples:hover:before {
+        height: calc(100% - 32px);
+        top: 16px;
+      }
+
+      .item-examples:hover:after {
+        width: calc(100% - 32px);
+        left: 16px;
+      }
+
+      .item-examples span {
+        font-size: 15px;
+        z-index: 3;
+        position: relative;
+        font-weight: 600;
       }
     }
     .chat-input {
