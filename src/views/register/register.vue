@@ -301,6 +301,9 @@
       box-sizing: border-box;
       padding: 1rem;
       width: 540px;
+      @media (max-width: 600px) {
+        width: 95%;
+      }
       height: auto;
       border-radius: 10px;
       box-shadow: 5px 5px 10px 3px rgba(102, 102, 102, 0.344);

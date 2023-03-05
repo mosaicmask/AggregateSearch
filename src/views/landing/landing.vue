@@ -240,6 +240,9 @@
     .landing-box {
       // 让元素的长宽包括内边框
       width: 540px;
+      @media (max-width: 600px) {
+        width: 95%;
+      }
       min-height: 520px;
       box-sizing: border-box;
       padding: 1rem;

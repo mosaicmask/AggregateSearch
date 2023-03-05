@@ -122,6 +122,10 @@
       align-items: center;
       justify-content: center;
       min-width: 150px;
+      @media (max-width: 590px) {
+        // display: none;
+        min-width: 100px;
+      }
 
       a {
         margin: 0 0 0 5px;
@@ -223,8 +227,9 @@
         // display: none;
         min-width: 200px;
       }
-      @media (max-width: 700px) {
-        display: none;
+      @media (max-width: 590px) {
+        // display: none;
+        min-width: 150px;
       }
       .nav-item {
         width: 35px;
@@ -264,6 +269,14 @@
           width: 100%;
         }
       }
+      @media (max-width: 700px) {
+        .nav-item:nth-child(2),
+        .nav-item:nth-child(3),
+        .nav-item:nth-child(5),
+        svg {
+          display: none;
+        }
+      }
       .icon-nav {
         margin: 0 1rem;
         cursor: pointer;
@@ -293,11 +306,18 @@
       align-items: center;
       justify-content: flex-end;
       padding: 0 50px 0 0;
+      @media (max-width: 600px) {
+        padding: 0 20px 0 0;
+      }
       .login-button,
       .enroll-button {
         width: 95px;
         height: 45px;
         color: #fff;
+        @media (max-width: 600px) {
+          width: 55px;
+          height: 35px;
+        }
       }
     }
   }

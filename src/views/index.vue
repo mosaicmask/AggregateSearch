@@ -94,9 +94,15 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    @media (max-width: 600px) {
+      padding: 0 10px;
+    }
     h1 {
       margin: 12rem 0 0 0;
       font-size: 2.9rem;
+      @media (max-width: 600px) {
+        font-size: 1.5rem;
+      }
       .typewriter {
         color: transparent;
         font-size: 1.4rem;
