@@ -71,7 +71,7 @@
     })
   }
   getConf()
-
+  // 搜索按钮点击事件
   const searchData = async () => {
     if (!inputVal.value) {
       router.go(0)

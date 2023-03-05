@@ -219,6 +219,13 @@
       display: flex;
       align-items: center;
       justify-content: space-evenly;
+      @media (max-width: 790px) {
+        // display: none;
+        min-width: 200px;
+      }
+      @media (max-width: 700px) {
+        display: none;
+      }
       .nav-item {
         width: 35px;
         height: 20px;
