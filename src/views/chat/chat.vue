@@ -73,7 +73,7 @@
   const chatData = reactive([
     {
       type: 'reply',
-      text: '你好啊！有什么问题欢迎问我...'
+      text: '您好啊！有什么问题欢迎问我...'
     }
   ])
   const examples = reactive([

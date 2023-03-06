@@ -16,7 +16,7 @@
         class="input"
         id="value"
         name="value"
-        placeholder="输入你要搜索的内容"
+        placeholder="输入您要搜索的内容"
         autocomplete="off"
         v-model="inputVal"
         @keyup.enter.exact="searchData"

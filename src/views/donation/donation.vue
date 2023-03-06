@@ -351,6 +351,10 @@
             font-size: 200%;
             margin-bottom: 10px;
           }
+          .tabs-info-warn {
+            font-size: 14px;
+            line-height: 23px;
+          }
         }
       }
     }

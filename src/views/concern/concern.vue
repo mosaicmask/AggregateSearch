@@ -141,6 +141,9 @@
     padding: 20px 40px;
     box-sizing: border-box;
     text-align: center;
+    p {
+      color: #000;
+    }
     .icon {
       width: 1.5rem;
     }
