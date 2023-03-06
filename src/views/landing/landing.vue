@@ -2,16 +2,16 @@
   <div class="landing-body">
     <form class="landing-box" @submit.prevent="login">
       <el-alert
-        title="邮箱注册的用户，请记住系统赋予您的初始密码，或者登陆后立即前往修改！"
+        title="邮箱注册的用户，请记住系统赋予您的初始密码，或者登录后立即前往修改！"
         type="warning"
         center
         show-icon
         :closable="false"
       />
-      <h1>登陆</h1>
+      <h1>登录</h1>
       <div class="select-box">
-        <span :class="[typeFlg ? '' : 'pick']" @click="checkType(0)">手机登陆</span>
-        <span :class="[typeFlg ? 'pick' : '']" @click="checkType(1)">邮箱登陆</span>
+        <span :class="[typeFlg ? '' : 'pick']" @click="checkType(0)">手机登录</span>
+        <span :class="[typeFlg ? 'pick' : '']" @click="checkType(1)">邮箱登录</span>
       </div>
       <template v-if="typeFlg">
         <emailInput
@@ -45,7 +45,7 @@
         ></checkingInput>
       </template>
       <div class="submit">
-        <input class="submit-button" type="submit" :value="typeFlg ? '登陆' : '一键注册登陆'" />
+        <input class="submit-button" type="submit" :value="typeFlg ? '登录' : '一键注册登录'" />
       </div>
       <div class="text-box">
         <em @click="toPage('register')">遇到问题？</em>
@@ -98,7 +98,7 @@
     receiptCode: string
   }
 
-  // 手机登陆的表单校验
+  // 手机登录的表单校验
   const checkPhoneFormData = () => {
     const result =
       RefPhoneInput.value?.checkPhone() &&
@@ -106,7 +106,7 @@
       RefCheckingInput.value?.checkReceiptCode()
     return result
   }
-  //  登陆按钮点击事件
+  //  登录按钮点击事件
   const login = async () => {
     const formData = {
       userEmail: userEmail.value,
@@ -115,28 +115,28 @@
       receiptCode: receiptCode.value
     }
     if (typeFlg.value) {
-      // 邮箱用户登陆
+      // 邮箱用户登录
       // 如果邮箱未注册，直接退出
       if (!emailExist.value) return
       await emailUserLogin(formData)
       return
     }
-    // 手机用户登陆
+    // 手机用户登录
     // 验证手机用户表单
     if (!checkPhoneFormData()) return
     if (!phoneExist.value) {
-      //phoneUserExist = false 表示用户不存在，走注册&登陆
+      //phoneUserExist = false 表示用户不存在，走注册&登录
       await phoneUserRegister(formData)
       await phoneUserLogin(formData)
       return
     }
-    // 直接登陆
+    // 直接登录
     await phoneUserLogin(formData)
   }
 
-  // 手机用户登陆
+  // 手机用户登录
   const phoneUserLogin = async (formData: FormData) => {
-    // 手机用户登陆 缓存中有可能有邮箱信息，删掉
+    // 手机用户登录 缓存中有可能有邮箱信息，删掉
     formData.userEmail = ''
     formData.userPassword = ''
 
@@ -148,9 +148,9 @@
           message,
           type
         })
-        // 登陆成功
+        // 登录成功
         if (res.errno == 2000) {
-          // 存储用户登陆状态
+          // 存储用户登录状态
           loginStatus.setLoginTime(data)
           setTimeout(() => {
             toPage('home')
@@ -170,7 +170,7 @@
 
   // 手机用户注册
   const phoneUserRegister = async (formData: FormData) => {
-    // 如果手机用户登陆 缓存中有可能有邮箱信息，删掉
+    // 如果手机用户登录 缓存中有可能有邮箱信息，删掉
     formData.userEmail = ''
     formData.userPassword = ''
     // 注册接口
@@ -180,7 +180,7 @@
       }
     })
   }
-  // 邮箱用户登陆
+  // 邮箱用户登录
   const emailUserLogin = async (formData: FormData) => {
     await userLogin(formData)
       .then((res) => {
@@ -190,11 +190,11 @@
           message,
           type
         })
-        // 登陆成功
+        // 登录成功
         if (res.errno == 2000) {
           // 清除用户注册信息
           signUpData.removeSignUpData()
-          // 存储用户登陆状态
+          // 存储用户登录状态
           loginStatus.setLoginTime(data)
           setTimeout(() => {
             toPage('home')
@@ -204,7 +204,7 @@
       .catch((error) => {
         console.log('error :>> ', error)
         messageAlerts({
-          title: '登陆失败',
+          title: '登录失败',
           message: '可能是服务器出现错误，请稍后再试',
           type: 'error'
         })

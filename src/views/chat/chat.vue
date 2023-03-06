@@ -121,7 +121,7 @@
     // 如果返回超时或后台出错
     if (typeof chatAnswer != 'string') {
       if (chatAnswer.errno == 1004) {
-        typewriter('抱歉，要使用该功能请先登陆')
+        typewriter('抱歉，要使用该功能请先登录')
         return
       }
       // 将错误提示写入聊天列表

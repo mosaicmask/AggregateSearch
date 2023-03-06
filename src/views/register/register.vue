@@ -18,7 +18,7 @@
         />
         <span class="message">
           {{ message.emailTipMessage }}
-          <a @click="toPage('landing')" v-if="showLoginText">登陆</a>
+          <a @click="toPage('landing')" v-if="showLoginText">登录</a>
         </span>
       </div>
       <div class="input-group">
@@ -84,7 +84,7 @@
       </div>
       <div class="text-box">
         <em @click="toPage('landing')">遇到问题？</em>
-        <span>已有账号？<em @click="toPage('landing')">前往登陆</em></span>
+        <span>已有账号？<em @click="toPage('landing')">前往登录</em></span>
       </div>
     </form>
   </div>
@@ -103,7 +103,7 @@
   const router = useRouter()
   // 隐私政策状态
   const checkFlg = ref(false)
-  // 登陆文字显示状态
+  // 登录文字显示状态
   const showLoginText = ref(false)
   // 切换按钮状态
   const loadingFlg = ref(false)
@@ -198,7 +198,7 @@
     if (exist.value) {
       messageAlerts({
         title: '用户已存在',
-        message: '该用户已存在，请直接前往登陆',
+        message: '该用户已存在，请直接前往登录',
         type: 'warning'
       })
       return
@@ -274,7 +274,7 @@
       // 注册成功后的逻辑还需要优化
       messageAlerts({
         title: '注册成功',
-        message: '3s后自动跳转到登陆页面',
+        message: '3s后自动跳转到登录页面',
         type: 'success'
       })
     })

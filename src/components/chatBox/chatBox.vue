@@ -105,7 +105,7 @@
       if (chatAnswer.errno == 1004) {
         chatData.push({
           type: 'error',
-          text: '抱歉，要使用该功能请先登陆'
+          text: '抱歉，要使用该功能请先登录'
         })
         loadFlag.value = false
         return

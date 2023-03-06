@@ -1,5 +1,5 @@
 /**
- * @description 用户登陆状态的管理文件
+ * @description 用户登录状态的管理文件
  * @author mosaic
  */
 
@@ -14,7 +14,8 @@ const ls = new SecureLS({
   encryptionSecret: 'encryption' //PBKDF2值
 })
 
-// 登陆状态
+// 登录状态
+
 const loginStatus = reactive({
   isLogin: ls.get('_UD') ? true : false,
   verifyLoginTime() {
@@ -23,10 +24,11 @@ const loginStatus = reactive({
     if (userData == null) return
     // 如果当前时间>设定时间，视为过期
     if (Date.now() > userData.expire) {
-      console.log('登陆状态已经过期!')
+console.log('登录状态已经过期!')
+
       messageAlerts({
-        title: '登陆失效',
-        message: '登陆状态已过期，请重新登陆',
+        title: '登录失效',
+        message: '登录状态已过期，请重新登录',
         type: 'warning'
       })
       // 清除缓存

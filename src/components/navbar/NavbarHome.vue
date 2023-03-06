@@ -55,7 +55,7 @@
     <template v-if="!loginStatus.isLogin">
       <div class="button-box" v-if="!navbarFlg">
         <el-button class="login-button" color="#5e4dcd" @click="toPage('landing')">
-          登陆
+          登录
         </el-button>
         <el-button class="enroll-button" color="#3d3285" @click="toPage('register')">
           注册
