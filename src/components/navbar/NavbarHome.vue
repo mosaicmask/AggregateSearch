@@ -272,6 +272,7 @@
       @media (max-width: 700px) {
         .nav-item:nth-child(2),
         .nav-item:nth-child(3),
+        // .nav-item:nth-child(4),
         .nav-item:nth-child(5),
         svg {
           display: none;
@@ -308,6 +309,7 @@
       padding: 0 50px 0 0;
       @media (max-width: 600px) {
         padding: 0 20px 0 0;
+        box-sizing: border-box;
       }
       .login-button,
       .enroll-button {

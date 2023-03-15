@@ -281,12 +281,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      @media (max-width: 600px) {
+        flex-direction: column;
+        // height: 40px;
+      }
 
       a {
         color: rgb(162, 162, 162);
         height: 18px;
         font-size: 12px;
-        cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -301,6 +304,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 12px;
 
         img {
           margin: 0 5px;
