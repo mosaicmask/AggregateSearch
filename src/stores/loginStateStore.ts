@@ -24,8 +24,6 @@ const loginStatus = reactive({
     if (userData == null) return
     // 如果当前时间>设定时间，视为过期
     if (Date.now() > userData.expire) {
-console.log('登录状态已经过期!')
-
       messageAlerts({
         title: '登录失效',
         message: '登录状态已过期，请重新登录',

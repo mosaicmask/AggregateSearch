@@ -164,3 +164,18 @@ export const changePassword = async (params) => {
     data: { oldPassword, newPassword }
   })
 }
+
+/**
+ *
+ * 用户忘记密码的修改接口
+ * @param {*} params
+ * @return {*}
+ */
+export const forgotPassword = async (params) => {
+  const { receiptCode, userEmail, userPassword } = params
+  return await axios({
+    url: 'api/users/forgotPassword',
+    method: 'patch',
+    data: { receiptCode, userEmail, userPassword }
+  })
+}
