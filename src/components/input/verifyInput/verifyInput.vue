@@ -30,9 +30,9 @@
 <script setup lang="ts">
   import { watch, ref } from 'vue'
   import { refDebounced } from '@vueuse/core'
-  import { FormFormatCheck } from '../../../utils/Check'
-  import { getCaptcha } from '../../../http/api/users'
-  import { messageAlerts } from '../../../utils/tip'
+  import { FormFormatCheck } from '@/utils/Check'
+  import { getCaptcha } from '@/http/api/users'
+  import { messageAlerts } from '@/utils/tip'
   import emitter from '@/utils/Bus'
 
   interface Captcha {
@@ -79,7 +79,7 @@
     // 给兄弟组件传参
     // 第一个参数: 监听的连接名
     // 第二个参数: 传递的数据
-    emitter.emit('param', res)
+    emitter.emit('verifyInput', res)
     return res
   }
 

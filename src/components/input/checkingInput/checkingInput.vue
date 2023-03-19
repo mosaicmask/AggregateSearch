@@ -35,7 +35,6 @@
   import emitter from '@/utils/Bus'
   import { getPhoneCheckCode } from '@/http/api/users'
   import { messageAlerts } from '@/utils/tip'
-  const emit = defineEmits(['update:receiptCode', 'useCheckCaptcha'])
   const buttonText = ref('获取验证码')
   // 提示文字显示flg
   const message = reactive({
@@ -45,6 +44,7 @@
   // 切换按钮状态
   const loadingFlg = ref(false)
 
+  const emit = defineEmits(['update:receiptCode', 'useCheckCaptcha'])
   // 接收父组件参数
   const props = defineProps<{
     userPhone: string
@@ -66,7 +66,7 @@
   // 第一个参数: 监听的连接名
   // 第二个参数: 传递的数据
   const checkCaptchaFlag = ref()
-  emitter.on('param', (flag: boolean) => {
+  emitter.on('verifyInput', (flag: boolean) => {
     checkCaptchaFlag.value = flag
   })
 
