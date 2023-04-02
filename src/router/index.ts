@@ -56,6 +56,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/issues/forgotPassword.vue')
   },
   {
+    path: '/pricingTables',
+    name: 'pricingTables',
+    component: () => import('../views/pricingTables/pricingTables.vue')
+  },
+  {
     path: '/:catchAll(.*)', // 不识别的path自动匹配404
     component: () => import('../views/notFound.vue')
     // redirect: '/404',
