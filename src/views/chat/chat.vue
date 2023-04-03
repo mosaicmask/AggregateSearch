@@ -1,5 +1,10 @@
 <template>
   <div class="chat-body">
+    <el-alert
+      title="由于Open AI 大量封锁境内账号，所以目前chatGPT功能暂时无法使用！！请耐心等待！！"
+      type="error"
+      effect="dark"
+    />
     <ul class="chat-box">
       <li
         v-for="(item, index) in chatData"
