@@ -19,7 +19,7 @@
         placeholder="输入您要搜索的内容"
         autocomplete="off"
         v-model="inputVal"
-        @keyup.enter.exact="searchData"
+        @keypress.enter.exact="searchData"
       />
       <!-- <input class="button--submit" value="Subscribe" type="submit" /> -->
       <button @click="searchData" class="button--submit">

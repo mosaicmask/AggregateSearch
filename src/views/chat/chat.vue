@@ -56,7 +56,7 @@
     </div>
     <div class="chat-input">
       <div class="input">
-        <textarea rows="1" v-model="textarea" tabindex="0" @keyup.enter.exact="sendQuestion">
+        <textarea rows="1" v-model="textarea" tabindex="0" @keypress.enter.exact="sendQuestion">
         </textarea>
         <div class="icon-box" @click="sendQuestion">
           <svg class="send-icon" aria-hidden="true">

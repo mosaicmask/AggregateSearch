@@ -12,7 +12,7 @@
           class="input"
           type="text"
           v-model="inputVal"
-          @keyup.enter.exact="searchData"
+          @keypress.enter.exact="searchData"
           placeholder="Search for something"
           id="search"
         />
