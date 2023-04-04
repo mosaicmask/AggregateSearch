@@ -98,25 +98,41 @@
   import { getQRCode, getPaymentStatus } from '@/http/api/payment'
   import { messageAlerts } from '../../utils/tip'
   import { paymentStore } from '@/stores/paymentStore'
+  import router from '@/router'
   const visible = ref(false)
   const QRCode = ref('')
   const itemPrice = ref(0)
   // 定价列表
   const priceList: Item[] = [
     {
-      price: 0.01,
+      price: 12.9,
       duration: '月',
-      extentOfAuthority: ['增加可选搜索引擎', '一个月内可无限次请求', '与最新的ChatGPT-4进行对话']
+      extentOfAuthority: [
+        '成为月度大侦探',
+        '增加可选搜索引擎',
+        '一个月内可无限次请求',
+        '与最新的ChatGPT-4进行对话'
+      ]
     },
     {
-      price: 0.01,
+      price: 29.9,
       duration: '季度',
-      extentOfAuthority: ['增加可选搜索引擎', '季度内可无限次请求', '与最新的ChatGPT-4进行对话']
+      extentOfAuthority: [
+        '成为季度大侦探',
+        '增加可选搜索引擎',
+        '季度内可无限次请求',
+        '与最新的ChatGPT-4进行对话'
+      ]
     },
     {
-      price: 0.01,
+      price: 199,
       duration: '永久',
-      extentOfAuthority: ['开放所有功能（包括后续更新）', '无限次请求', '与最新的ChatGPT-4进行对话']
+      extentOfAuthority: [
+        '成为永久大侦探',
+        '开放所有功能（包括后续更新）',
+        '无限次请求',
+        '与最新的ChatGPT-4进行对话'
+      ]
     }
   ]
   interface Item {
@@ -143,15 +159,17 @@
   const toPayment = async (item: Item) => {
     itemPrice.value = item.price
     const data = {
-      price: item.price
+      // price: item.price
+      price: 0.01
     }
     visible.value = true
     await getQRCode(data).then(async (res) => {
-      console.log(res)
       QRCode.value = res.url_qrcode
       // 将支付数据存入缓存
       paymentStore.setPaymentData(res)
-      createSetInterval()
+      if (QRCode.value) {
+        createSetInterval()
+      }
     })
   }
 
@@ -167,13 +185,16 @@
       }
       // 调用接口查询支付状态
       await getPaymentStatus(data).then((res) => {
-        console.log(typeof res.errno)
         if (res.errno === 4003 || res.errno === 2000) {
           stopSetInterval()
         }
         if (res.errno === 2000) {
           visible.value = false
           messageAlerts({ ...res })
+          // 支付成功后返回上一页
+          setTimeout(() => {
+            router.go(-1)
+          }, 3000)
           return
         }
       })
