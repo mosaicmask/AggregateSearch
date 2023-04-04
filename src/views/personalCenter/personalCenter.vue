@@ -118,7 +118,7 @@
     </form>
     <div class="body-right">
       <div class="search-conf-box">
-        <h3>引擎搜索结果-展示配置</h3>
+        <h3>-- 引擎搜索结果配置 --</h3>
         <draggable
           v-model="myArray"
           @handle="'.item-card'"
@@ -160,9 +160,13 @@
           </el-button>
         </div>
       </div>
+      <div class="consumption-box">
+        <h3>-- 用户消费记录 --</h3>
+        <consumptionRecords></consumptionRecords>
+      </div>
       <div class="litter-conf-box">
         <!-- <h3>暂时不知道放什么-QAQ</h3> -->
-        <InfiniteScroll></InfiniteScroll>
+        <!-- <InfiniteScroll></InfiniteScroll> -->
       </div>
     </div>
   </div>
@@ -171,15 +175,16 @@
 <script lang="ts">
   import { defineComponent, reactive, toRefs } from 'vue'
   import { loginStatus } from '@/stores/loginStateStore'
-  // 这里有个坑，不能直接用组合是API 也就是setup 写在script标签里，这样会导致拖动数据不更新
   import passwordInput from '@/components/input/passwordInput/passwordInput.vue'
+  // 这里有个坑，不能直接用组合是API 也就是setup 写在script标签里，这样会导致拖动数据不更新
   import draggable from 'vuedraggable'
   import { logout, getEngineConf, changeEngineConf, changePassword } from '@/http/api/users'
   import { messageAlerts } from '@/utils/tip'
   import { engineConfData } from '@/stores/engineConfStore'
+  import consumptionRecords from './consumptionRecords/consumptionRecords.vue'
 
   export default defineComponent({
-    components: { draggable, passwordInput },
+    components: { draggable, passwordInput, consumptionRecords },
     async setup() {
       const data = reactive({
         drag: false,
@@ -421,6 +426,12 @@
           align-items: center;
           justify-content: center;
         }
+      }
+      .consumption-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 30px 0 0 0;
       }
       .litter-conf-box {
         background: #fff;

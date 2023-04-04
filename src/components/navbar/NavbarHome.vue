@@ -37,20 +37,21 @@
       <router-link to="/concerning" class="nav-item">
         <span>关于</span>
       </router-link>
-      <router-link to="/donation" class="nav-item">
+      <!-- <router-link to="/donation" class="nav-item">
         <span>捐赠</span>
-      </router-link>
+      </router-link> -->
       <router-link to="/concern" class="nav-item">
         <span> 关注 </span>
+      </router-link>
+      <router-link to="/pricingTables" class="nav-item">
+        <span> 成为大侦探 </span>
+        <el-badge value="pro" class="warning" type="warning"> </el-badge>
       </router-link>
       <el-tooltip effect="dark" content="个人中心" v-if="navbarFlg" placement="bottom-start">
         <svg class="icon icon-nav" @click="toPage('personalCenter')" aria-hidden="true">
           <use xlink:href="#icon-24gf-portraitMaleInfo2"></use>
         </svg>
       </el-tooltip>
-      <svg class="icon icon-nav" aria-hidden="true">
-        <use xlink:href="#icon-androidgengduo"></use>
-      </svg>
     </div>
     <template v-if="!loginStatus.isLogin">
       <div class="button-box" v-if="!navbarFlg">
@@ -232,20 +233,26 @@
         min-width: 150px;
       }
       .nav-item {
-        width: 35px;
+        width: auto;
         height: 20px;
         font-size: 1rem;
         font-weight: 500;
+        position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
         text-decoration: none;
         position: relative;
-        overflow: hidden;
+        // overflow: hidden;
         padding: 15px 0px 10px 0px;
         margin: 0 15px;
         letter-spacing: 1px;
-
+        .warning {
+          position: absolute;
+          right: -25px;
+          top: 10px;
+          border-radius: 5px;
+        }
         span {
           display: inline-block;
           margin: 0 auto;
