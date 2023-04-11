@@ -138,8 +138,8 @@
     [key: string]: string
   }
   const type = [
-    engineConfData.data.firstEngine || 'Bing',
-    engineConfData.data.lastEngine || 'Baidu'
+    engineConfData.data.firstEngine || 'Baidu',
+    engineConfData.data.lastEngine || 'SoGou'
   ]
   const searchType = ref()
   searchType.value = sessionStorage.getItem('search-type')
