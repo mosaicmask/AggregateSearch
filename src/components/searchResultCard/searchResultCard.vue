@@ -10,7 +10,7 @@
       </svg>
       <h1>For {{ typeData }}</h1>
     </div>
-    <div class="content-box" v-if="searchData?.length">
+    <div class="content-box" v-if="searchData?.length" @scroll="onscroll">
       <div class="content-item" v-for="item in searchData" :key="item.title">
         <div class="item-title">
           <a :href="item.href" target="_blank">
@@ -38,6 +38,7 @@
   import loaders from '../../components/loaders/loadersOne.vue'
   import loadersTwo from '../../components/loaders/loadersTwo.vue'
   import { useRoute } from 'vue-router'
+  import { throttle } from '@/utils/functions/throttle'
   const route = useRoute()
   const iconText = ref('#icon-bing_logo_icon')
   // 获取父组件传递过来的搜索类型
@@ -45,29 +46,32 @@
     typeData: string
   }>()
 
+  const page = ref<number>(0)
+
   // 加载动画
   const flag = ref(true)
   setTimeout(() => {
     flag.value = false
   }, 1500)
 
-  //  根据类型进行搜索内容爬取
-  switch (props.typeData) {
-    case 'Bing':
-      await crawlingData.getBingData(route.params.keyword)
-      break
-    case 'Google':
-      await crawlingData.getGoogleData(route.params.keyword)
-      break
-    case 'Baidu':
-      await crawlingData.getBaiduData(route.params.keyword)
-      break
-    case 'SoGou':
-      await crawlingData.getSouGouData(route.params.keyword)
-      break
-    default:
-      break
+  const onscroll = throttle(async (event: WheelEvent) => {
+    const targetElement = event.target as HTMLElement
+    const scrollTop = targetElement.scrollTop // 获取滚动距离
+    const clientHeight = targetElement.clientHeight //可视区域的高度
+    const scrollHeight = targetElement.scrollHeight // 可滚动元素总长
+    if (scrollHeight - scrollTop <= clientHeight) {
+      page.value++
+      sendRequest()
+    }
+  }, 1)
+
+  const sendRequest = async () => {
+    const keyword = route.params.keyword
+    const pageNum = page.value
+    await crawlingData.getSearchData(keyword, pageNum, props.typeData)
   }
+  
+  await sendRequest()
   const getSearchData = async () => {
     //  根据类型 返回 搜索数据
     switch (props.typeData) {
@@ -81,7 +85,7 @@
         return crawlingData.baiduData
       case 'SoGou':
         iconText.value = '#icon-sougoushuru'
-        return crawlingData.soGouData
+        return crawlingData.sogouData
       default:
         return crawlingData.bingData
     }

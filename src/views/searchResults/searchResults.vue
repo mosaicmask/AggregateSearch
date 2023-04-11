@@ -122,11 +122,11 @@
 <script setup lang="ts">
   import { ref, reactive } from 'vue'
   import { InfoFilled } from '@element-plus/icons-vue'
-  import searchResultCard from '/src/components/searchResultCard/searchResultCard.vue'
-  import informationCard from '/src/components/informationCard/informationCard.vue'
-  import chatBox from '/src/components/chatBox/chatBox.vue'
-  import moreSearchCard from '/src/components/moreSearchCard/moreSearchCard.vue'
-  import toolCard from '/src/components/toolCard/toolCard.vue'
+  import searchResultCard from '@/components/searchResultCard/searchResultCard.vue'
+  import informationCard from '@/components/informationCard/informationCard.vue'
+  import chatBox from '@/components/chatBox/chatBox.vue'
+  import moreSearchCard from '@/components/moreSearchCard/moreSearchCard.vue'
+  import toolCard from '@/components/toolCard/toolCard.vue'
   import { engineConfData } from '@/stores/engineConfStore'
   import { useRoute } from 'vue-router'
   import router from '@/router'
@@ -138,7 +138,7 @@
     [key: string]: string
   }
   const type = [
-    engineConfData.data.firstEngine || 'SoGou',
+    engineConfData.data.firstEngine || 'Bing',
     engineConfData.data.lastEngine || 'Baidu'
   ]
   const searchType = ref()
