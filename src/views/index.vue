@@ -37,7 +37,7 @@
         <span>Search</span>
       </button>
     </div>
-    <p class="only-chat">我只想体验 chat GPT 👉<a href="https://gpt.gcchen.cn/#/chat/1002">点击前往</a>👈</p>
+    <p class="only-chat">我只想体验 chat GPT 👉<router-link to="/chat">点击前往</router-link>👈</p>
     <footer class="footer">
       <a href="https://beian.miit.gov.cn">桂ICP备2021009358号-3</a>
       <span class="gongan">
