@@ -115,6 +115,9 @@
     align-items: center;
     justify-content: flex-start;
     margin: 0 0 2rem 0;
+    @media (max-width: 768px) {
+      margin: 0 0 1rem 0;
+    }
 
     .icon-engine {
       width: 2.5rem;

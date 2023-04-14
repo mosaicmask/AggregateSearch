@@ -417,9 +417,13 @@
       display: grid;
       grid-template-columns: auto auto 430px;
       grid-row: calc(100vh - 75px);
+      @media screen and (max-width: 768px) {
+        grid-template-columns: auto;
+        grid-template-rows: auto auto auto;
+      }
       .result-item {
         // width: auto;
-        min-width: 400px;
+        min-width: 360px;
         max-width: 600px;
         min-height: calc(100vh - 110px);
         padding: 1.5rem 0.1rem 0 2rem;

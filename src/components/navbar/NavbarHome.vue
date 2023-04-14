@@ -112,11 +112,13 @@
   .navbar-body {
     width: 100%;
     height: 75px;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     box-shadow: 0px 0px 8px 6px #413a6d4f;
     background-color: #fff;
+    padding: 0 10px;
 
     .git-box {
       display: flex;
@@ -224,13 +226,11 @@
       display: flex;
       align-items: center;
       justify-content: space-evenly;
-      @media (max-width: 790px) {
-        // display: none;
+      @media (max-width: 768px) {
         min-width: 200px;
       }
       @media (max-width: 590px) {
-        // display: none;
-        min-width: 150px;
+        display: none;
       }
       .nav-item {
         width: auto;
