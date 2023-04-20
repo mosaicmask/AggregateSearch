@@ -121,15 +121,15 @@
 
 <script setup lang="ts">
   import { ref, reactive } from 'vue'
-  import { InfoFilled } from '@element-plus/icons-vue'
-  import searchResultCard from '/src/components/searchResultCard/searchResultCard.vue'
-  import informationCard from '/src/components/informationCard/informationCard.vue'
-  import chatBox from '/src/components/chatBox/chatBox.vue'
-  import moreSearchCard from '/src/components/moreSearchCard/moreSearchCard.vue'
-  import toolCard from '/src/components/toolCard/toolCard.vue'
-  import { engineConfData } from '@/stores/engineConfStore'
   import { useRoute } from 'vue-router'
   import router from '@/router'
+  import { InfoFilled } from '@element-plus/icons-vue'
+  import chatBox from '@/components/chatBox/chatBox.vue'
+  import { engineConfData } from '@/stores/engineConfStore'
+  import searchResultCard from './components/searchResultCard/searchResultCard.vue'
+  import informationCard from './components/informationCard/informationCard.vue'
+  import moreSearchCard from './components/moreSearchCard/moreSearchCard.vue'
+  import toolCard from './components/toolCard/toolCard.vue'
   interface Label {
     name: string
     href: string
@@ -138,8 +138,8 @@
     [key: string]: string
   }
   const type = [
-    engineConfData.data.firstEngine || 'SoGou',
-    engineConfData.data.lastEngine || 'Baidu'
+    engineConfData.data.firstEngine || 'Baidu',
+    engineConfData.data.lastEngine || 'SoGou'
   ]
   const searchType = ref()
   searchType.value = sessionStorage.getItem('search-type')
@@ -417,9 +417,13 @@
       display: grid;
       grid-template-columns: auto auto 430px;
       grid-row: calc(100vh - 75px);
+      @media screen and (max-width: 768px) {
+        grid-template-columns: auto;
+        grid-template-rows: auto auto auto;
+      }
       .result-item {
         // width: auto;
-        min-width: 400px;
+        min-width: 360px;
         max-width: 600px;
         min-height: calc(100vh - 110px);
         padding: 1.5rem 0.1rem 0 2rem;

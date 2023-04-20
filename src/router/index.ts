@@ -51,6 +51,16 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/chat/chat.vue')
   },
   {
+    path: '/forgotPassword',
+    name: 'forgotPassword',
+    component: () => import('../views/issues/forgotPassword.vue')
+  },
+  {
+    path: '/pricingTables',
+    name: 'pricingTables',
+    component: () => import('../views/pricingTables/pricingTables.vue')
+  },
+  {
     path: '/:catchAll(.*)', // 不识别的path自动匹配404
     component: () => import('../views/notFound.vue')
     // redirect: '/404',
@@ -64,11 +74,11 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  // 1.如果访问的是登录页面（无需权限），直接放行
+  // 1.如果访问的不是个人中心页面（无需权限），直接放行
   if (to.path !== '/personalCenter') return next()
-  // 2.如果访问的是有登录权限的页面，先要获取isLogin
+  // 2.如果访问的是个人中心页面，先要获取isLogin
   const isLogin = loginStatus.isLogin
-  // 2.1如果token为空，强制跳转到登录页面；否则，直接放行
+  // 2.1如果isLogin为空，强制跳转到登录页面；否则，直接放行
   if (!isLogin) {
     alert('请登录')
     return next('/landing')

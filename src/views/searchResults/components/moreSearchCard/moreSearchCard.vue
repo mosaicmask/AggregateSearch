@@ -55,10 +55,10 @@
         a {
           color: #4e6ef2;
         }
-        &:hover{
-          transition: all .4s;
+        &:hover {
+          transition: all 0.4s;
           box-shadow: 3px 5px 7px 1px rgb(212, 181, 247);
-          a{
+          a {
             color: rgb(176, 105, 251);
           }
         }

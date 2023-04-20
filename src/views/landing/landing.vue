@@ -48,7 +48,7 @@
         <input class="submit-button" type="submit" :value="typeFlg ? '登录' : '一键注册登录'" />
       </div>
       <div class="text-box">
-        <em @click="toPage('register')">遇到问题？</em>
+        <em @click="toPage('forgotPassword')">忘记密码？</em>
         <span>没有账号？<em @click="toPage('register')">前往注册</em></span>
       </div>
     </form>
@@ -59,15 +59,15 @@
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
 
-  import { loginStatus } from '../../stores/loginStateStore'
-  import { userLogin, register } from '../../http/api/users'
+  import { loginStatus } from '@/stores/loginStateStore'
+  import { userLogin, register } from '@/http/api/users'
   import { messageAlerts } from '@/utils/tip'
   import { signUpData } from '@/stores/signUpStore'
-  import emailInput from '../../components/input/emailInput/emailInput.vue'
-  import verifyInput from '../../components/input/verifyInput/verifyInput.vue'
-  import checkingInput from '../../components/input/checkingInput/checkingInput.vue'
-  import phoneOnInput from '../../components/input/phoneOnInput/phoneOnInput.vue'
-  import passwordInput from '../../components/input/passwordInput/passwordInput.vue'
+  import emailInput from '@/components/input/emailInput/emailInput.vue'
+  import verifyInput from '@/components/input/verifyInput/verifyInput.vue'
+  import checkingInput from '@/components/input/checkingInput/checkingInput.vue'
+  import phoneOnInput from '@/components/input/phoneOnInput/phoneOnInput.vue'
+  import passwordInput from '@/components/input/passwordInput/passwordInput.vue'
 
   const router = useRouter()
   const typeFlg = ref(0)

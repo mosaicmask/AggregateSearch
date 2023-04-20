@@ -1,10 +1,10 @@
 <template>
   <div class="input-group">
-    <label class="label" for="Captcha">手机验证码</label>
+    <label class="label" for="Captcha">邮箱回执码</label>
     <div class="input-line">
       <input
         autocomplete="off"
-        placeholder="请输入手机验证码"
+        placeholder="请输入邮箱回执码"
         type="text"
         v-model="itemValue"
         class="input"
@@ -29,29 +29,22 @@
 </template>
 
 <script setup lang="ts">
-  import { watch, ref, reactive } from 'vue'
-  import { refDebounced } from '@vueuse/core'
-  import { FormFormatCheck } from '@/utils/Check'
+  import { getEmailCode } from '@/http/api/users'
   import emitter from '@/utils/Bus'
-  import { getPhoneCheckCode } from '@/http/api/users'
-  import { messageAlerts } from '@/utils/tip'
-  const buttonText = ref('获取验证码')
+  const itemValue = ref('')
+  const buttonText = ref('获取回执码')
   // 提示文字显示flg
   const message = reactive({
     receiptCodeTipMessage: ''
   })
-  const itemValue = ref('')
-  // 切换按钮状态
-  const loadingFlg = ref(false)
-
-  const emit = defineEmits(['update:receiptCode', 'useCheckCaptcha'])
-  // 接收父组件参数
   const props = defineProps<{
-    userPhone: string
+    userEmail: string
     receiptCode: string
+    emailExist: boolean
   }>()
-  // 父子双向数据绑定
-  const handleChange = (e) => {
+  // 父子组件双向数据更新
+  const emit = defineEmits(['update:receiptCode', 'useCheckCaptcha'])
+  const handleChange = (e: string) => {
     emit('update:receiptCode', e)
   }
   watch(
@@ -60,46 +53,32 @@
       handleChange(newVal)
     }
   )
-
   // 接收兄弟组件传参
   // 如果放入某个事件内会出现调用次数越来越多的问题
   // 第一个参数: 监听的连接名
   // 第二个参数: 传递的数据
-  const checkCaptchaFlag = ref()
+  const checkCaptchaFlag = ref<boolean>()
   emitter.on('verifyInput', (flag: boolean) => {
     checkCaptchaFlag.value = flag
   })
 
-  const formCheck = new FormFormatCheck()
-  // 验证回执码
-  const receiptCodeDebounced = refDebounced(itemValue, 1000)
-  watch(receiptCodeDebounced, () => {
-    checkReceiptCode()
-  })
-
-  const checkReceiptCode = () => {
-    return formCheck.checkReceiptCode({ receiptCode: itemValue.value, message })
-  }
-
+  // 切换按钮状态
+  const loadingFlg = ref(false)
   //  获取回执
-  const getReceiptCode = async () => {
+  const getReceiptCode = () => {
     // 调用兄弟组件事件
     emit('useCheckCaptcha')
-    // 这里只是进行了判断进行阻拦，后续有时间可以用调用兄弟组件的方法
-    if (!checkCaptchaFlag.value || !props.userPhone) return
-    // 发送手机校验码
-    getPhoneCheckCode(props.userPhone).then((res) => {
-      if (res.errno == 2404) {
-        messageAlerts({ ...res })
-        return
-      }
-      const countdown = 60
-      loadingFlg.value = true
-      messageAlerts({ ...res })
-      setTime(countdown)
+    if (!checkCaptchaFlag.value || !props.emailExist || !props.userEmail) {
+      return
+    }
+    let countdown = 60
+    loadingFlg.value = true
+    setTime(countdown)
+    // 邮箱回执
+    getEmailCode(props.userEmail).then((res) => {
+      console.log('res :>> ', res)
     })
   }
-
   // 回执倒计时函数
   const setTime = (countdown) => {
     if (countdown == 0) {
@@ -113,10 +92,6 @@
       }, 1000)
     }
   }
-
-  defineExpose({
-    checkReceiptCode
-  })
 </script>
 
 <style lang="scss" scoped>

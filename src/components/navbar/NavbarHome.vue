@@ -12,7 +12,7 @@
           class="input"
           type="text"
           v-model="inputVal"
-          @keyup.enter.exact="searchData"
+          @keypress.enter.exact="searchData"
           placeholder="Search for something"
           id="search"
         />
@@ -43,14 +43,15 @@
       <router-link to="/concern" class="nav-item">
         <span> 关注 </span>
       </router-link>
+      <!-- <router-link to="/pricingTables" class="nav-item">
+        <span> 成为大侦探 </span>
+        <el-badge value="pro" class="warning" type="warning"> </el-badge>
+      </router-link> -->
       <el-tooltip effect="dark" content="个人中心" v-if="navbarFlg" placement="bottom-start">
         <svg class="icon icon-nav" @click="toPage('personalCenter')" aria-hidden="true">
           <use xlink:href="#icon-24gf-portraitMaleInfo2"></use>
         </svg>
       </el-tooltip>
-      <svg class="icon icon-nav" aria-hidden="true">
-        <use xlink:href="#icon-androidgengduo"></use>
-      </svg>
     </div>
     <template v-if="!loginStatus.isLogin">
       <div class="button-box" v-if="!navbarFlg">
@@ -111,11 +112,13 @@
   .navbar-body {
     width: 100%;
     height: 75px;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     box-shadow: 0px 0px 8px 6px #413a6d4f;
     background-color: #fff;
+    padding: 0 10px;
 
     .git-box {
       display: flex;
@@ -223,29 +226,33 @@
       display: flex;
       align-items: center;
       justify-content: space-evenly;
-      @media (max-width: 790px) {
-        // display: none;
+      @media (max-width: 768px) {
         min-width: 200px;
       }
       @media (max-width: 590px) {
-        // display: none;
-        min-width: 150px;
+        display: none;
       }
       .nav-item {
-        width: 35px;
+        width: auto;
         height: 20px;
         font-size: 1rem;
         font-weight: 500;
+        position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
         text-decoration: none;
         position: relative;
-        overflow: hidden;
+        // overflow: hidden;
         padding: 15px 0px 10px 0px;
         margin: 0 15px;
         letter-spacing: 1px;
-
+        .warning {
+          position: absolute;
+          right: -25px;
+          top: 10px;
+          border-radius: 5px;
+        }
         span {
           display: inline-block;
           margin: 0 auto;
@@ -272,6 +279,7 @@
       @media (max-width: 700px) {
         .nav-item:nth-child(2),
         .nav-item:nth-child(3),
+        // .nav-item:nth-child(4),
         .nav-item:nth-child(5),
         svg {
           display: none;
@@ -308,6 +316,7 @@
       padding: 0 50px 0 0;
       @media (max-width: 600px) {
         padding: 0 20px 0 0;
+        box-sizing: border-box;
       }
       .login-button,
       .enroll-button {

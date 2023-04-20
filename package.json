@@ -16,6 +16,7 @@
     "mitt": "^3.0.0",
     "normalize.css": "^8.0.1",
     "nprogress": "^0.2.0",
+    "pinia": "^2.0.33",
     "sass": "^1.58.1",
     "secure-ls": "^1.2.6",
     "uuid": "^9.0.0",

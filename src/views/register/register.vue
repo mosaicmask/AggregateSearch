@@ -83,7 +83,7 @@
         <input class="submit-button" type="submit" />
       </div>
       <div class="text-box">
-        <em @click="toPage('landing')">遇到问题？</em>
+        <em @click="toPage('issues')">遇到问题？</em>
         <span>已有账号？<em @click="toPage('landing')">前往登录</em></span>
       </div>
     </form>

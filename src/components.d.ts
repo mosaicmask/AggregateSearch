@@ -41,6 +41,7 @@ declare module '@vue/runtime-core' {
     Smiley: typeof import('./components/smiley/Smiley.vue')['default']
     ToolCard: typeof import('./components/toolCard/toolCard.vue')['default']
     UnderConstruction: typeof import('./components/error/underConstruction.vue')['default']
+    VerifyEmailCode: typeof import('./components/input/verifyEmailCode/verifyEmailCode.vue')['default']
     VerifyInput: typeof import('./components/input/verifyInput/verifyInput.vue')['default']
   }
 }
