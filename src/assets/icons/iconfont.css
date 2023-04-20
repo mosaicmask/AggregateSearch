@@ -1,8 +1,10 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3798072 */
-  src: url('iconfont.woff2?t=1677995464582') format('woff2'),
-       url('iconfont.woff?t=1677995464582') format('woff'),
-       url('iconfont.ttf?t=1677995464582') format('truetype');
+  /* Color fonts */
+  src: 
+       url('iconfont.woff2?t=1680611104347') format('woff2'),
+       url('iconfont.woff?t=1680611104347') format('woff'),
+       url('iconfont.ttf?t=1680611104347') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +13,46 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-duihua-copy:before {
+  content: "\100c5";
+}
+
+.icon-icon-copy:before {
+  content: "\100c6";
+}
+
+.icon-shouye-copy:before {
+  content: "\100c7";
+}
+
+.icon-xiazai-copy:before {
+  content: "\100c8";
+}
+
+.icon-shouye:before {
+  content: "\e621";
+}
+
+.icon-icon:before {
+  content: "\e64f";
+}
+
+.icon-icon1:before {
+  content: "\e6a0";
+}
+
+.icon-bianjibiaoge:before {
+  content: "\eabc";
+}
+
+.icon-xiazai:before {
+  content: "\e65d";
+}
+
+.icon-duihua:before {
+  content: "\100c4";
 }
 
 .icon-fasong:before {
@@ -39,10 +81,6 @@
 
 .icon-shuaxin:before {
   content: "\e604";
-}
-
-.icon-yahoo-fill:before {
-  content: "\eabe";
 }
 
 .icon-baidu_logo_icon:before {
@@ -123,9 +161,5 @@
 
 .icon-weiruan1:before {
   content: "\e611";
-}
-
-.icon-sousuo:before {
-  content: "\100c6";
 }
 

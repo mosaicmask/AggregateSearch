@@ -3,14 +3,14 @@
     <loadersTwo></loadersTwo>
     <h4>加载中...</h4>
   </div>
-  <div v-else>
+  <div class="content-body" v-else>
     <div class="engine">
       <svg class="icon icon-engine" aria-hidden="true">
         <use :xlink:href="iconText"></use>
       </svg>
       <h1>For {{ typeData }}</h1>
     </div>
-    <div class="content-box" v-if="searchData?.length">
+    <div class="content-box" v-if="searchData?.length" @scroll="onscroll">
       <div class="content-item" v-for="item in searchData" :key="item.title">
         <div class="item-title">
           <a :href="item.href" target="_blank">
@@ -29,21 +29,31 @@
       <loaders></loaders>
       <h4>获取搜索数据被拦截，请稍后再试...</h4>
     </div>
+    <Transition name="load">
+      <div class="load-box" v-show="loadFlag">
+        <div class="load-item"></div>
+        <span>加载中...</span>
+      </div>
+    </Transition>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
-  import { crawlingData } from '@/stores/searchStore.js'
-  import loaders from '../../components/loaders/loadersOne.vue'
-  import loadersTwo from '../../components/loaders/loadersTwo.vue'
+  import { ref, reactive } from 'vue'
+  import { crawlingData } from '../../../../stores/searchStore.js'
+  import loaders from '../../../../components/loaders/loadersOne.vue'
+  import loadersTwo from '../../../../components/loaders/loadersTwo.vue'
   import { useRoute } from 'vue-router'
+  import { throttle } from '../../../../utils/functions/throttle'
   const route = useRoute()
   const iconText = ref('#icon-bing_logo_icon')
+  const loadFlag = ref(false)
   // 获取父组件传递过来的搜索类型
   const props = defineProps<{
     typeData: string
   }>()
+
+  const page = ref<number>(0)
 
   // 加载动画
   const flag = ref(true)
@@ -51,23 +61,29 @@
     flag.value = false
   }, 1500)
 
-  //  根据类型进行搜索内容爬取
-  switch (props.typeData) {
-    case 'Bing':
-      await crawlingData.getBingData(route.params.keyword)
-      break
-    case 'Google':
-      await crawlingData.getGoogleData(route.params.keyword)
-      break
-    case 'Baidu':
-      await crawlingData.getBaiduData(route.params.keyword)
-      break
-    case 'SoGou':
-      await crawlingData.getSouGouData(route.params.keyword)
-      break
-    default:
-      break
+  const onscroll = throttle(async (event: WheelEvent) => {
+    const targetElement = event.target as HTMLElement
+    const scrollTop = targetElement.scrollTop // 获取滚动距离
+    const clientHeight = targetElement.clientHeight //可视区域的高度
+    const scrollHeight = targetElement.scrollHeight // 可滚动元素总长
+    if (scrollHeight - scrollTop <= clientHeight) {
+      page.value++
+      loadFlag.value = true
+      sendRequest()
+    }
+  }, 1)
+
+  // 发送请求
+  const sendRequest = async () => {
+    const keyword = route.params.keyword
+    const pageNum = page.value
+    await crawlingData.getSearchData(keyword, pageNum, props.typeData)
+    setTimeout(() => {
+      loadFlag.value = false
+    }, 500)
   }
+
+  await sendRequest()
   const getSearchData = async () => {
     //  根据类型 返回 搜索数据
     switch (props.typeData) {
@@ -81,7 +97,7 @@
         return crawlingData.baiduData
       case 'SoGou':
         iconText.value = '#icon-sougoushuru'
-        return crawlingData.soGouData
+        return crawlingData.sogouData
       default:
         return crawlingData.bingData
     }
@@ -91,11 +107,17 @@
 </script>
 
 <style lang="scss" scoped>
+  .content-body {
+    position: relative;
+  }
   .engine {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     margin: 0 0 2rem 0;
+    @media (max-width: 768px) {
+      margin: 0 0 1rem 0;
+    }
 
     .icon-engine {
       width: 2.5rem;
@@ -150,6 +172,60 @@
     .content-item:nth-child(1) {
       margin: 1rem 0 0 0;
     }
+  }
+
+  .load-box {
+    position: absolute;
+    bottom: 0;
+    left: -20px;
+    width: 100%;
+    height: 30px;
+    background: #e4e4e4;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    .load-item {
+      width: 20px;
+      height: 20px;
+      border: #ffffff solid 2px;
+      border-bottom-color: #5e4dcd;
+      border-radius: 50%;
+      animation: rotation 1s linear infinite;
+      // border-image: linear-gradient(blue, pink) 2/2px;
+      // clip-path: inset(0 round 50%);
+    }
+
+    @keyframes rotation {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    span {
+      font-size: 12px;
+      color: #666666;
+      margin: 0 10px;
+    }
+  }
+
+  // Vue 的过渡样式
+  .load-enter-active {
+    transition: all 0.3s ease-in-out;
+  }
+  .load-leave-active {
+    transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+  }
+
+  .load-enter-from,
+  .load-leave-to {
+    transform: translateY(30px);
+    opacity: 0;
   }
 
   .error,

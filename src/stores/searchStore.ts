@@ -10,21 +10,20 @@ import {
   crawlingGoogleData
 } from '@/http/api/reptile'
 
+type SearchFun = (keyword: string | string[], pageNum: number,engine: string) => void
 interface SearchData {
   // errno: number
   [key: string]: string
 }
 
 interface CrawlingData {
-  keyword: string
-  soGouData: SearchData[]
+  keyword: string | string[]
+  sogouData: SearchData[]
   bingData: SearchData[]
   baiduData: SearchData[]
   googleData: SearchData[]
-  getSouGouData: Function
-  getGoogleData: Function
-  getBingData: Function
-  getBaiduData: Function
+  getSearchData: SearchFun
+  sendRequest: Function
   init: Function
   setHighLight: Function
   resolveKeywords: Function
@@ -32,46 +31,44 @@ interface CrawlingData {
 
 const crawlingData = reactive<CrawlingData>({
   keyword: '',
-  soGouData: [],
+  sogouData: [],
   baiduData: [],
   bingData: [],
   googleData: [],
-  async getSouGouData(keyword) {
+  async getSearchData(keyword, pageNum, engine) {
     this.keyword = keyword
-    const res = await crawlingSouGouData({ keyword: this.keyword })
+    const dataKey = `${engine.toLocaleLowerCase()}Data`
+    const res = await this.sendRequest(pageNum, engine)
     if (!res.data || typeof res.data != 'object' || res.data == null || res.data.errno) return
-    this.soGouData = res?.data
-    await this.init(this.soGouData)
+    // 如果不是第一次，就合并数据
+    if (this[dataKey].length === 0) {
+      this[dataKey] = await this.init(res.data)
+    } else {
+      this[dataKey].push(...await this.init(res.data))
+    }
+  },
+  // 根据不同引擎，请求不同接口
+  async sendRequest(pageNum:number, engine:string) {
+    let res
+    switch (engine) {
+      case 'Bing':
+        res = await crawlingBingData({ keyword: this.keyword, pageNum })
+        break
+      case 'Google':
+        res = await crawlingGoogleData({ keyword: this.keyword, pageNum })
+        break
+      case 'Baidu':
+        res = await crawlingBaiduData({ keyword: this.keyword, pageNum })
+        break
+      case 'SoGou':
+       res =  await crawlingSouGouData({ keyword: this.keyword, pageNum })
+        break
+      default:
+        break
+    }
+    return res
   },
 
-  async getBingData(keyword) {
-    this.keyword = keyword
-    const res = await crawlingBingData({ keyword: this.keyword })
-    if (!res.data || typeof res.data != 'object' || res.data == null || res.data.errno) return
-    this.bingData = res?.data
-    await this.init(this.bingData)
-  },
-  async getBaiduData(keyword) {
-    this.keyword = keyword
-    const res = await crawlingBaiduData({ keyword: this.keyword })
-    if (!res.data || typeof res.data != 'object' || res.data == null || res.data.errno) return
-    this.baiduData = res?.data
-    await this.init(this.baiduData)
-  },
-  async getGoogleData(keyword) {
-    this.keyword = keyword
-    const res = await crawlingGoogleData({ keyword: this.keyword })
-    if (
-      typeof res == 'undefined' ||
-      !res.data ||
-      typeof res.data != 'object' ||
-      res.data == null ||
-      res.data.errno
-    )
-      return
-    this.googleData = res?.data
-    await this.init(this.googleData)
-  },
   init(data) {
     const resKeywords = this.resolveKeywords(`${this.keyword} `) || []
     data.map((item, index) => {
@@ -84,6 +81,7 @@ const crawlingData = reactive<CrawlingData>({
         this.setHighLight({ itemKeywords, item, index, data })
       })
     })
+    return data
   },
 
   // 设置高亮

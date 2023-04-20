@@ -1,5 +1,10 @@
 <template>
   <div class="chat-body">
+    <el-alert
+      title="由于Open AI 大量封锁境内账号，所以目前chatGPT功能可能不稳定。"
+      type="warning"
+      effect="dark"
+    />
     <ul class="chat-box">
       <li
         v-for="(item, index) in chatData"
@@ -51,7 +56,7 @@
     </div>
     <div class="chat-input">
       <div class="input">
-        <textarea rows="1" v-model="textarea" tabindex="0" @keyup.enter.exact="sendQuestion">
+        <textarea rows="1" v-model="textarea" tabindex="0" @keypress.enter.exact="sendQuestion">
         </textarea>
         <div class="icon-box" @click="sendQuestion">
           <svg class="send-icon" aria-hidden="true">

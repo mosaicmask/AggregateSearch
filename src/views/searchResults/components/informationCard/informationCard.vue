@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-  import { crawlingInformationData } from '@/http/api/reptile'
+  import { crawlingInformationData } from '../../../../http/api/reptile'
 
   const informationData = await crawlingInformationData().then((res) => {
     if (!res) return
