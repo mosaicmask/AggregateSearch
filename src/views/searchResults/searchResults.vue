@@ -6,11 +6,6 @@
         <use xlink:href="#icon-jiantou-you"></use>
       </svg>
     </div>
-    <div :class="['drawer-setting']" @click="drawerRight = !drawerRight">
-      <svg class="icon icon-setting" aria-hidden="true">
-        <use xlink:href="#icon-wangzhanshezhi"></use>
-      </svg>
-    </div>
     <!-- 抽屉 ltr -->
     <el-drawer
       v-model="drawerLeft"
@@ -40,7 +35,8 @@
         <el-collapse accordion>
           <el-collapse-item name="1">
             <template #title>
-              相关技术文档<el-icon class="header-icon">
+              框架文档
+              <el-icon class="header-icon">
                 <info-filled />
               </el-icon>
             </template>
@@ -62,7 +58,8 @@
           </el-collapse-item>
           <el-collapse-item name="2">
             <template #title>
-              相关精华博客<el-icon class="header-icon">
+              UI组件文档
+              <el-icon class="header-icon">
                 <info-filled />
               </el-icon>
             </template>
@@ -84,10 +81,6 @@
           </el-collapse-item>
         </el-collapse>
       </div>
-    </el-drawer>
-    <!-- 抽屉 rtl -->
-    <el-drawer v-model="drawerRight" title="I am the title" :with-header="false">
-      <span>this is setting!!!!</span>
     </el-drawer>
     <div class="result-box">
       <!-- 搜索内容 第一列 -->
@@ -145,7 +138,6 @@
   searchType.value = sessionStorage.getItem('search-type')
   const route = useRoute()
   const drawerLeft = ref(false)
-  const drawerRight = ref(false)
   // 搜索关键字
   const keyword = route.params.keyword
   // 监听路由参数变化刷新页面（可以优化，只刷新子组件）
@@ -237,21 +229,6 @@
       &:hover .icon-switch {
         width: 1.8rem;
         height: 1.8rem;
-      }
-    }
-    .drawer-setting {
-      right: 0;
-      top: 10px;
-      border-radius: 5px 0 0 5px;
-      .icon-setting {
-        width: 1.2rem;
-        height: 1.2rem;
-        transition: all 0.5s ease-in-out;
-      }
-
-      &:hover .icon-setting {
-        width: 1.6rem;
-        height: 1.6rem;
       }
     }
 
