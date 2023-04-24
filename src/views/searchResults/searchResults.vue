@@ -6,11 +6,6 @@
         <use xlink:href="#icon-jiantou-you"></use>
       </svg>
     </div>
-    <div :class="['drawer-setting']" @click="drawerRight = !drawerRight">
-      <svg class="icon icon-setting" aria-hidden="true">
-        <use xlink:href="#icon-wangzhanshezhi"></use>
-      </svg>
-    </div>
     <!-- 抽屉 ltr -->
     <el-drawer
       v-model="drawerLeft"
@@ -21,7 +16,7 @@
     >
       <div class="doc-input">
         <label for="search">
-          <input class="input" type="text" placeholder="Search twitter" id="search" />
+          <input class="input" v-model="inputVal" type="text" placeholder="搜索文档" id="search" />
           <div class="fancy-bg"></div>
           <div class="search">
             <svg
@@ -40,54 +35,64 @@
         <el-collapse accordion>
           <el-collapse-item name="1">
             <template #title>
-              相关技术文档<el-icon class="header-icon">
+              框架文档
+              <el-icon class="header-icon">
                 <info-filled />
               </el-icon>
             </template>
-            <ul class="doc-box">
-              <li class="item-doc" v-for="i in 5" :key="i">
-                <img src="../../assets/image/doc.png" alt="站点图标" />
-                <div class="text-box">
-                  <h4>for...in - JavaScript MDN</h4>
-                  <span>
-                    …备注：
-                    <mark>for</mark>
-                    ...
-                    <mark>in</mark>
-                    不应该用于迭代一个关注索引顺序的 Array。…
-                  </span>
-                </div>
-              </li>
+            <ul class="doc-box" v-if="documentDevList.length">
+              <template v-for="(item, index) in documentDevList" :key="index">
+                <a :href="item.url" target="_blank">
+                  <li class="item-doc">
+                    <img
+                      :src="
+                        item.icon
+                          ? item.icon
+                          : 'https://my-note-images-mac.oss-cn-shanghai.aliyuncs.com/code-image/doc.png'
+                      "
+                      alt="站点图标"
+                    />
+                    <div class="text-box">
+                      <h4>{{ item.name }}</h4>
+                      <span>{{ item.describe || '暂无简介' }}</span>
+                    </div>
+                  </li>
+                </a>
+              </template>
             </ul>
+            <h4 v-else>暂无匹配结果</h4>
           </el-collapse-item>
           <el-collapse-item name="2">
             <template #title>
-              相关精华博客<el-icon class="header-icon">
+              UI组件文档
+              <el-icon class="header-icon">
                 <info-filled />
               </el-icon>
             </template>
-            <ul class="doc-box">
-              <li class="item-doc" v-for="i in 5" :key="i">
-                <img src="../../assets/image/doc.png" alt="站点图标" />
-                <div class="text-box">
-                  <h4>for...in - JavaScript MDN</h4>
-                  <span>
-                    …备注：
-                    <mark>for</mark>
-                    ...
-                    <mark>in</mark>
-                    不应该用于迭代一个关注索引顺序的 Array。…
-                  </span>
-                </div>
-              </li>
+            <ul class="doc-box" v-if="documentDevList.length">
+              <template v-for="(item, index) in documentUIList" :key="index">
+                <a :href="item.url" target="_blank">
+                  <li class="item-doc">
+                    <img
+                      :src="
+                        item.icon
+                          ? item.icon
+                          : 'https://my-note-images-mac.oss-cn-shanghai.aliyuncs.com/code-image/doc.png'
+                      "
+                      alt="站点图标"
+                    />
+                    <div class="text-box">
+                      <h4>{{ item.name }}</h4>
+                      <span>{{ item.describe || '暂无简介' }}</span>
+                    </div>
+                  </li>
+                </a>
+              </template>
             </ul>
+            <h4 v-else>暂无匹配结果</h4>
           </el-collapse-item>
         </el-collapse>
       </div>
-    </el-drawer>
-    <!-- 抽屉 rtl -->
-    <el-drawer v-model="drawerRight" title="I am the title" :with-header="false">
-      <span>this is setting!!!!</span>
     </el-drawer>
     <div class="result-box">
       <!-- 搜索内容 第一列 -->
@@ -122,10 +127,12 @@
 <script setup lang="ts">
   import { ref, reactive } from 'vue'
   import { useRoute } from 'vue-router'
+  import { refDebounced } from '@vueuse/core'
   import router from '@/router'
   import { InfoFilled } from '@element-plus/icons-vue'
   import chatBox from '@/components/chatBox/chatBox.vue'
   import { engineConfData } from '@/stores/engineConfStore'
+  import { getDocumentList, getItemDocumentList } from '@/http/api/documentation'
   import searchResultCard from './components/searchResultCard/searchResultCard.vue'
   import informationCard from './components/informationCard/informationCard.vue'
   import moreSearchCard from './components/moreSearchCard/moreSearchCard.vue'
@@ -137,6 +144,13 @@
   interface Tool {
     [key: string]: string
   }
+  interface DocumentList {
+    [key: string]: string
+  }
+  interface DocumentResult {
+    DEV: never[]
+    UI: never[]
+  }
   const type = [
     engineConfData.data.firstEngine || 'Baidu',
     engineConfData.data.lastEngine || 'SoGou'
@@ -145,7 +159,6 @@
   searchType.value = sessionStorage.getItem('search-type')
   const route = useRoute()
   const drawerLeft = ref(false)
-  const drawerRight = ref(false)
   // 搜索关键字
   const keyword = route.params.keyword
   // 监听路由参数变化刷新页面（可以优化，只刷新子组件）
@@ -201,6 +214,29 @@
       href: 'https://tool.lu/regex/'
     }
   ])
+
+  // 获取文档列表
+  let documentDevList = reactive<DocumentList[]>([])
+  let documentUIList = reactive<DocumentList[]>([])
+  getDocumentList().then((res: DocumentResult) => {
+    documentDevList.push(...res.DEV)
+    documentUIList.push(...res.UI)
+  })
+
+  // 搜索文档
+  const inputVal = ref('')
+  const documentKey = refDebounced(inputVal, 1000)
+  const searchDocument = () => {
+    getItemDocumentList(inputVal.value).then((res: DocumentResult) => {
+      // 清空数组
+      documentDevList.splice(0)
+      documentUIList.splice(0)
+      // 添加过滤后的结果
+      documentDevList.push(...res.DEV)
+      documentUIList.push(...res.UI)
+    })
+  }
+  watch(() => documentKey.value, searchDocument)
 </script>
 
 <style lang="scss" scoped>
@@ -237,21 +273,6 @@
       &:hover .icon-switch {
         width: 1.8rem;
         height: 1.8rem;
-      }
-    }
-    .drawer-setting {
-      right: 0;
-      top: 10px;
-      border-radius: 5px 0 0 5px;
-      .icon-setting {
-        width: 1.2rem;
-        height: 1.2rem;
-        transition: all 0.5s ease-in-out;
-      }
-
-      &:hover .icon-setting {
-        width: 1.6rem;
-        height: 1.6rem;
       }
     }
 
@@ -345,7 +366,12 @@
         .doc-box {
           margin: 0;
           padding: 0;
+          width: 100%;
+          a {
+            width: inherit;
+          }
           .item-doc {
+            width: inherit;
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -374,11 +400,23 @@
             img {
               width: 40px;
               height: 40px;
-              border-radius: 50%;
+              // border-radius: 50%;
             }
 
             .text-box {
+              flex: 1;
               padding: 15px 10px;
+
+              h4 {
+                margin: 5px 0;
+              }
+              span {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
+              }
             }
 
             &:last-child {
@@ -389,15 +427,10 @@
           span {
             position: relative;
             transition: all 300ms;
-            mark {
-              position: relative;
-              transition: all 300ms;
-            }
           }
           // 控制模糊
           &:hover span,
-          &:hover h4,
-          &:hover mark {
+          &:hover h4 {
             color: transparent;
             text-shadow: 0 0 3px #aaa;
           }
@@ -405,9 +438,6 @@
           &:hover li:hover span,
           &:hover li:hover h4 {
             color: #ffffff;
-          }
-          &:hover li:hover mark {
-            color: #000000;
           }
         }
       }
