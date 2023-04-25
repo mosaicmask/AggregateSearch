@@ -45,6 +45,61 @@
       "name": "MDN Web",
       "url": "https://developer.mozilla.org/zh-CN/",
       "describe": "Resources for Developers,by Developers"
+    },
+    {
+      "name": "Vue Macros",
+      "url": "https://vue-macros.sxzz.moe/zh-CN/",
+      "describe": "探索并扩展更多的宏和语法糖到 Vue 中。",
+      "icon": "https://vue-macros.sxzz.moe/logo.svg"
+    },
+    {
+      "name": "node.js",
+      "url": "https://nodejs.org/en",
+      "describe": "Node.js® is an open-source, cross-platform JavaScript runtime environment."
+    },
+    {
+      "name": "Axios",
+      "url": "http://www.axios-js.com/zh-cn/docs/",
+      "describe": "Axios 是一个基于 promise 的 HTTP 库，可以用在浏览器和 node.js 中。"
+    },
+    {
+      "name": "Moment.js",
+      "url": "http://momentjs.cn/",
+      "describe": "JavaScript 日期处理类库"
+    },
+    {
+      "name": "Sequelize",
+      "url": "https://www.sequelize.cn/",
+      "describe": "Sequelize 是一个基于 promise 的 Node.js ORM, 目前支持 Postgres, MySQL, MariaDB, SQLite 以及 Microsoft SQL Server. ",
+      "icon": "https://www.sequelize.cn/assets/images/logo-small-844fb9182c0fbf41931de2246fa9c496.png"
+    },
+    {
+      "name": "jQuery",
+      "url": "http://hemin.cn/jq/",
+      "describe": "jQuery是一个快速、简洁的JavaScript框架"
+    },
+    {
+      "name": "redis",
+      "url": "http://www.redis.cn/",
+      "describe": "Redis 是一个开源（BSD许可）的，内存中的数据结构存储系统，它可以用作数据库、缓存和消息中间件。",
+      "icon": "http://www.redis.cn/images/redis-white.png"
+    },
+    {
+      "name": "Nginx",
+      "url": "https://blog.redis.com.cn/doc/index.html",
+      "describe": "Nginx (engine x) 是一个高性能的HTTP和反向代理web服务器，同时也提供了IMAP/POP3/SMTP服务"
+    },
+    {
+      "name": "Git",
+      "url": "https://git-scm.com/docs",
+      "describe": "Git是一个开源的分布式版本控制系统，可以有效、高速地处理从很小到非常大的项目版本管理。",
+      "icon": "https://git-scm.com/images/logo@2x.png"
+    },
+    {
+      "name": "Bootstrap",
+      "url": "https://getbootstrap.com/",
+      "describe": "Bootstrap是Twitter推出的一个用于前端开发的开源工具包。",
+      "icon": "https://getbootstrap.com/docs/5.3/assets/brand/bootstrap-logo-shadow.png"
     }
   ],
   "UI": [
@@ -76,7 +131,14 @@
     {
       "name": "Vuetify",
       "url": "https://vuetifyjs.com/en/",
-      "describe": "Vuetify 是一个纯手工精心打造的 Material 样式的 Vue UI 组件库。"
+      "describe": "Vuetify 是一个纯手工精心打造的 Material 样式的 Vue UI 组件库"
+    },
+    {
+      "name": "VuePress",
+      "url": "https://www.vuepress.cn/",
+      "describe": "Vue 驱动的静态网站生成器",
+      "icon": "https://www.vuepress.cn/hero.png"
     }
+    
   ]
 }
