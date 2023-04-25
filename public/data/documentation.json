@@ -88,6 +88,18 @@
       "name": "Nginx",
       "url": "https://blog.redis.com.cn/doc/index.html",
       "describe": "Nginx (engine x) 是一个高性能的HTTP和反向代理web服务器，同时也提供了IMAP/POP3/SMTP服务"
+    },
+    {
+      "name": "Git",
+      "url": "https://git-scm.com/docs",
+      "describe": "Git是一个开源的分布式版本控制系统，可以有效、高速地处理从很小到非常大的项目版本管理。",
+      "icon": "https://git-scm.com/images/logo@2x.png"
+    },
+    {
+      "name": "Bootstrap",
+      "url": "https://getbootstrap.com/",
+      "describe": "Bootstrap是Twitter推出的一个用于前端开发的开源工具包。",
+      "icon": "https://getbootstrap.com/docs/5.3/assets/brand/bootstrap-logo-shadow.png"
     }
   ],
   "UI": [
