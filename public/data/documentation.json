@@ -60,7 +60,8 @@
     {
       "name": "Axios",
       "url": "http://www.axios-js.com/zh-cn/docs/",
-      "describe": "Axios 是一个基于 promise 的 HTTP 库，可以用在浏览器和 node.js 中。"
+      "describe": "Axios 是一个基于 promise 的 HTTP 库，可以用在浏览器和 node.js 中。",
+      "icon": "https://www.axios.com/_next/image?url=https%3A%2F%2Fstatic.axios.com%2Fimg%2Fauthor-default.png&w=320&q=75"
     },
     {
       "name": "Moment.js",
@@ -93,7 +94,7 @@
       "name": "Git",
       "url": "https://git-scm.com/docs",
       "describe": "Git是一个开源的分布式版本控制系统，可以有效、高速地处理从很小到非常大的项目版本管理。",
-      "icon": "https://git-scm.com/images/logo@2x.png"
+      "icon": "https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png"
     },
     {
       "name": "Bootstrap",
