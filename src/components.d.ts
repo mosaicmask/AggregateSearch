@@ -14,6 +14,7 @@ declare module '@vue/runtime-core' {
     ChatReplyBox: typeof import('./components/chatBox/chatReplyBox/chatReplyBox.vue')['default']
     CheckingInput: typeof import('./components/input/checkingInput/checkingInput.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
+    ElBadge: typeof import('element-plus/es')['ElBadge']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCollapse: typeof import('element-plus/es')['ElCollapse']
     ElCollapseItem: typeof import('element-plus/es')['ElCollapseItem']
