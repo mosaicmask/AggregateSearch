@@ -129,8 +129,6 @@
   }
   // 格式化字符串
   const formatString = (str: string) => {
-    // 先删掉首位
-    str = str.slice(1, str.length)
     // 如果删了之后，首字母还是'\n'就继续删掉
     if (str.indexOf('\n') === 0) {
       return formatString(str)

@@ -1,4 +1,11 @@
 <template>
+  <el-alert
+    title="支付功能尚未完善，目前处于演示阶段，请勿随意付款！"
+    type="warning"
+    effect="dark"
+    center
+    show-icon
+  />
   <section>
     <div class="pricing pricing-palden">
       <template v-for="(item, index) in priceList" :key="item.price">
