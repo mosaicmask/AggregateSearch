@@ -43,10 +43,10 @@
       <router-link to="/concern" class="nav-item">
         <span> 关注 </span>
       </router-link>
-      <!-- <router-link to="/pricingTables" class="nav-item">
+      <router-link to="/pricingTables" class="nav-item">
         <span> 成为大侦探 </span>
         <el-badge value="pro" class="warning" type="warning"> </el-badge>
-      </router-link> -->
+      </router-link>
       <el-tooltip effect="dark" content="个人中心" v-if="navbarFlg" placement="bottom-start">
         <svg class="icon icon-nav" @click="toPage('personalCenter')" aria-hidden="true">
           <use xlink:href="#icon-24gf-portraitMaleInfo2"></use>
