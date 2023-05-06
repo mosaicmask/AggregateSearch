@@ -4,6 +4,8 @@
       title="由于Open AI 大量封锁境内账号，所以目前chatGPT功能可能不稳定。"
       type="warning"
       effect="dark"
+      center
+      show-icon
     />
     <ul class="chat-box">
       <li
