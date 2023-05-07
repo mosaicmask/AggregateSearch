@@ -10,8 +10,8 @@
       />
       <h1>登录</h1>
       <div class="select-box">
-        <span :class="[typeFlg ? '' : 'pick']" @click="checkType(0)">手机登录</span>
-        <span :class="[typeFlg ? 'pick' : '']" @click="checkType(1)">邮箱登录</span>
+        <span :class="{ pick: !typeFlg }" @click="checkType(0)">手机登录</span>
+        <span :class="{ pick: typeFlg }" @click="checkType(1)">邮箱登录</span>
       </div>
       <template v-if="typeFlg">
         <emailInput
