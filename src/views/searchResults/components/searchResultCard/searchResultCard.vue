@@ -8,7 +8,7 @@
       <svg class="icon icon-engine" aria-hidden="true">
         <use :xlink:href="iconText"></use>
       </svg>
-      <h1>For {{ typeData }}</h1>
+      <h1>Form {{ typeData }}</h1>
     </div>
     <div class="content-box" v-if="searchData?.length" @scroll="onscroll">
       <div class="content-item" v-for="item in searchData" :key="item.title">
