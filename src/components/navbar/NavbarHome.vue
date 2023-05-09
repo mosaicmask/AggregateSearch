@@ -1,5 +1,5 @@
 <template>
-  <nav :class="['navbar-body', navbarFlg ? 'navbar-body-search' : '']">
+  <nav :class="['navbar-body', { 'navbar-body-search': navbarFlg }]">
     <div class="git-box">
       <svg class="icon" aria-hidden="true">
         <use xlink:href="#icon-github-fill"></use>
@@ -30,7 +30,7 @@
         </div>
       </label>
     </div>
-    <div :class="['text-box', navbarFlg ? 'text-search' : '']">
+    <div :class="['text-box', { 'text-search': navbarFlg }]">
       <router-link to="/" class="nav-item">
         <span> 首页 </span>
       </router-link>

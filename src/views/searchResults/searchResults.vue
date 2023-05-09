@@ -108,7 +108,7 @@
       <div class="result-item last" v-if="searchType == '0'">
         <informationCard></informationCard>
         <moreSearchCard :data="informationLabel">
-          <template #title> 资源搜索</template>
+          <template #title> 社交搜索</template>
         </moreSearchCard>
         <moreSearchCard :data="blogLabel">
           <template #title> 博客搜索</template>
@@ -171,12 +171,16 @@
   // 标签数据
   const informationLabel = reactive<Label[]>([
     {
-      name: '百度百科',
-      href: `https://baike.baidu.com/item/${keyword}?fromModule=lemma_search-history`
+      name: '贴吧搜索',
+      href: `https://tieba.baidu.com/f/search/res?ie=utf-8&qw=${keyword}`
     },
+    // {
+    //   name: '维基百科',
+    //   href: `https://zh.wikipedia.org/w/index.php?search=${keyword}`
+    // },
     {
-      name: '维基百科',
-      href: `https://zh.wikipedia.org/w/index.php?search=${keyword}`
+      name: '微博搜索',
+      href: `https://s.weibo.com/weibo?q=${keyword}`
     },
     { name: 'B站搜索', href: `https://search.bilibili.com/all?keyword=${keyword}` },
     { name: '抖音搜索', href: `https://www.douyin.com/search/${keyword}` }

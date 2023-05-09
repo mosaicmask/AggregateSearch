@@ -215,11 +215,11 @@
             label: '百度',
             icon: 'baidu_logo_icon'
           },
-          {
-            value: 'Google',
-            label: '谷歌',
-            icon: 'google_icon'
-          },
+          // {
+          //   value: 'Google',
+          //   label: '谷歌',
+          //   icon: 'google_icon'
+          // },
           {
             value: 'Bing',
             label: '必应',

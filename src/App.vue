@@ -13,6 +13,10 @@
         router.go(0)
         return
       }
+      if (oldVal.indexOf('searchResults') && newVal == '/') {
+        router.go(0)
+        return
+      }
       if (oldVal == '/landing' && newVal == '/') {
         router.go(0)
         return
