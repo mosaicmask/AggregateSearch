@@ -37,9 +37,15 @@
 </template>
 
 <style lang="scss">
+
+  *{
+    scrollbar-width: thin;
+  }
+
   body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
       Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    scrollbar-width: thin;
   }
 
   ::-webkit-scrollbar {

@@ -10,7 +10,7 @@ import {
   crawlingGoogleData
 } from '@/http/api/reptile'
 
-type SearchFun = (keyword: string | string[], pageNum: number,engine: string) => void
+type SearchFun = (keyword: string | string[], pageNum: number, engine: string) => void
 interface SearchData {
   // errno: number
   [key: string]: string
@@ -44,11 +44,11 @@ const crawlingData = reactive<CrawlingData>({
     if (this[dataKey].length === 0) {
       this[dataKey] = await this.init(res.data)
     } else {
-      this[dataKey].push(...await this.init(res.data))
+      this[dataKey].push(...(await this.init(res.data)))
     }
   },
   // 根据不同引擎，请求不同接口
-  async sendRequest(pageNum:number, engine:string) {
+  async sendRequest(pageNum: number, engine: string) {
     let res
     switch (engine) {
       case 'Bing':
@@ -61,7 +61,7 @@ const crawlingData = reactive<CrawlingData>({
         res = await crawlingBaiduData({ keyword: this.keyword, pageNum })
         break
       case 'SoGou':
-       res =  await crawlingSouGouData({ keyword: this.keyword, pageNum })
+        res = await crawlingSouGouData({ keyword: this.keyword, pageNum })
         break
       default:
         break
